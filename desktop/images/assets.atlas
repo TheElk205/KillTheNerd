@@ -1,0 +1,181 @@
+
+assets.png
+size: 512,256
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+bush
+  rotate: false
+  xy: 131, 183
+  size: 70, 70
+  orig: 70, 70
+  offset: 0, 0
+  index: -1
+cactus
+  rotate: false
+  xy: 203, 183
+  size: 70, 70
+  orig: 70, 70
+  offset: 0, 0
+  index: -1
+cloud1
+  rotate: false
+  xy: 1, 182
+  size: 128, 71
+  orig: 128, 71
+  offset: 0, 0
+  index: -1
+coinGold
+  rotate: false
+  xy: 475, 145
+  size: 36, 36
+  orig: 36, 36
+  offset: 0, 0
+  index: -1
+coin_gold
+  rotate: false
+  xy: 1, 157
+  size: 256, 23
+  orig: 256, 23
+  offset: 0, 0
+  index: -1
+dirtCliffLeft
+  rotate: false
+  xy: 259, 111
+  size: 70, 70
+  orig: 70, 70
+  offset: 0, 0
+  index: -1
+dirtMid
+  rotate: false
+  xy: 275, 183
+  size: 70, 70
+  orig: 70, 70
+  offset: 0, 0
+  index: -1
+flagBlue2
+  rotate: false
+  xy: 331, 111
+  size: 70, 70
+  orig: 70, 70
+  offset: 0, 0
+  index: -1
+flagBlueHanging
+  rotate: false
+  xy: 347, 183
+  size: 70, 70
+  orig: 70, 70
+  offset: 0, 0
+  index: -1
+grass
+  rotate: false
+  xy: 403, 111
+  size: 70, 70
+  orig: 70, 70
+  offset: 0, 0
+  index: -1
+grassCenter
+  rotate: false
+  xy: 419, 183
+  size: 70, 70
+  orig: 70, 70
+  offset: 0, 0
+  index: -1
+grassCliffRight
+  rotate: false
+  xy: 1, 85
+  size: 70, 70
+  orig: 70, 70
+  offset: 0, 0
+  index: -1
+grassHillLeft
+  rotate: false
+  xy: 73, 85
+  size: 70, 70
+  orig: 70, 70
+  offset: 0, 0
+  index: -1
+grassHillLeft2
+  rotate: false
+  xy: 145, 85
+  size: 70, 70
+  orig: 70, 70
+  offset: 0, 0
+  index: -1
+grassMid
+  rotate: false
+  xy: 217, 39
+  size: 70, 70
+  orig: 70, 70
+  offset: 0, 0
+  index: -1
+plant
+  rotate: false
+  xy: 1, 13
+  size: 70, 70
+  orig: 70, 70
+  offset: 0, 0
+  index: -1
+player
+  rotate: false
+  xy: 433, 62
+  size: 47, 47
+  orig: 47, 47
+  offset: 0, 0
+  index: -1
+player-ouch
+  rotate: false
+  xy: 433, 13
+  size: 47, 47
+  orig: 47, 47
+  offset: 0, 0
+  index: -1
+player_chill
+  rotate: false
+  xy: 361, 10
+  size: 47, 47
+  orig: 47, 47
+  offset: 0, 0
+  index: -1
+rock
+  rotate: false
+  xy: 73, 13
+  size: 70, 70
+  orig: 70, 70
+  offset: 0, 0
+  index: -1
+snowMid
+  rotate: false
+  xy: 145, 13
+  size: 70, 70
+  orig: 70, 70
+  offset: 0, 0
+  index: -1
+snowRight
+  rotate: false
+  xy: 289, 39
+  size: 70, 70
+  orig: 70, 70
+  offset: 0, 0
+  index: -1
+spikes
+  rotate: false
+  xy: 289, 2
+  size: 70, 35
+  orig: 70, 35
+  offset: 0, 0
+  index: -1
+springboardDown
+  rotate: false
+  xy: 217, 1
+  size: 70, 36
+  orig: 70, 36
+  offset: 0, 0
+  index: -1
+springboardUp
+  rotate: false
+  xy: 361, 59
+  size: 70, 50
+  orig: 70, 50
+  offset: 0, 0
+  index: -1
