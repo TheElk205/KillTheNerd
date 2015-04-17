@@ -1,13 +1,15 @@
 package at.gamejam.ktn.game;
 
+import at.gamejam.ktn.game.entites.PlayerSleep;
 import at.gamejam.ktn.game.entities.Coin;
-import at.gamejam.ktn.game.entities.Player;
+import at.gamejam.ktn.game.entites.Player;
 import at.gamejam.ktn.game.entities.Spikes;
 import at.gamejam.ktn.utils.CameraHelper;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.math.Plane.PlaneSide;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -22,7 +24,7 @@ import com.badlogic.gdx.physics.box2d.World;
  */
 public class WorldController extends InputAdapter {
 	public CameraHelper		cameraHelper;
-	public Player			player;
+	public PlayerSleep			player;
 	public long				timeElapsed;
 	int						coinCount	= 0;
 	private World			b2World;
@@ -39,7 +41,7 @@ public class WorldController extends InputAdapter {
 		this.cameraHelper = new CameraHelper();
 		// this.b2World = new World(new Vector2(0, -9.81f), true);
 		this.b2World = new World(new Vector2(0, 0), true); // no gravity
-		this.player = new Player(new Vector2(0.5f, 1.5f), this.b2World);
+		this.player = new PlayerSleep(new Vector2(0.5f, 1.5f), this.b2World);
 		this.cameraHelper.setTarget(this.player.getBody());
 		// this.level = new Level(this.b2World);
 		this.level = new TopDownLevel(this.b2World);
@@ -122,17 +124,21 @@ public class WorldController extends InputAdapter {
 				this.cameraHelper.addZoom(0.2f);
 				break;
 			case Input.Keys.LEFT:
-				this.player.setLeft(true);
+				this.player.setDirection(Player.Direction.W);
 				break;
 			case Input.Keys.RIGHT:
-				this.player.setRight(true);
+				this.player.setDirection(Player.Direction.E);
+				break;
+			case Input.Keys.UP:
+				this.player.setDirection(Player.Direction.N);
+				break;
+			case Input.Keys.DOWN:
+				this.player.setDirection(Player.Direction.S);
 				break;
 			case Input.Keys.D:
 				this.debug = !this.debug;
 				break;
-			case Input.Keys.SPACE:
-			case Input.Keys.UP:
-				this.player.jump();
+			case Input.Keys.SPACE:				
 				break;
 			case Input.Keys.R:
 				this.reset = true;
@@ -145,10 +151,10 @@ public class WorldController extends InputAdapter {
 	public boolean keyUp(final int keycode) {
 		switch (keycode) {
 			case Input.Keys.LEFT:
-				this.player.setLeft(false);
-				break;
 			case Input.Keys.RIGHT:
-				this.player.setRight(false);
+			case Input.Keys.UP:
+			case Input.Keys.DOWN:
+				this.player.stop();
 				break;
 		}
 		return false;
@@ -160,12 +166,12 @@ public class WorldController extends InputAdapter {
 			this.reset();
 		}
 		if (screenX < (Gdx.graphics.getWidth() / 3)) {
-			this.player.setLeft(true);
+			//this.player.setLeft(true);
 		} else
 			if (screenX > ((Gdx.graphics.getWidth() / 3) * 2)) {
-				this.player.setRight(true);
+				//this.player.setRight(true);
 			} else {
-				this.player.jump();
+				//this.player.jump();
 			}
 		return true;
 	}
@@ -173,10 +179,10 @@ public class WorldController extends InputAdapter {
 	@Override
 	public boolean touchUp(final int screenX, final int screenY, final int pointer, final int button) {
 		if (screenX < (Gdx.graphics.getWidth() / 3)) {
-			this.player.setLeft(false);
+			//this.player.setLeft(false);
 		} else
 			if (screenX > ((Gdx.graphics.getWidth() / 3) * 2)) {
-				this.player.setRight(false);
+				//this.player.setRight(false);
 			}
 		return true;
 	}

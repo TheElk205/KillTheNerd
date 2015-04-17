@@ -1,5 +1,7 @@
 package at.gamejam.ktn.game.entites;
 
-public abstract class InteractiveObject {
+import at.gamejam.ktn.game.entities.GameObject;
+
+public abstract class InteractiveObject extends GameObject {
 
 }
