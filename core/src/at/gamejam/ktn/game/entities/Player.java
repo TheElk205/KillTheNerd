@@ -93,10 +93,12 @@ public class Player extends GameObject {
 		} else
 			if (this.right) {
 				toApply.x = Player.ACCELERATION;
+			} else {
+				toApply.x = 0;
 			}
-		if (((this.b2Body.getLinearVelocity().x > Player.MAX_SPEED) && (toApply.x > 0)) || ((this.b2Body.getLinearVelocity().x < -Player.MAX_SPEED) && (toApply.x < 0))) {
+		/*if (((this.b2Body.getLinearVelocity().x > Player.MAX_SPEED) && (toApply.x > 0)) || ((this.b2Body.getLinearVelocity().x < -Player.MAX_SPEED) && (toApply.x < 0))) {
 			toApply.x = 0;
-		}
+		}*/
 		this.b2Body.applyForceToCenter(toApply, true);
 	}
 

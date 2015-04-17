@@ -21,14 +21,14 @@ import com.badlogic.gdx.physics.box2d.World;
  * Created by Lukas on 11.04.2015.
  */
 public class WorldController extends InputAdapter {
-	public CameraHelper	cameraHelper;
-	public Player		player;
-	public long			timeElapsed;
-	int					coinCount	= 0;
-	private World		b2World;
-	private Level		level;
-	private boolean		debug		= false;
-	private boolean		reset;
+	public CameraHelper		cameraHelper;
+	public Player			player;
+	public long				timeElapsed;
+	int						coinCount	= 0;
+	private World			b2World;
+	private TopDownLevel	level;
+	private boolean			debug		= true;
+	private boolean			reset;
 
 	public WorldController() {
 		this.init();
@@ -37,10 +37,12 @@ public class WorldController extends InputAdapter {
 	public void init() {
 		Gdx.input.setInputProcessor(this);
 		this.cameraHelper = new CameraHelper();
-		this.b2World = new World(new Vector2(0, -9.81f), true);
+		// this.b2World = new World(new Vector2(0, -9.81f), true);
+		this.b2World = new World(new Vector2(0, 0), true); // no gravity
 		this.player = new Player(new Vector2(0.5f, 1.5f), this.b2World);
 		this.cameraHelper.setTarget(this.player.getBody());
-		this.level = new Level(this.b2World);
+		// this.level = new Level(this.b2World);
+		this.level = new TopDownLevel(this.b2World);
 		this.b2World.setContactListener(new ContactListener() {
 			@Override
 			public void beginContact(final Contact contact) {
@@ -187,7 +189,7 @@ public class WorldController extends InputAdapter {
 		return this.b2World;
 	}
 
-	public Level getLevel() {
+	public TopDownLevel getLevel() {
 		return this.level;
 	}
 }

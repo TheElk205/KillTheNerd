@@ -34,7 +34,7 @@ public class BasicBlock extends GameObject {
 		switch (type) {
 			case BlockDirt:
 				this.texture = this.assets.findRegion("grassCenter");
-				this.physics = false;
+				// this.physics = false;
 				break;
 			case BlockGrass:
 				this.texture = this.assets.findRegion("grassMid");
@@ -46,6 +46,12 @@ public class BasicBlock extends GameObject {
 				this.texture = this.assets.findRegion("grassHillLeft2");
 				this.physics = false;
 				break;
+			case BlockBorder:
+				this.texture = this.assets.findRegion("grassCenter");
+
+				break;
+			default:
+				throw new RuntimeException("no image defined for this block type");
 		}
 		if (flipped) {
 			this.texture = new TextureRegion(this.texture); // clone texture for performing flip
@@ -70,9 +76,16 @@ public class BasicBlock extends GameObject {
 			} else {
 				edgeShape.set(new Vector2(0, 0), this.dimension);
 			}
+		}
+		if (this.type == BasicBlockType.BlockBorder) {
+			edgeShape.set(new Vector2(0, this.dimension.y), this.dimension);
+			// edgeShape.set(new Vector2(0, this.dimension.x), this.dimension);
+			edgeShape.set(new Vector2(this.dimension.x, 0), this.dimension);
+			// edgeShape.set(new Vector2(this.dimension.y, 0), this.dimension);
 		} else {
 			edgeShape.set(new Vector2(0, this.dimension.y), this.dimension);
 		}
+
 		edgeShape.setVertex0(new Vector2(-this.dimension.x, this.dimension.y));
 		edgeShape.setVertex3(new Vector2(2 * this.dimension.x, this.dimension.y));
 		edgeShape.setHasVertex0(true);
@@ -91,6 +104,6 @@ public class BasicBlock extends GameObject {
 	}
 
 	public enum BasicBlockType {
-		BlockGrass, BlockDirt, BlockSlope, BlockSlopeStart
+		BlockGrass, BlockDirt, BlockSlope, BlockSlopeStart, BlockBorder
 	}
 }
