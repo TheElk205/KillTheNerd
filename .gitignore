@@ -30,6 +30,8 @@ out/
 com_crashlytics_export_strings.xml
 
 ## Eclipse
+.project
+.classpath
 .metadata
 **/bin/
 tmp/
