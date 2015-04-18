@@ -31,6 +31,8 @@ public abstract class Item extends InteractiveObject {
 	private Body				b2Body;
 	private final World			b2World;
 
+	public boolean destroyed = false;
+	
 	public Item(final Vector2 position, final World b2World) {
 		super();
 		this.position = position;

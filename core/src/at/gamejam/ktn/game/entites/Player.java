@@ -16,7 +16,8 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public abstract class Player extends InteractiveObject {
 	protected Vector<Item>		items;
-	protected int				maxItems		= 5;
+	protected int maxItems = 50;
+	protected int itemCount = 50;
 
 	protected int				points			= 0;
 	protected float				startSpeed		= 3f;
@@ -168,10 +169,14 @@ public abstract class Player extends InteractiveObject {
 	}
 
 	public boolean addItem(final Item item) {
-		if (this.items.size() < this.maxItems) {
-			this.items.add(item);
-			// System.out.println("Got an Item!");
-			return true;
+		if(this.itemCount < this.maxItems) {
+			//this.items.add(item);
+			if(item.collectable) {
+				item.collectable = false;
+				this.itemCount++;
+				System.out.println("Got an Item! " + this.itemCount);
+				return true;
+			}
 		}
 		return false;
 	}
@@ -189,11 +194,11 @@ public abstract class Player extends InteractiveObject {
 	}
 
 	public void throwItem() {
-		if (this.items.size() >= 0) {
+		if(itemCount > 0) {
 			final RedBull bull = new RedBull(this.position, this.b2World);
-			bull.init(true);
+			//bull.init(true);
 			bull.collected = false;
-			// bull.collectable = false;
+			bull.collectable = false;
 			final Vector2 toApply = new Vector2();
 			// System.out.println(bull.position);
 			switch (this.directionLooking) {
@@ -223,6 +228,8 @@ public abstract class Player extends InteractiveObject {
 			bull.getBody().applyForceToCenter(toApply, true);
 			this.worldController.addRedBull(bull);
 			// this.items.remove(this.items.size()-1);
+			itemCount--;
+			System.out.println("Item Thrown: " +itemCount);
 		}
 	}
 
