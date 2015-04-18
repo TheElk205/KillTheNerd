@@ -68,3 +68,5 @@ build/
 *.classpath
 core/.classpath
 desktop/.classpath
+core/.classpath
+*.classpath

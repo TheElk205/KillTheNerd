@@ -5,13 +5,11 @@ import java.util.Vector;
 import at.gamejam.ktn.game.entites.Player;
 import at.gamejam.ktn.game.entites.PlayerSleep;
 import at.gamejam.ktn.game.entites.RedBull;
-<<<<<<< HEAD
 import at.gamejam.ktn.game.entities.Coin;
 import at.gamejam.ktn.game.entities.GameObject;
 import at.gamejam.ktn.game.entites.Player;
 import at.gamejam.ktn.game.entities.Spikes;
-=======
->>>>>>> origin/master
+
 import at.gamejam.ktn.utils.CameraHelper;
 
 import com.badlogic.gdx.Gdx;
@@ -67,18 +65,14 @@ public class WorldController extends InputAdapter {
 		for (int i = tmp.size() - 1; i >= 0; i--) {
 			this.level.removeRedBull(this.level.getRedBulls().get(i));
 		}
-<<<<<<< HEAD
 		
 		//Add Items
 		if(newObjects.size() > 0) {
 			for(GameObject o : newObjects) {
-				this.level.gameObjects.add(o);
+				this.level.getGameObjects().add(o);
 			}
 		}
-		
-=======
 
->>>>>>> origin/master
 		if (this.reset) {
 			this.reset();
 		}
@@ -203,7 +197,7 @@ public class WorldController extends InputAdapter {
 		return this.debug;
 	}
 
-	protected World getB2World() {
+	public World getB2World() {
 		return this.b2World;
 	}
 

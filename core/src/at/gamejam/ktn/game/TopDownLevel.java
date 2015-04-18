@@ -119,4 +119,8 @@ public class TopDownLevel {
 	public void addGameObject(final GameObject object) {
 		this.gameObjects.add(object);
 	}
+	
+	public List<GameObject>	getGameObjects() {
+		return this.gameObjects;
+	}
 }
