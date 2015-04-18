@@ -3,32 +3,30 @@ package at.gamejam.ktn.game.entites;
 import java.util.Vector;
 
 import at.gamejam.ktn.game.WorldController;
+import at.gamejam.ktn.utils.Constants;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 
 public abstract class Player extends InteractiveObject {
+
 	protected Vector<Item>		items;
-	protected int				maxItems			= 50;
-	protected int				itemCount			= 50;
+	protected int				maxItems			= 6;
+	public int					itemCount			= Constants.START_ITEM_COUNT;
 
 	protected int				points				= 0;
-	protected float				startSpeed			= 3f;
+	protected float				startSpeed			= 5f;
 	protected float				currentSpeed		= this.startSpeed;
 
-	protected float				throwingSpeed		= 75;
+	protected float				throwingSpeed		= 200;
 
-	protected TextureRegion		texture;
 	protected World				b2World;
 	protected WorldController	worldController;
-	protected Body				b2Body;
 
 	protected Direction			directionMoving;
 	protected Direction			directionLooking;
@@ -44,20 +42,20 @@ public abstract class Player extends InteractiveObject {
 
 	private float				timeSinceLastShoot	= 0;
 
-	protected ItemType itemType = ItemType.REDBULL;
-	
+	protected ItemType			itemType			= ItemType.REDBULL;
+
 	public enum ItemType {
 		REDBULL, THESIS
 	}
-	
+
 	protected void initConstructor(final Vector2 position, final WorldController worldcontroller) {
 		this.worldController = worldcontroller;
 		this.b2World = this.worldController.getB2World();
 		this.position = position;
-		this.init();
+		this.init(true, true);
 	}
 
-	protected void init() {
+	private void init(boolean animation, boolean initPhysics) {
 		this.items = new Vector<Item>();
 
 		this.dimension.set(0.2f, 0.2f);
@@ -67,35 +65,41 @@ public abstract class Player extends InteractiveObject {
 		this.directionMoving = Direction.STAY;
 		this.directionLooking = Direction.S;
 		this.loadAsset();
-		this.initPhysics();
+		if (initPhysics) {
+			this.initPhysics();
+		}
 	}
 
-	private void initPhysics() {
-		// create body definition
-		final BodyDef bodyDef = new BodyDef();
-		bodyDef.type = BodyDef.BodyType.DynamicBody;
-		bodyDef.position.set(this.position.x, this.position.y);
+	@Override
+	public void initPhysics() {
+		if (!this.physicsAlreadyInit) {
+			this.physicsAlreadyInit = true;
+			// create body definition
+			final BodyDef bodyDef = new BodyDef();
+			bodyDef.type = BodyDef.BodyType.DynamicBody;
+			bodyDef.position.set(this.position.x, this.position.y);
 
-		// create body in world
-		this.b2Body = this.b2World.createBody(bodyDef);
+			// create body in world
+			this.b2Body = this.b2World.createBody(bodyDef);
 
-		// create shape
-		final CircleShape circleShape = new CircleShape();
-		circleShape.setRadius(this.dimension.x / 2);
+			// create shape
+			final CircleShape circleShape = new CircleShape();
+			circleShape.setRadius(this.dimension.x / 2);
 
-		// create fixture to attach shape to body
-		final FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.shape = circleShape;
-		fixtureDef.density = 0f;
-		// fixtureDef.friction = 1f;
-		// fixtureDef.restitution = 0;
+			// create fixture to attach shape to body
+			final FixtureDef fixtureDef = new FixtureDef();
+			fixtureDef.shape = circleShape;
+			fixtureDef.density = 0f;
+			fixtureDef.friction = 0f;
+			fixtureDef.restitution = 0;
 
-		this.b2Body.createFixture(fixtureDef);
-		this.b2Body.setLinearDamping(1f);
-		this.b2Body.setBullet(true);
+			this.b2Body.createFixture(fixtureDef);
+			this.b2Body.setLinearDamping(1f);
+			this.b2Body.setBullet(false);
 
-		circleShape.dispose(); // clean up!!
-		this.b2Body.setUserData(this);
+			circleShape.dispose(); // clean up!!
+			this.b2Body.setUserData(this);
+		}
 	}
 
 	protected abstract void loadAsset();
@@ -117,7 +121,7 @@ public abstract class Player extends InteractiveObject {
 
 	public void getNear(final Object o) {
 		if (o instanceof Item) {
-			((Item) o).grabbed(this);
+			((Item) o).grabbedBy(this);
 		} else
 			if (o instanceof Pupil) {
 				((Pupil) o).isNear(this);
@@ -133,8 +137,10 @@ public abstract class Player extends InteractiveObject {
 
 	@Override
 	public void render(final SpriteBatch batch) {
-		batch.draw(this.texture, this.position.x - (this.dimension.x / 2), this.position.y - (this.dimension.y / 2), this.origin.x, this.origin.y, this.dimension.x, this.dimension.y, this.scale.x,
-				this.scale.y, this.rotation);
+		if (this.toRender) {
+			batch.draw(this.texture, this.position.x - (this.dimension.x / 2), this.position.y - (this.dimension.y / 2), this.origin.x, this.origin.y, this.dimension.x, this.dimension.y,
+					this.scale.x, this.scale.y, this.rotation);
+		}
 	}
 
 	@Override
@@ -186,7 +192,7 @@ public abstract class Player extends InteractiveObject {
 			if (item.collectable) {
 				item.collectable = false;
 				this.itemCount++;
-				System.out.println("Got an Item! " + this.itemCount);
+				// System.out.println("Got an Item! " + this.itemCount);
 				return true;
 			}
 		}
@@ -207,7 +213,7 @@ public abstract class Player extends InteractiveObject {
 
 	public void throwItem(float deltaTime) {
 		timeSinceLastShoot += deltaTime;
-		if ((itemCount > 0) && this.shoot && (this.timeSinceLastShoot > 1)) {
+		if ((itemCount > 0) && this.shoot && (this.timeSinceLastShoot > 0.5f)) {
 			this.timeSinceLastShoot = 0;
 			Vector2 initPos = this.position;
 			Vector2 toApply = new Vector2();
@@ -219,44 +225,51 @@ public abstract class Player extends InteractiveObject {
 				case N:
 					toApply.y = throwingSpeed;
 					initPos.y += this.dimension.y + offset;
-				break;
+					break;
 				case S:
 					toApply.y = -throwingSpeed;
 					initPos.y -= (this.dimension.y + offset);
-				break;
+					break;
 				case E:
 					toApply.x = throwingSpeed;
 					initPos.x += this.dimension.x + offset;
-				break;
+					break;
 				case W:
 					toApply.x = -throwingSpeed;
 					initPos.x -= (this.dimension.x + offset);
-				break;
+					break;
 				default:
-					System.out.println("What the fuck");
 					break;
 			}
-			if(this.itemType == ItemType.REDBULL) {
-				RedBull bull = new RedBull(initPos, this.b2World);
-				bull.getBody().applyForceToCenter(toApply, true);				
+			if (this.itemType == ItemType.REDBULL) {
+				RedBull bull = new RedBull(initPos, this.b2World, true);
+				bull.getB2Body().applyForceToCenter(toApply, true);
 				this.worldController.addTempGameObject(bull);
-			}
-			else if(this.itemType == ItemType.THESIS){
-				Thesis thesis = new Thesis(initPos, this.b2World);
-				thesis.getBody().applyForceToCenter(toApply, true);				
-				this.worldController.addTempGameObject(thesis);
-			}
+				bull.itemIsThrownBy = this;
+				this.worldController.redBullCount--;
+			} else
+				if (this.itemType == ItemType.THESIS) {
+					Thesis thesis = new Thesis(initPos, this.b2World, true);
+					thesis.getB2Body().applyForceToCenter(toApply, true);
+					this.worldController.addTempGameObject(thesis);
+					thesis.itemIsThrownBy = this;
+					this.worldController.coinCount--;
+				}
 			itemCount--;
-			System.out.println("Item Thrown: " + itemCount);
+			// System.out.println("Item Thrown: " + itemCount);
 		}
 	}
 
-	public Body getBody() {
+	/*public Body getBody() {
 		return this.b2Body;
-	}
+	}*/
 
-	public void hitByItem(Item item) {
-		System.out.println(this + " hit by " + item);
+	/**
+	 * @param item
+	 * @return returns true if player "dead"
+	 */
+	public boolean hitByItem(Item item) {
+		// System.out.println(this + " hit by " + item);
 		if ((item instanceof RedBull) && (this instanceof PlayerSleep)) {
 			health = health - 50;
 		}
@@ -265,9 +278,11 @@ public abstract class Player extends InteractiveObject {
 		}*/
 
 		if (health <= 0) {
+			return true;
 			// this.getBody().setActive(false);
 			// this.b2World.destroyBody(getBody());
 		}
+		return false;
 	}
 
 	public void setName(final String name) {

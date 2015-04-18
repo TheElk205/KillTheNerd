@@ -24,6 +24,9 @@ public class WorldRenderer implements Disposable {
 	private Box2DDebugRenderer		debugRenderer;
 	private BitmapFont				font;
 	private TextureRegion			coinTexture;
+	private TextureRegion			redbullTexture;
+	public int						coinPosition	= 40;
+	public int						redBullPosition	= 40;
 
 	public WorldRenderer(final WorldController worldController) {
 		this.worldController = worldController;
@@ -45,6 +48,7 @@ public class WorldRenderer implements Disposable {
 
 		this.font = new BitmapFont(true); // default 15pt Arial
 		this.coinTexture = Assets.getInstance(new AssetManager()).findRegion("coinGold");
+		this.redbullTexture = Assets.getInstance(new AssetManager()).findRegion("redBull");
 	}
 
 	public void renderGUI(final SpriteBatch batch) {
@@ -53,9 +57,25 @@ public class WorldRenderer implements Disposable {
 		final String mmss = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(this.worldController.timeElapsed) % TimeUnit.HOURS.toMinutes(1),
 				TimeUnit.MILLISECONDS.toSeconds(this.worldController.timeElapsed) % TimeUnit.MINUTES.toSeconds(1));
 		this.font.draw(batch, mmss, 10, 10);
-		batch.draw(this.coinTexture, 10, 40, 20, 20);
+
 		this.font.draw(batch, Integer.toString(this.worldController.coinCount), 35, 40);
+		this.font.draw(batch, Integer.toString(this.worldController.redBullCount), 570, 40);
+		this.drawMunition();
 		batch.end();
+	}
+
+	public void drawMunition() {
+		int offset = 0;
+		for (int i = 0; i < this.worldController.playerWake.itemCount; i++) {
+			this.batch.draw(this.redbullTexture, 550, this.redBullPosition + offset, 20, 20);
+			offset += 30;
+		}
+
+		offset = 0;
+		for (int i = 0; i < this.worldController.playerSleep.itemCount; i++) {
+			this.batch.draw(this.coinTexture, 10, this.coinPosition + offset, 20, 20);
+			offset += 30;
+		}
 	}
 
 	public void render() {
@@ -64,6 +84,7 @@ public class WorldRenderer implements Disposable {
 		this.batch.begin();
 		this.worldController.getLevel().render(this.batch);
 		this.worldController.playerSleep.render(this.batch);
+		this.worldController.playerWake.render(this.batch); // TODO make global list.. forgot player wake..
 		this.batch.end();
 		this.renderGUI(this.batch);
 		if (this.worldController.isDebug()) {

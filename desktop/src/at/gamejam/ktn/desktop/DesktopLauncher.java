@@ -1,6 +1,7 @@
 package at.gamejam.ktn.desktop;
 
 import at.gamejam.ktn.JumpAndRoll;
+import at.gamejam.ktn.utils.Constants;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
@@ -22,6 +23,8 @@ public class DesktopLauncher {
 		final LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		// new LwjglApplication(new KTN_Game(), config);
 
+		config.height = Constants.VIEWPORT_GUI_HEIGHT;
+		config.width = Constants.VIEWPORT_GUI_WIDTH;
 		new LwjglApplication(new JumpAndRoll(), config);
 	}
 }
