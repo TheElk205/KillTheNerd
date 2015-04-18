@@ -3,7 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="con" path="org.springsource.ide.eclipse.gradle.classpathcontainer"/>
-	<classpathentry kind="lib" path="C:/Users/Ferdi/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx/1.5.5/9896d723afaeaae8229546119f9abffac5f8dbc7/gdx-1.5.5.jar" sourcepath="C:/Users/Ferdi/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx/1.5.5/23a5d06da04fd9a381aa225425722facf7de96c1/gdx-1.5.5-sources.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Ferdi/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-box2d/1.5.5/8931a097fc80279c6b9ee695560a85c1e280c7ea/gdx-box2d-1.5.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Herkt Kevin/Desktop/Dropbox/Gamejam_2015/lib"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
