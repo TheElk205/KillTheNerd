@@ -6,15 +6,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
 
 public abstract class Item extends InteractiveObject {
 
-<<<<<<< HEAD
 	// not animated
 	protected TextureRegion		texture;
 
@@ -30,37 +27,20 @@ public abstract class Item extends InteractiveObject {
 
 	Player						grabbedBy;
 
-	public Item() {
+	private Body				b2Body;
+	private final World			b2World;
 
-	}
-
-	public Item(final Vector2 position) {
-=======
-	//not animated
-	protected TextureRegion texture;
-	
-	//animated
-	protected TextureRegion[] textureRegion;
-	protected Animation animation;
-	protected float startTime = 0;
-	protected int numPictures = 0;
-	
-	//all
-	boolean collected = false;
-	boolean animated = false;
-	
-	Player grabbedBy;
-	
-	private Body b2Body;
-	private World b2World;
-	
-	public Item(final Vector2 position, World b2World) {
->>>>>>> origin/master
+	public Item(final Vector2 position, final World b2World) {
 		super();
 		this.position = position;
 		this.dimension = new Vector2(0.25f, 0.2f);
 		this.b2World = b2World;
-		
+
+	}
+
+	public Item() {
+		super();
+		this.b2World = null;
 	}
 
 	// public Item(boolean animated) {
@@ -73,9 +53,9 @@ public abstract class Item extends InteractiveObject {
 		if (this.animated) {
 			this.initAnimated();
 		}
-		initPhysics();
+		this.initPhysics();
 	}
-	
+
 	private void initPhysics() {
 		final BodyDef bodyDef = new BodyDef();
 		bodyDef.position.set(new Vector2(this.position.x + (this.dimension.x / 2f), this.position.y + (this.dimension.y / 2f)));
@@ -89,9 +69,9 @@ public abstract class Item extends InteractiveObject {
 		this.b2Body.createFixture(fixtureDef);
 		this.b2Body.setUserData(this);
 	}
-	
+
 	private void disablePhysics() {
-		
+
 	}
 
 	private void initAnimated() {
@@ -130,19 +110,13 @@ public abstract class Item extends InteractiveObject {
 	public void setCollected(final boolean b) {
 		this.collected = b;
 	}
-<<<<<<< HEAD
 
-	// interactions
-	public void grabbed(final Player player) {
-=======
-	
 	public Body getBody() {
 		return this.b2Body;
 	}
-	
-	//interactions
-	public void grabbed(Player player) {
->>>>>>> origin/master
+
+	// interactions
+	public void grabbed(final Player player) {
 		System.out.println("Item grabbed by: " + player);
 		this.collected = true;
 		this.grabbedBy = player;
