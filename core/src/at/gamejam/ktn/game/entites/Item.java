@@ -3,6 +3,7 @@ package at.gamejam.ktn.game.entites;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -16,26 +17,25 @@ public abstract class Item extends InteractiveObject {
 	protected TextureRegion		texture;
 
 	// animated
-	protected TextureRegion[]	textureRegion;
-	protected Animation			animation;
-	protected float				startTime	= 0;
-	protected int				numPictures	= 0;
+	protected TextureRegion[] textureRegion;
+	protected Animation	animation;
+	protected float startTime = 0;
+	protected int numPictures = 0;
 
 	// all
-	boolean						collected	= false;
-	boolean						animated	= false;
+	boolean	collected = false;
+	boolean	animated = false;
+	boolean collectable = true;
+	Player grabbedBy;
 
-	Player						grabbedBy;
-
-	private Body				b2Body;
-	private final World			b2World;
+	private Body b2Body;
+	private final World	b2World;
 
 	public Item(final Vector2 position, final World b2World) {
 		super();
 		this.position = position;
 		this.dimension = new Vector2(0.25f, 0.2f);
 		this.b2World = b2World;
-
 	}
 
 	public Item() {
@@ -47,9 +47,10 @@ public abstract class Item extends InteractiveObject {
 	// super();
 	// this.animated = animated;
 	// }
-
+	
 	protected void init(final boolean animated) {
 		this.animated = animated;
+		this.collected = false;
 		if (this.animated) {
 			this.initAnimated();
 		}
@@ -101,6 +102,12 @@ public abstract class Item extends InteractiveObject {
 	public void update(final float deltaTime) {
 		super.update(deltaTime);
 		this.startTime += deltaTime;
+		this.position = this.b2Body.getPosition();
+		
+		this.position.x = this.position.x - this.dimension.x/2;
+		this.position.y = this.position.y - this.dimension.y/2;
+		
+		this.rotation = this.b2Body.getAngle() * MathUtils.radiansToDegrees;
 	}
 
 	public boolean isCollected() {
@@ -108,7 +115,8 @@ public abstract class Item extends InteractiveObject {
 	}
 
 	public void setCollected(final boolean b) {
-		this.collected = b;
+		if(collectable)
+			this.collected = b;
 	}
 
 	public Body getBody() {
@@ -117,11 +125,13 @@ public abstract class Item extends InteractiveObject {
 
 	// interactions
 	public void grabbed(final Player player) {
-		System.out.println("Item grabbed by: " + player);
-		this.collected = true;
-		this.grabbedBy = player;
-		this.grabbedBy.addItem(this);
-		this.disablePhysics();
+		if(collectable) {
+			System.out.println("Item grabbed by: " + player);
+			this.collected = true;
+			this.grabbedBy = player;
+			this.grabbedBy.addItem(this);
+			this.disablePhysics();
+		}
 	}
 
 }

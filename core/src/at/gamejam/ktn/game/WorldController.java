@@ -7,6 +7,7 @@ import at.gamejam.ktn.game.entites.Item;
 import at.gamejam.ktn.game.entites.PlayerSleep;
 import at.gamejam.ktn.game.entites.RedBull;
 import at.gamejam.ktn.game.entities.Coin;
+import at.gamejam.ktn.game.entities.GameObject;
 import at.gamejam.ktn.game.entites.Player;
 import at.gamejam.ktn.game.entities.Spikes;
 import at.gamejam.ktn.utils.CameraHelper;
@@ -37,6 +38,7 @@ public class WorldController extends InputAdapter {
 	private boolean			debug		= true;
 	private boolean			reset;
 
+	Vector<GameObject> newObjects = new Vector<GameObject>();
 	public WorldController() {
 		this.init();
 	}
@@ -46,7 +48,7 @@ public class WorldController extends InputAdapter {
 		this.cameraHelper = new CameraHelper();
 		// this.b2World = new World(new Vector2(0, -9.81f), true);
 		this.b2World = new World(new Vector2(0, 0), true); // no gravity
-		this.player = new PlayerSleep(new Vector2(0.5f, 1.5f), this.b2World);
+		this.player = new PlayerSleep(new Vector2(0.5f, 1.5f), this);
 		this.cameraHelper.setTarget(this.player.getBody());
 		// this.level = new Level(this.b2World);
 		this.level = new TopDownLevel(this.b2World);
@@ -104,6 +106,13 @@ public class WorldController extends InputAdapter {
 		}
 		for(int i = tmp.size()-1; i >= 0; i--) {
 			this.level.removeRedBull(this.level.getRedBulls().get(i));
+		}
+		
+		//Add Items
+		if(newObjects.size() > 0) {
+			for(GameObject o : newObjects) {
+				this.level.gameObjects.add(o);
+			}
 		}
 		
 		if (this.reset) {
@@ -215,6 +224,15 @@ public class WorldController extends InputAdapter {
 				//this.player.setRight(false);
 			}
 		return true;
+	}
+	
+	public void addGameObject(GameObject object) {
+		newObjects.add(object);
+	}
+	
+	public void addRedBull(RedBull bull) {
+		this.addGameObject(bull);
+		this.level.getRedBulls().add(bull);
 	}
 
 	public boolean isDebug() {

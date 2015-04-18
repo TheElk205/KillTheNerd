@@ -2,6 +2,8 @@ package at.gamejam.ktn.game.entites;
 
 import java.util.Vector;
 
+import at.gamejam.ktn.game.WorldController;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -20,8 +22,11 @@ public abstract class Player extends InteractiveObject {
 	protected float startSpeed = 3f;
 	protected float currentSpeed = this.startSpeed;
 	
+	protected float throwingSpeed = 75;
+	
 	protected TextureRegion texture;
 	protected World b2World;
+	protected WorldController worldController;
 	protected Body b2Body;
 	
 	protected Direction directionMoving;
@@ -29,8 +34,9 @@ public abstract class Player extends InteractiveObject {
 	
 	protected String name = "Player";
 	
-	protected void initConstructor(final Vector2 position, final World b2World) {
-		this.b2World = b2World;
+	protected void initConstructor(final Vector2 position, WorldController worldcontroller) {
+		this.worldController = worldcontroller;
+		this.b2World = this.worldController.getB2World();
 		this.position = position;
 		this.init();
 	}
@@ -39,10 +45,11 @@ public abstract class Player extends InteractiveObject {
 		this.items = new Vector<Item>();
 		
 		this.dimension.set(0.2f, 0.2f);
-		this.origin.x = this.dimension.x / 2;
-		this.origin.y = this.dimension.y / 2;
+		this.origin.x = 0;
+		this.origin.y = 0;
 		//this.texture = this.assets.findRegion("player");
 		this.directionMoving = Direction.STAY;
+		this.directionLooking = Direction.S;
 		this.loadAsset();
 		this.initPhysics();
 	}
@@ -159,10 +166,40 @@ public abstract class Player extends InteractiveObject {
 	}
 	
 	public void throwItem() {
-		if(this.items.size() > 0) {
-			Item item = this.items.get(this.items.size()-1);
-			item.collected = false;
-			item.getBody().applyForceToCenter(new Vector2(1,0), true);
+		if(this.items.size() >= 0) {
+			RedBull bull = new RedBull(this.position, this.b2World);
+			bull.init(true);
+			bull.collected = false;
+			//bull.collectable = false;
+			Vector2 toApply = new Vector2();
+			System.out.println(bull.position);
+			switch(directionLooking) {
+			case N:
+				//toApply.y = throwingSpeed;
+				bull.position.y += 2;
+				System.out.print("UP");
+				break;
+			case S:
+				//toApply.y = -throwingSpeed;
+				bull.position.y -= 2;
+				break;
+			case E:
+				//toApply.x = throwingSpeed;
+				bull.position.x += 2;
+				break;
+			case W:
+				//toApply.x = -throwingSpeed;
+				bull.position.x -= 2;
+				break;
+			default:
+				System.out.println("What the fuck");
+				break;
+			}
+			System.out.println(bull.position);
+			System.out.println(this.position);
+			bull.getBody().applyForceToCenter(toApply, true);
+			worldController.addRedBull(bull);
+			//this.items.remove(this.items.size()-1);
 		}
 	}
 	
