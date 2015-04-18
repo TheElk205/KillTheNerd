@@ -2,6 +2,7 @@ package at.gamejam.ktn.game;
 
 import java.util.Vector;
 
+import at.gamejam.ktn.game.entites.Item;
 import at.gamejam.ktn.game.entites.PlayerSleep;
 import at.gamejam.ktn.game.entites.RedBull;
 import at.gamejam.ktn.game.entities.GameObject;
@@ -63,10 +64,13 @@ public class WorldController {
 //		for (int i = tmp.size() - 1; i >= 0; i--) {
 //			this.level.removeRedBull(this.level.getRedBulls().get(i));
 //		}
-		for(RedBull b: this.level.getRedBulls()) {
-			if(b.isCollected() && !b.destroyed) {
-				this.b2World.destroyBody(b.getBody());
-				b.destroyed = true;
+		for(GameObject o: this.level.getGameObjects()) {
+			if(o instanceof Item) {
+				RedBull b = (RedBull) o;
+				if(b.isCollected() && !b.destroyed) {
+					this.b2World.destroyBody(b.getBody());
+					b.destroyed = true;
+				}
 			}
 		}
 			newObjects.clear();
@@ -89,23 +93,6 @@ public class WorldController {
 		this.timeElapsed = 0;
 		this.coinCount = 0;
 	}
-
-	/*private void testCoins() {
-		final Rectangle playerRect = new Rectangle();
-		final Rectangle coinRect = new Rectangle();
-		playerRect.set(this.player.position.x, this.player.position.y, this.player.dimension.x, this.player.dimension.y);
-		for (final RedBull red : this.level.getRedBulls()) {
-			if (red.isCollected()) {
-				continue;
-			}
-			coinRect.set(red.position.x, red.position.y, red.dimension.x, red.dimension.y);
-			if (!playerRect.overlaps(coinRect)) {
-				continue;
-			}
-			red.grabbed(this.player);
-			this.coinCount += 1;
-		}
-	}*/
 
 	public void addTempGameObject(final GameObject object) {
 		this.newObjects.add(object);
