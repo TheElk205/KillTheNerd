@@ -39,6 +39,12 @@ public abstract class Player extends InteractiveObject {
 	private boolean				left;
 	private boolean				down;
 
+	protected ItemType itemType = ItemType.REDBULL;
+	
+	public enum ItemType {
+		REDBULL, THESIS
+	}
+	
 	protected void initConstructor(final Vector2 position, final WorldController worldcontroller) {
 		this.worldController = worldcontroller;
 		this.b2World = this.worldController.getB2World();
@@ -196,7 +202,7 @@ public abstract class Player extends InteractiveObject {
 	public void throwItem() {
 		if(itemCount > 0) {
 			Vector2 initPos = this.position;
-			
+			Vector2 toApply = new Vector2();
 			initPos.x -= this.dimension.x/2f;
 			initPos.y -= this.dimension.x/2f;
 			
@@ -205,36 +211,33 @@ public abstract class Player extends InteractiveObject {
 				case N:
 				toApply.y = throwingSpeed;
 				initPos.y += this.dimension.y + offset;
-				System.out.println("UP");
-					break;
+				break;
 				case S:
 				toApply.y = -throwingSpeed;
 				initPos.y -= (this.dimension.y + offset);
-				System.out.println("DOWN");
-					break;
+				break;
 				case E:
 				toApply.x = throwingSpeed;
 				initPos.x += this.dimension.x + offset;
-				System.out.println("LEFT");
-					break;
+				break;
 				case W:
 				toApply.x = -throwingSpeed;
 				initPos.x -= (this.dimension.x + offset);
-				System.out.println("RIGHT");
-					break;
+				break;
 				default:
 					System.out.println("What the fuck");
 					break;
 			}
-			RedBull bull = new RedBull(initPos, this.b2World);
-			//bull.init(true);
-			bull.collected = false;
-			bull.collectable = true;
-//			System.out.println(bull.position);
-//			System.out.println(this.position);
-			bull.getBody().applyForceToCenter(toApply, true);
-			this.worldController.addRedBull(bull);
-			// this.items.remove(this.items.size()-1);
+			if(this.itemType == ItemType.REDBULL) {
+				RedBull bull = new RedBull(initPos, this.b2World);
+				bull.getBody().applyForceToCenter(toApply, true);				
+				this.worldController.addTempGameObject(bull);
+			}
+			else if(this.itemType == ItemType.THESIS){
+				Thesis thesis = new Thesis(initPos, this.b2World);
+				thesis.getBody().applyForceToCenter(toApply, true);				
+				this.worldController.addTempGameObject(thesis);
+			}
 			itemCount--;
 			System.out.println("Item Thrown: " +itemCount);
 		}
