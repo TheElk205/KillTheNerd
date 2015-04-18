@@ -16,14 +16,14 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public abstract class Player extends InteractiveObject {
 	protected Vector<Item>		items;
-	protected int maxItems = 50;
-	protected int itemCount = 50;
+	protected int				maxItems			= 50;
+	protected int				itemCount			= 50;
 
-	protected int				points			= 0;
-	protected float				startSpeed		= 3f;
-	protected float				currentSpeed	= this.startSpeed;
+	protected int				points				= 0;
+	protected float				startSpeed			= 3f;
+	protected float				currentSpeed		= this.startSpeed;
 
-	protected float				throwingSpeed	= 75;
+	protected float				throwingSpeed		= 75;
 
 	protected TextureRegion		texture;
 	protected World				b2World;
@@ -33,11 +33,14 @@ public abstract class Player extends InteractiveObject {
 	protected Direction			directionMoving;
 	protected Direction			directionLooking;
 
-	protected String			name			= "Player";
+	protected String			name				= "Player";
 	private boolean				right;
 	private boolean				up;
 	private boolean				left;
 	private boolean				down;
+	private boolean				shoot;
+
+	private float				timeSinceLastShoot	= 0;
 
 	protected ItemType itemType = ItemType.REDBULL;
 	
@@ -135,6 +138,7 @@ public abstract class Player extends InteractiveObject {
 	@Override
 	public void update(final float deltaTime) {
 		this.move();
+		this.throwItem(deltaTime);
 		this.position = this.b2Body.getPosition();
 		this.rotation = this.b2Body.getAngle() * MathUtils.radiansToDegrees;
 	}
@@ -175,9 +179,9 @@ public abstract class Player extends InteractiveObject {
 	}
 
 	public boolean addItem(final Item item) {
-		if(this.itemCount < this.maxItems) {
-			//this.items.add(item);
-			if(item.collectable) {
+		if (this.itemCount < this.maxItems) {
+			// this.items.add(item);
+			if (item.collectable) {
 				item.collectable = false;
 				this.itemCount++;
 				System.out.println("Got an Item! " + this.itemCount);
@@ -199,30 +203,32 @@ public abstract class Player extends InteractiveObject {
 		this.directionMoving = Direction.STAY;
 	}
 
-	public void throwItem() {
-		if(itemCount > 0) {
+	public void throwItem(float deltaTime) {
+		timeSinceLastShoot += deltaTime;
+		if ((itemCount > 0) && this.shoot && (this.timeSinceLastShoot > 1)) {
+			this.timeSinceLastShoot = 0;
 			Vector2 initPos = this.position;
 			Vector2 toApply = new Vector2();
-			initPos.x -= this.dimension.x/2f;
-			initPos.y -= this.dimension.x/2f;
-			
+			initPos.x -= this.dimension.x / 2f;
+			initPos.y -= this.dimension.x / 2f;
+
 			float offset = 0.1f;
 			switch (this.directionLooking) {
 				case N:
-				toApply.y = throwingSpeed;
-				initPos.y += this.dimension.y + offset;
+					toApply.y = throwingSpeed;
+					initPos.y += this.dimension.y + offset;
 				break;
 				case S:
-				toApply.y = -throwingSpeed;
-				initPos.y -= (this.dimension.y + offset);
+					toApply.y = -throwingSpeed;
+					initPos.y -= (this.dimension.y + offset);
 				break;
 				case E:
-				toApply.x = throwingSpeed;
-				initPos.x += this.dimension.x + offset;
+					toApply.x = throwingSpeed;
+					initPos.x += this.dimension.x + offset;
 				break;
 				case W:
-				toApply.x = -throwingSpeed;
-				initPos.x -= (this.dimension.x + offset);
+					toApply.x = -throwingSpeed;
+					initPos.x -= (this.dimension.x + offset);
 				break;
 				default:
 					System.out.println("What the fuck");
@@ -239,7 +245,7 @@ public abstract class Player extends InteractiveObject {
 				this.worldController.addTempGameObject(thesis);
 			}
 			itemCount--;
-			System.out.println("Item Thrown: " +itemCount);
+			System.out.println("Item Thrown: " + itemCount);
 		}
 	}
 
@@ -292,4 +298,13 @@ public abstract class Player extends InteractiveObject {
 	public boolean getDown() {
 		return this.down;
 	}
+
+	public void setShoot(boolean b) {
+		this.shoot = b;
+	}
+
+	public boolean getShoot() {
+		return this.shoot;
+	}
+
 }
