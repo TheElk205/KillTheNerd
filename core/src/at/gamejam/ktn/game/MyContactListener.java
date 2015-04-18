@@ -8,6 +8,7 @@ import at.gamejam.ktn.game.entites.Player;
 import at.gamejam.ktn.game.entites.PlayerSleep;
 import at.gamejam.ktn.game.entites.PlayerWake;
 import at.gamejam.ktn.game.entites.RedBull;
+import at.gamejam.ktn.game.entites.Thesis;
 import at.gamejam.ktn.game.entites.ThrowableObject;
 import at.gamejam.ktn.game.entities.GameObject;
 import at.gamejam.ktn.game.entities.Spikes;
@@ -67,6 +68,9 @@ public class MyContactListener implements ContactListener {
 		if (((userDataB instanceof PlayerSleep) && (userDataA instanceof Item)) || ((userDataA instanceof Item) && (userDataB instanceof PlayerSleep))) {
 			collisionType = 5;
 		}
+		if (((userDataB instanceof Thesis) && (userDataA instanceof RedBull)) || ((userDataA instanceof Thesis) && (userDataB instanceof RedBull))) {
+			collisionType = 6;
+		}
 
 		/*if (!(playerWithSpikes || playerWithThrowable || player1WithPlayer2 || playerWithItem)) {
 			return; // no collision at all
@@ -104,52 +108,118 @@ public class MyContactListener implements ContactListener {
 				System.out.println("beginContact Player1 with Player2");
 				break;
 			case 4: // playerWake + any item
-				if (userDataA instanceof Item) {
-					System.out.println("beginContact PlayerWake with Item");
-					final Item item = (Item) (userDataA);
-					final PlayerWake player = (PlayerWake) (userDataB);
-					item.grabbed(player);
-				} else {
-					System.out.println("beginContact Item with PlayerWake");
-					final Item item = (Item) userDataB;
-					final PlayerWake player = (PlayerWake) userDataA;
-					item.grabbed(player);
-				}
+				if (userDataA instanceof RedBull) {
+					System.out.println("wake takes RedBull");
+					wakeWithRedbull(userDataB, userDataA);
+				} else
+					if (userDataB instanceof RedBull) {
+						System.out.println("wake takes RedBull");
+						wakeWithRedbull(userDataA, userDataB);
+					} else
+						if (userDataA instanceof Thesis) {
+							wakeWithThesis(userDataB, userDataA);
+						} else
+							if (userDataB instanceof Thesis) {
+								wakeWithThesis(userDataA, userDataB);
+							}
 				break;
 			case 5: // playerSleep + any item
-				if (userDataA instanceof Item) {
-					System.out.println("beginContact PlayerSleep with Item");
-					final Item item = (Item) (userDataA);
-					final PlayerSleep player = (PlayerSleep) userDataB;
-					if (player.hitByItem(item)) {
-						player.setToRender(false);
-						objectsToRemove.add(player);
-					}
-					objectsToRemove.add(item);
-					item.setToRender(false);
-
-				} else {
-					System.out.println("beginContact Item with PlayerSleep");
-					final Item item = (Item) userDataB;
-					final PlayerSleep player = (PlayerSleep) userDataA;
-					if (player.hitByItem(item)) {
-						objectsToRemove.add(player);
-						player.setToRender(false);
-					}
-					objectsToRemove.add(item);
-					item.setToRender(false);
-				}
+				if (userDataA instanceof RedBull) {
+					sleepWithRedbull(userDataB, userDataA);
+				} else
+					if (userDataB instanceof RedBull) {
+						sleepWithRedbull(userDataA, userDataB);
+					} else
+						if (userDataB instanceof Thesis) {
+							System.out.println("sleep takes thesis");
+							sleepWithThesis(userDataA, userDataB);
+						} else
+							if (userDataA instanceof Thesis) {
+								System.out.println("sleep takes thesis");
+								sleepWithThesis(userDataB, userDataA);
+							}
+				break;
+			case 6:
+				// ((Item)userDataA).getB2Body()
 				break;
 			default:
 				System.out.println("default hit A: " + userDataA + " B: " + userDataB);
+				/*if (userDataA instanceof Item) {
+					((Item) userDataA).getB2Body().applyForceToCenter(new Vector2(), true);
+				}
+				if (userDataB instanceof Item) {
+					((Item) userDataB).getB2Body().applyForceToCenter(new Vector2(), true);
+				}*/
 				break;
 		}
 
 	}
 
+	private void wakeWithThesis(Object playerWake, Object userDataB) {
+		// TODO nothing to do , ZzZzZ 5sec aussetzen
+		final PlayerWake player = (PlayerWake) (playerWake);
+		final Thesis thesis = (Thesis) userDataB;
+		if (thesis.itemIsThrownBy instanceof PlayerSleep) {
+			if (player.hitByItem(thesis)) {
+				player.setToRender(false);
+				this.objectsToRemove.add(player);
+			}
+			thesis.setToRender(false);
+			this.objectsToRemove.add(thesis);
+		}
+	}
+
+	public void sleepWithRedbull(final Object userDataB, final Object userDataA) {
+		final Item item = (Item) (userDataA);
+		final PlayerSleep player = (PlayerSleep) userDataB;
+		if (item.itemIsThrownBy instanceof PlayerWake) {
+			if (player.hitByItem(item)) {
+				player.setToRender(false);
+				this.objectsToRemove.add(player);
+			}
+			item.setToRender(false);
+			this.objectsToRemove.add(item);
+		}
+	}
+
+	private void sleepWithThesis(Object userDataA, Object userDataB) {
+		final Item item = (Item) userDataB;
+		final PlayerSleep player = (PlayerSleep) userDataA;
+		this.wContr.coinCount++;
+		item.grabbedBy(player);
+	}
+
+	private void wakeWithRedbull(Object userDataA, Object userDataB) {
+		final Item item = (Item) userDataB;
+		final PlayerWake player = (PlayerWake) userDataA;
+		this.wContr.redBullCount++;
+		item.grabbedBy(player);
+	}
+
 	@Override
 	public void endContact(final Contact contact) {
-		// System.out.println("endContact");
+		final Fixture fA = contact.getFixtureA();
+		final Fixture fB = contact.getFixtureB();
+
+		final Object userDataB = fB.getBody().getUserData();
+		final Object userDataA = fA.getBody().getUserData();
+		int collisionType = 0;
+		if (((userDataB instanceof Player) && (userDataA instanceof Spikes)) || ((userDataA instanceof Player) && (userDataB instanceof Spikes))) {
+			collisionType = 1;
+		}
+		if (((userDataB instanceof Player) && (userDataA instanceof ThrowableObject)) || ((userDataA instanceof Player) && (userDataB instanceof ThrowableObject))) {
+			collisionType = 2;
+		}
+		if ((userDataB instanceof Player) && (userDataA instanceof Player)) {
+			collisionType = 3;
+		}
+		if (((userDataB instanceof PlayerWake) && (userDataA instanceof Item)) || ((userDataA instanceof Item) && (userDataB instanceof PlayerWake))) {
+			collisionType = 4;
+		}
+		if (((userDataB instanceof PlayerSleep) && (userDataA instanceof Item)) || ((userDataA instanceof Item) && (userDataB instanceof PlayerSleep))) {
+			collisionType = 5;
+		}
+
 	}
 
 	@Override

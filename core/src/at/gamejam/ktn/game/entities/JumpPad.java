@@ -58,11 +58,11 @@ public class JumpPad extends GameObject {
 		this.b2World.QueryAABB(new QueryCallback() {
 			@Override
 			public boolean reportFixture(final Fixture fixture) {
-				if (fixture.getBody().getUserData() instanceof Player) {
+				/*if (fixture.getBody().getUserData() instanceof Player) {
 					JumpPad.this.trigger();
 					fixture.getBody().setLinearVelocity(JumpPad.this.b2Body.getLinearVelocity().x, 0);
 					fixture.getBody().applyForceToCenter(0, JumpPad.JUMP_FORCE * 1.5f, true);
-				}
+				}*/
 				return false;
 			}
 		}, lowerX, lowerY, (lowerX + this.dimension.x) - (2 * border), lowerY + 0.1f);

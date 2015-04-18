@@ -7,13 +7,14 @@ public class RedBull extends Item {
 
 	public RedBull(final Vector2 position, final World b2World, boolean initPhysics) {
 		super(position, b2World);
-		this.numPictures = 8;
+		this.numPictures = 4;
+		this.frameDuration = 0.25f;
 		this.init(true, initPhysics);
 	}
 
 	@Override
 	protected void loadAsset() {
-		this.texture = this.assets.findRegion("coin_gold");
+		this.texture = this.assets.findRegion("newRedBull_2_true");
 	}
 
 }

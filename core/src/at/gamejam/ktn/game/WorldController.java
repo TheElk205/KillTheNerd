@@ -8,6 +8,7 @@ import at.gamejam.ktn.game.entites.PlayerSleep;
 import at.gamejam.ktn.game.entites.PlayerWake;
 import at.gamejam.ktn.game.entities.GameObject;
 import at.gamejam.ktn.utils.CameraHelper;
+import at.gamejam.ktn.utils.Constants;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
@@ -19,10 +20,11 @@ public class WorldController {
 	public PlayerSleep				playerSleep;
 	public PlayerWake				playerWake;
 	public long						timeElapsed;
-	protected int					coinCount		= 0;
+	public int						coinCount		= Constants.START_ITEM_COUNT;
+	public int						redBullCount	= Constants.START_ITEM_COUNT;
 	private World					b2World;
 	private TopDownLevel			level;
-	private final boolean			debug			= true;
+	private final boolean			debug			= false;
 	// private boolean reset;
 
 	private final List<GameObject>	objectsToAdd	= new ArrayList<GameObject>();
@@ -38,16 +40,16 @@ public class WorldController {
 		// this.b2World = new World(new Vector2(0, -9.81f), true);
 		this.b2World = new World(new Vector2(0, 0), true); // no gravity
 
-		this.playerSleep = new PlayerSleep(new Vector2(0.5f, 1.5f), this);
-		this.playerWake = new PlayerWake(new Vector2(1.5f, 0.5f), this);
+		this.playerSleep = new PlayerSleep(new Vector2(-1.5f, -1.0f), this);
+		this.playerWake = new PlayerWake(new Vector2(1.5f, -1.0f), this);
 
-		// this.cameraHelper.setTarget(this.playerSleep.getBody());
+		this.cameraHelper.setTarget(this.playerSleep.getB2Body());
 		// this.level = new Level(this.b2World);
 
 		this.level = new TopDownLevel(this.b2World);
-		contactListener = new MyContactListener(this);
-		this.b2World.setContactListener(contactListener);
-		Gdx.input.setInputProcessor(new InputManager(this.playerSleep, this.playerWake, this.cameraHelper));
+		this.contactListener = new MyContactListener(this);
+		this.b2World.setContactListener(this.contactListener);
+		Gdx.input.setInputProcessor(new InputManager(this.playerWake, this.playerSleep, this.cameraHelper));
 	}
 
 	public void update(final float deltaTime) {
@@ -69,7 +71,7 @@ public class WorldController {
 			if (o instanceof Item) {
 				Item b = (Item) o;
 				if (b.isCollected() && !b.destroyed) {
-					this.b2World.destroyBody(b.getBody());
+					this.b2World.destroyBody(b.getB2Body());
 					b.destroyed = true;
 				}
 			}

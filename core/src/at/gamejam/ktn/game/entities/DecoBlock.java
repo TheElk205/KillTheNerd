@@ -35,6 +35,9 @@ public class DecoBlock extends GameObject {
 			case Bush:
 				this.textureHanging = this.assets.findRegion("bush");
 				break;
+			case NPC:
+				this.textureHanging = this.assets.findRegion("worker");
+				break;
 			case Plant:
 			default:
 				this.textureHanging = this.assets.findRegion("plant");
@@ -48,6 +51,6 @@ public class DecoBlock extends GameObject {
 	}
 
 	public enum DecoBlockType {
-		Rock, Cactus, Cloud, Bush, Plant
+		Rock, Cactus, Cloud, Bush, Plant, NPC
 	}
 }

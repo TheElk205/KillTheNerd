@@ -3,29 +3,28 @@ package at.gamejam.ktn.game.entites;
 import java.util.Vector;
 
 import at.gamejam.ktn.game.WorldController;
+import at.gamejam.ktn.utils.Constants;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 
 public abstract class Player extends InteractiveObject {
+
 	protected Vector<Item>		items;
-	protected int				maxItems			= 50;
-	protected int				itemCount			= 50;
+	protected int				maxItems			= 6;
+	public int					itemCount			= Constants.START_ITEM_COUNT;
 
 	protected int				points				= 0;
-	protected float				startSpeed			= 3f;
+	protected float				startSpeed			= 5f;
 	protected float				currentSpeed		= this.startSpeed;
 
-	protected float				throwingSpeed		= 75;
+	protected float				throwingSpeed		= 200;
 
-	protected TextureRegion		texture;
 	protected World				b2World;
 	protected WorldController	worldController;
 
@@ -91,12 +90,12 @@ public abstract class Player extends InteractiveObject {
 			final FixtureDef fixtureDef = new FixtureDef();
 			fixtureDef.shape = circleShape;
 			fixtureDef.density = 0f;
-			// fixtureDef.friction = 1f;
-			// fixtureDef.restitution = 0;
+			fixtureDef.friction = 0f;
+			fixtureDef.restitution = 0;
 
 			this.b2Body.createFixture(fixtureDef);
 			this.b2Body.setLinearDamping(1f);
-			this.b2Body.setBullet(true);
+			this.b2Body.setBullet(false);
 
 			circleShape.dispose(); // clean up!!
 			this.b2Body.setUserData(this);
@@ -122,7 +121,7 @@ public abstract class Player extends InteractiveObject {
 
 	public void getNear(final Object o) {
 		if (o instanceof Item) {
-			((Item) o).grabbed(this);
+			((Item) o).grabbedBy(this);
 		} else
 			if (o instanceof Pupil) {
 				((Pupil) o).isNear(this);
@@ -214,7 +213,7 @@ public abstract class Player extends InteractiveObject {
 
 	public void throwItem(float deltaTime) {
 		timeSinceLastShoot += deltaTime;
-		if ((itemCount > 0) && this.shoot && (this.timeSinceLastShoot > 1)) {
+		if ((itemCount > 0) && this.shoot && (this.timeSinceLastShoot > 0.5f)) {
 			this.timeSinceLastShoot = 0;
 			Vector2 initPos = this.position;
 			Vector2 toApply = new Vector2();
@@ -244,22 +243,26 @@ public abstract class Player extends InteractiveObject {
 			}
 			if (this.itemType == ItemType.REDBULL) {
 				RedBull bull = new RedBull(initPos, this.b2World, true);
-				bull.getBody().applyForceToCenter(toApply, true);
+				bull.getB2Body().applyForceToCenter(toApply, true);
 				this.worldController.addTempGameObject(bull);
+				bull.itemIsThrownBy = this;
+				this.worldController.redBullCount--;
 			} else
 				if (this.itemType == ItemType.THESIS) {
 					Thesis thesis = new Thesis(initPos, this.b2World, true);
-					thesis.getBody().applyForceToCenter(toApply, true);
+					thesis.getB2Body().applyForceToCenter(toApply, true);
 					this.worldController.addTempGameObject(thesis);
+					thesis.itemIsThrownBy = this;
+					this.worldController.coinCount--;
 				}
 			itemCount--;
 			// System.out.println("Item Thrown: " + itemCount);
 		}
 	}
 
-	public Body getBody() {
+	/*public Body getBody() {
 		return this.b2Body;
-	}
+	}*/
 
 	/**
 	 * @param item

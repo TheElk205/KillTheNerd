@@ -1,188 +1,209 @@
 
 assets.png
-size: 1024,256
+size: 512,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 bush
   rotate: false
-  xy: 1, 73
+  xy: 363, 876
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 cactus
   rotate: false
-  xy: 131, 146
+  xy: 363, 804
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 cloud1
   rotate: false
-  xy: 1, 145
+  xy: 363, 948
   size: 128, 71
   orig: 128, 71
   offset: 0, 0
   index: -1
 coinGold
   rotate: false
-  xy: 338, 133
+  xy: 435, 279
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 coin_gold
   rotate: false
-  xy: 1, 218
+  xy: 1, 58
   size: 256, 23
   orig: 256, 23
   offset: 0, 0
   index: -1
 dirtCliffLeft
   rotate: false
-  xy: 1, 1
+  xy: 363, 732
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 dirtMid
   rotate: false
-  xy: 73, 73
+  xy: 363, 660
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 flagBlue2
   rotate: false
-  xy: 73, 1
+  xy: 363, 588
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 flagBlueHanging
   rotate: false
-  xy: 145, 74
+  xy: 363, 516
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 grass
   rotate: false
-  xy: 145, 2
+  xy: 363, 444
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 grassCenter
   rotate: false
-  xy: 203, 146
+  xy: 363, 372
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 grassCliffRight
   rotate: false
-  xy: 217, 74
+  xy: 363, 300
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 grassHillLeft
   rotate: false
-  xy: 217, 2
+  xy: 363, 228
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 grassHillLeft2
   rotate: false
-  xy: 275, 171
+  xy: 363, 156
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 grassMid
   rotate: false
-  xy: 347, 171
+  xy: 363, 84
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
+newRedBull_2_true
+  rotate: false
+  xy: 1, 1
+  size: 220, 55
+  orig: 220, 55
+  offset: 0, 0
+  index: -1
 plant
   rotate: false
-  xy: 419, 171
+  xy: 435, 876
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 player
   rotate: false
-  xy: 923, 194
+  xy: 435, 464
   size: 47, 47
   orig: 47, 47
   offset: 0, 0
   index: -1
 player-ouch
   rotate: false
-  xy: 972, 194
+  xy: 435, 415
   size: 47, 47
   orig: 47, 47
   offset: 0, 0
   index: -1
 playerWake
   rotate: false
-  xy: 289, 122
+  xy: 435, 366
   size: 47, 47
   orig: 47, 47
   offset: 0, 0
   index: -1
 player_chill
   rotate: false
-  xy: 289, 73
+  xy: 435, 317
   size: 47, 47
   orig: 47, 47
   offset: 0, 0
   index: -1
+redBull
+  rotate: false
+  xy: 435, 513
+  size: 50, 55
+  orig: 50, 55
+  offset: 0, 0
+  index: -1
 rock
   rotate: false
-  xy: 491, 171
+  xy: 435, 804
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 snowMid
   rotate: false
-  xy: 563, 171
+  xy: 435, 732
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 snowRight
   rotate: false
-  xy: 635, 171
+  xy: 435, 660
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 spikes
   rotate: false
-  xy: 851, 206
+  xy: 259, 46
   size: 70, 35
   orig: 70, 35
   offset: 0, 0
   index: -1
 springboardDown
   rotate: false
-  xy: 779, 205
+  xy: 435, 570
   size: 70, 36
   orig: 70, 36
   offset: 0, 0
   index: -1
 springboardUp
   rotate: false
-  xy: 707, 191
+  xy: 435, 608
   size: 70, 50
   orig: 70, 50
+  offset: 0, 0
+  index: -1
+worker
+  rotate: false
+  xy: 1, 83
+  size: 360, 936
+  orig: 360, 936
   offset: 0, 0
   index: -1

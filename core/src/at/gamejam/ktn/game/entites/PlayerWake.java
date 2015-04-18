@@ -12,6 +12,6 @@ public class PlayerWake extends Player {
 
 	@Override
 	protected void loadAsset() {
-		this.texture = this.assets.findRegion("player");
+		this.texture = this.assets.findRegion("player-ouch");
 	}
 }

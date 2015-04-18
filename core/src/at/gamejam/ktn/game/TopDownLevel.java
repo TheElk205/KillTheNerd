@@ -3,9 +3,10 @@ package at.gamejam.ktn.game;
 import java.util.ArrayList;
 import java.util.List;
 
+import at.gamejam.ktn.game.entites.NPC;
 import at.gamejam.ktn.game.entites.RedBull;
+import at.gamejam.ktn.game.entites.Thesis;
 import at.gamejam.ktn.game.entities.BasicBlock;
-import at.gamejam.ktn.game.entities.DecoBlock;
 import at.gamejam.ktn.game.entities.GameObject;
 import at.gamejam.ktn.game.entities.JumpPad;
 import at.gamejam.ktn.game.entities.Spikes;
@@ -37,15 +38,6 @@ public class TopDownLevel {
 			this.gameObjects.add(new BasicBlock(new Vector2(-5, i), BasicBlock.BasicBlockType.BlockBorder, this.b2World));
 		}
 
-		this.gameObjects.add(new DecoBlock(new Vector2(-2, 1), DecoBlock.DecoBlockType.Bush));
-		this.gameObjects.add(new DecoBlock(new Vector2(3, 1), DecoBlock.DecoBlockType.Cactus));
-		this.gameObjects.add(new DecoBlock(new Vector2(7, 3), DecoBlock.DecoBlockType.Cloud));
-		this.gameObjects.add(new DecoBlock(new Vector2(1, 3), DecoBlock.DecoBlockType.Cloud));
-		this.gameObjects.add(new DecoBlock(new Vector2(4, 2.6f), DecoBlock.DecoBlockType.Cloud));
-		this.gameObjects.add(new DecoBlock(new Vector2(11, 3f), DecoBlock.DecoBlockType.Cloud));
-		this.gameObjects.add(new DecoBlock(new Vector2(5, 1), DecoBlock.DecoBlockType.Plant));
-		this.gameObjects.add(new DecoBlock(new Vector2(9, 2), DecoBlock.DecoBlockType.Rock));
-
 		/*for (int i = -5; i < 20; i++) {
 			if (i == 8) {
 				this.gameObjects.add(new BasicBlock(new Vector2(i, 0), BasicBlock.BasicBlockType.BlockSlopeStart, this.b2World));
@@ -69,8 +61,28 @@ public class TopDownLevel {
 		this.gameObjects.add(new BasicBlock(new Vector2(10, 1), BasicBlock.BasicBlockType.BlockSlope, this.b2World, true));
 		this.gameObjects.add(new JumpPad(new Vector2(1, 1f), this.b2World));
 		this.gameObjects.add(new Spikes(new Vector2(2f, 1f), this.b2World));
-		final RedBull r = new RedBull(new Vector2(0, 0), this.b2World, true);
-		this.gameObjects.add(r);
+
+		this.gameObjects.add(new RedBull(new Vector2(1, -5), this.b2World, true));
+		this.gameObjects.add(new RedBull(new Vector2(3, 0), this.b2World, true));
+		this.gameObjects.add(new Thesis(new Vector2(1, -3), this.b2World, true));
+		this.gameObjects.add(new RedBull(new Vector2(0, 2), this.b2World, true));
+		this.gameObjects.add(new Thesis(new Vector2(2, 0), this.b2World, true));
+		this.gameObjects.add(new Thesis(new Vector2(0, -4), this.b2World, true));
+
+		this.gameObjects.add(new NPC(new Vector2(1, -5), this.b2World, 50));
+		this.gameObjects.add(new NPC(new Vector2(3, 0), this.b2World, 50));
+		this.gameObjects.add(new NPC(new Vector2(1, -3), this.b2World, 50));
+		this.gameObjects.add(new NPC(new Vector2(0, 2), this.b2World, 50));
+		this.gameObjects.add(new NPC(new Vector2(2, 0), this.b2World, 50));
+		this.gameObjects.add(new NPC(new Vector2(0, -4), this.b2World, 50));
+		this.gameObjects.add(new NPC(new Vector2(-2, 1), this.b2World, 0));
+		this.gameObjects.add(new NPC(new Vector2(3, 1), this.b2World, 0));
+		this.gameObjects.add(new NPC(new Vector2(2, 1), this.b2World, 0));
+		this.gameObjects.add(new NPC(new Vector2(1, 3), this.b2World, 0));
+		this.gameObjects.add(new NPC(new Vector2(4, 2.6f), this.b2World, 100));
+		this.gameObjects.add(new NPC(new Vector2(1, 3f), this.b2World, 100));
+		this.gameObjects.add(new NPC(new Vector2(5, 1), this.b2World, 100));
+		this.gameObjects.add(new NPC(new Vector2(2, 2), this.b2World, 100));
 	}
 
 	public void render(final SpriteBatch batch) {
@@ -88,7 +100,7 @@ public class TopDownLevel {
 	public void removeRedBull(final RedBull bull) {
 		this.gameObjects.remove(bull);
 		this.redBulls.remove(bull);
-		this.b2World.destroyBody(bull.getBody());
+		this.b2World.destroyBody(bull.getB2Body());
 	}
 
 	/*public void addItem(final Item item) {
