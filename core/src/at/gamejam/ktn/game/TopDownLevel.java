@@ -3,7 +3,6 @@ package at.gamejam.ktn.game;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.gamejam.ktn.game.entites.Item;
 import at.gamejam.ktn.game.entites.RedBull;
 import at.gamejam.ktn.game.entities.BasicBlock;
 import at.gamejam.ktn.game.entities.DecoBlock;
@@ -70,13 +69,8 @@ public class TopDownLevel {
 		this.gameObjects.add(new BasicBlock(new Vector2(10, 1), BasicBlock.BasicBlockType.BlockSlope, this.b2World, true));
 		this.gameObjects.add(new JumpPad(new Vector2(1, 1f), this.b2World));
 		this.gameObjects.add(new Spikes(new Vector2(2f, 1f), this.b2World));
-		// RedBull r = new RedBull(new Vector2(2.2f, 2f));
-		final RedBull r = new RedBull(new Vector2(0, 0), this.b2World);
-		this.addGameObject(r);
-		//this.redBulls.add(r);
-		// r = new RedBull(new Vector2(10, 2f));
-		// this.gameObjects.add(c);
-		// this.coins.add(c);
+		final RedBull r = new RedBull(new Vector2(0, 0), this.b2World, true);
+		this.gameObjects.add(r);
 	}
 
 	public void render(final SpriteBatch batch) {
@@ -97,7 +91,7 @@ public class TopDownLevel {
 		this.b2World.destroyBody(bull.getBody());
 	}
 
-	public void addItem(final Item item) {
+	/*public void addItem(final Item item) {
 		if (item instanceof RedBull) {
 			this.addRedBull((RedBull) item);
 		}
@@ -106,7 +100,7 @@ public class TopDownLevel {
 	private void addRedBull(final RedBull bull) {
 		this.gameObjects.add(bull);
 		this.redBulls.add(bull);
-	}
+	}*/
 
 	public void reset() {
 		this.init();
@@ -116,14 +110,19 @@ public class TopDownLevel {
 		return this.redBulls;
 	}
 
-	public void addGameObject(final GameObject object) {
-		this.gameObjects.add(object);
-	}
-	
 	public List<GameObject> getGameObjects() {
 		return this.gameObjects;
 	}
+
+	public void addGameObject(final GameObject gameObject) {
+		this.gameObjects.add(gameObject);
+	}
+	/*public void addGameObject(final GameObject object) {
+	this.gameObjects.add(object);
+	}
+
+	}*/
 	/* List<GameObject>	getGameObjects() {
-		return this.gameObjects;
+	return this.gameObjects;
 	}*/
 }

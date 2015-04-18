@@ -28,7 +28,8 @@ public class Spikes extends GameObject {
 		this.initPhysics();
 	}
 
-	private void initPhysics() {
+	@Override
+	public void initPhysics() {
 		final BodyDef bodyDef = new BodyDef();
 		bodyDef.position.set(new Vector2(this.position.x + (this.dimension.x / 2f), this.position.y + (this.dimension.y / 2f)));
 		bodyDef.type = BodyDef.BodyType.KinematicBody;

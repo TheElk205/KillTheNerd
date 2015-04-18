@@ -44,7 +44,8 @@ public class Player extends GameObject {
 		this.initPhysics();
 	}
 
-	private void initPhysics() {
+	@Override
+	public void initPhysics() {
 		// create body definition
 		final BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.DynamicBody;

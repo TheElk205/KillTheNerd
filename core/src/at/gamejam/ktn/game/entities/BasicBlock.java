@@ -62,7 +62,8 @@ public class BasicBlock extends GameObject {
 		}
 	}
 
-	private void initPhysics() {
+	@Override
+	public void initPhysics() {
 		final BodyDef bodyDef = new BodyDef();
 		bodyDef.position.set(new Vector2(this.position.x, this.position.y));
 		bodyDef.type = BodyDef.BodyType.StaticBody;

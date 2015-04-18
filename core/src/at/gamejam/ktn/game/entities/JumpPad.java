@@ -68,7 +68,8 @@ public class JumpPad extends GameObject {
 		}, lowerX, lowerY, (lowerX + this.dimension.x) - (2 * border), lowerY + 0.1f);
 	}
 
-	private void initPhysics() {
+	@Override
+	public void initPhysics() {
 		final BodyDef jumpPad = new BodyDef();
 		jumpPad.position.set(new Vector2(this.position.x + (this.dimension.x / 2f), this.position.y + (this.dimension.y / 2f)));
 		jumpPad.type = BodyDef.BodyType.StaticBody;

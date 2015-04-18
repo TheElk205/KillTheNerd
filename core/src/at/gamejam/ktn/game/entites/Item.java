@@ -28,11 +28,11 @@ public abstract class Item extends InteractiveObject {
 	boolean						collectable	= true;
 	Player						grabbedBy;
 
-	private Body				b2Body;
+	// private Body b2Body;
 	private final World			b2World;
 
-	public boolean destroyed = false;
-	
+	public boolean				destroyed	= false;
+
 	public Item(final Vector2 position, final World b2World) {
 		super();
 		this.position = position;
@@ -50,16 +50,18 @@ public abstract class Item extends InteractiveObject {
 	// this.animated = animated;
 	// }
 
-	protected void init(final boolean animated) {
+	protected void init(final boolean animated, boolean initPhysics) {
 		this.animated = animated;
 		this.collected = false;
 		if (this.animated) {
 			this.initAnimated();
 		}
-		this.initPhysics();
+		if (initPhysics) {
+			this.initPhysics();
+		}
 	}
 
-	protected void init(final boolean animated, final boolean physics) {
+	/*protected void init(final boolean animated, final boolean physics) {
 		this.animated = animated;
 		this.collected = false;
 		if (this.animated) {
@@ -68,21 +70,25 @@ public abstract class Item extends InteractiveObject {
 		if (physics) {
 			this.initPhysics();
 		}
-	}
+	}*/
 
+	@Override
 	public void initPhysics() {
-		final BodyDef bodyDef = new BodyDef();
-		System.out.println(this.dimension + " " + this.position);
-		bodyDef.position.set(new Vector2(this.position.x + (this.dimension.x / 2f), this.position.y + (this.dimension.y / 2f)));
-		bodyDef.type = BodyDef.BodyType.DynamicBody;
-		this.b2Body = this.b2World.createBody(bodyDef);
-		final PolygonShape polygonShape = new PolygonShape();
-		System.out.println(this.dimension.x);
-		polygonShape.setAsBox(this.dimension.x / 2f, this.dimension.y / 2f);
-		final FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.shape = polygonShape;
-		this.b2Body.createFixture(fixtureDef);
-		this.b2Body.setUserData(this);
+		if (!this.physicsAlreadyInit) {
+			this.physicsAlreadyInit = true;
+			final BodyDef bodyDef = new BodyDef();
+			// System.out.println(this.dimension + " " + this.position);
+			bodyDef.position.set(new Vector2(this.position.x + (this.dimension.x / 2f), this.position.y + (this.dimension.y / 2f)));
+			bodyDef.type = BodyDef.BodyType.DynamicBody;
+			this.b2Body = this.b2World.createBody(bodyDef);
+			final PolygonShape polygonShape = new PolygonShape();
+			// System.out.println(this.dimension.x);
+			polygonShape.setAsBox(this.dimension.x / 2f, this.dimension.y / 2f);
+			final FixtureDef fixtureDef = new FixtureDef();
+			fixtureDef.shape = polygonShape;
+			this.b2Body.createFixture(fixtureDef);
+			this.b2Body.setUserData(this);
+		}
 	}
 
 	private void disablePhysics() {
@@ -105,16 +111,16 @@ public abstract class Item extends InteractiveObject {
 
 	@Override
 	public void render(final SpriteBatch batch) {
-		if (this.animated) {
-			if (!this.collected) {
-				batch.draw(this.animation.getKeyFrame(this.startTime, true), this.position.x, this.position.y, this.dimension.x, this.dimension.y);
-			}
+		if (this.animated && !this.collected) {
+			batch.draw(this.animation.getKeyFrame(this.startTime, true), this.position.x, this.position.y, this.dimension.x, this.dimension.y);
+		} else {
+			int a;
 		}
 	}
 
 	@Override
 	public void update(final float deltaTime) {
-		super.update(deltaTime);
+		// super.update(deltaTime);
 		this.startTime += deltaTime;
 		if (this.b2Body != null) {
 			this.position = this.b2Body.getPosition();

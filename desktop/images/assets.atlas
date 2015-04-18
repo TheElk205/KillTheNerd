@@ -1,180 +1,187 @@
 
 assets.png
-size: 512,256
+size: 1024,256
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 bush
   rotate: false
-  xy: 131, 183
+  xy: 1, 73
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 cactus
   rotate: false
-  xy: 203, 183
+  xy: 131, 146
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 cloud1
   rotate: false
-  xy: 1, 182
+  xy: 1, 145
   size: 128, 71
   orig: 128, 71
   offset: 0, 0
   index: -1
 coinGold
   rotate: false
-  xy: 475, 145
+  xy: 338, 133
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 coin_gold
   rotate: false
-  xy: 1, 157
+  xy: 1, 218
   size: 256, 23
   orig: 256, 23
   offset: 0, 0
   index: -1
 dirtCliffLeft
   rotate: false
-  xy: 259, 111
+  xy: 1, 1
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 dirtMid
   rotate: false
-  xy: 275, 183
+  xy: 73, 73
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 flagBlue2
   rotate: false
-  xy: 331, 111
+  xy: 73, 1
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 flagBlueHanging
   rotate: false
-  xy: 347, 183
+  xy: 145, 74
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 grass
   rotate: false
-  xy: 403, 111
+  xy: 145, 2
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 grassCenter
   rotate: false
-  xy: 419, 183
+  xy: 203, 146
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 grassCliffRight
   rotate: false
-  xy: 1, 85
+  xy: 217, 74
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 grassHillLeft
   rotate: false
-  xy: 73, 85
+  xy: 217, 2
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 grassHillLeft2
   rotate: false
-  xy: 145, 85
+  xy: 275, 171
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 grassMid
   rotate: false
-  xy: 217, 39
+  xy: 347, 171
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 plant
   rotate: false
-  xy: 1, 13
+  xy: 419, 171
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 player
   rotate: false
-  xy: 433, 62
+  xy: 923, 194
   size: 47, 47
   orig: 47, 47
   offset: 0, 0
   index: -1
 player-ouch
   rotate: false
-  xy: 433, 13
+  xy: 972, 194
+  size: 47, 47
+  orig: 47, 47
+  offset: 0, 0
+  index: -1
+playerWake
+  rotate: false
+  xy: 289, 122
   size: 47, 47
   orig: 47, 47
   offset: 0, 0
   index: -1
 player_chill
   rotate: false
-  xy: 361, 10
+  xy: 289, 73
   size: 47, 47
   orig: 47, 47
   offset: 0, 0
   index: -1
 rock
   rotate: false
-  xy: 73, 13
+  xy: 491, 171
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 snowMid
   rotate: false
-  xy: 145, 13
+  xy: 563, 171
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 snowRight
   rotate: false
-  xy: 289, 39
+  xy: 635, 171
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 spikes
   rotate: false
-  xy: 289, 2
+  xy: 851, 206
   size: 70, 35
   orig: 70, 35
   offset: 0, 0
   index: -1
 springboardDown
   rotate: false
-  xy: 217, 1
+  xy: 779, 205
   size: 70, 36
   orig: 70, 36
   offset: 0, 0
   index: -1
 springboardUp
   rotate: false
-  xy: 361, 59
+  xy: 707, 191
   size: 70, 50
   orig: 70, 50
   offset: 0, 0

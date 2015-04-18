@@ -1,11 +1,15 @@
 package at.gamejam.ktn.game;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import at.gamejam.ktn.game.entites.Item;
 import at.gamejam.ktn.game.entites.Player;
 import at.gamejam.ktn.game.entites.PlayerSleep;
 import at.gamejam.ktn.game.entites.PlayerWake;
 import at.gamejam.ktn.game.entites.RedBull;
 import at.gamejam.ktn.game.entites.ThrowableObject;
+import at.gamejam.ktn.game.entities.GameObject;
 import at.gamejam.ktn.game.entities.Spikes;
 
 import com.badlogic.gdx.math.Vector2;
@@ -17,6 +21,11 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 
 public class MyContactListener implements ContactListener {
 	private final WorldController	wContr;
+
+	/** object contains a body */
+	private final List<GameObject>	objectsToRemove	= new ArrayList<GameObject>();
+	/** the physics of this object (body) are not init yet */
+	private final List<GameObject>	objectsToAdd	= new ArrayList<GameObject>();
 
 	public MyContactListener(final WorldController wContr) {
 		this.wContr = wContr;
@@ -35,6 +44,8 @@ public class MyContactListener implements ContactListener {
 		// shape kreis
 
 		// TODO: should be done with filter.maskbit
+
+		// TODO dont add or remove objects because this method is called while step()
 
 		/*final boolean playerWithSpikes = ((userDataB instanceof Player) && (userDataA instanceof Spikes)) || ((userDataA instanceof Player) && (userDataB instanceof Spikes));
 		final boolean playerWithThrowable = ((userDataB instanceof Player) && (userDataA instanceof ThrowableObject)) || ((userDataA instanceof Player) && (userDataB instanceof ThrowableObject));
@@ -73,25 +84,21 @@ public class MyContactListener implements ContactListener {
 
 					System.out.println("spikePosition: " + itemPosition + "playerPosition: " + ((Player) userDataB).position);
 					newItem = new RedBull(itemPosition, this.wContr.getB2World(), false);
-					this.wContr.addTempGameObject(newItem);
+					this.objectsToAdd.add(newItem);
 				} else
 					if ((userDataB instanceof Spikes)) {
 						System.out.println("userDataB is Spikes");
 
 						// final Vector2 itemPosition = ((GameObject) userDataB).position;
 						newItem = new RedBull(itemPosition, this.wContr.getB2World(), false);
-						this.wContr.addTempGameObject(newItem);
-
+						this.objectsToAdd.add(newItem);
 					} else {
 						System.out.println("ERROR");
 					}
-				newItem.initPhysics();
+
 				break;
 			case 2:
 				System.out.println("beginContact Player with TrowableObject");
-				// if (userDataA instanceof Item) {
-
-				// }
 				break;
 			case 3:
 				System.out.println("beginContact Player1 with Player2");
@@ -114,18 +121,27 @@ public class MyContactListener implements ContactListener {
 					System.out.println("beginContact PlayerSleep with Item");
 					final Item item = (Item) (userDataA);
 					final PlayerSleep player = (PlayerSleep) userDataB;
-					player.hitByItem(item);
-					// item.hits(player);
+					if (player.hitByItem(item)) {
+						player.setToRender(false);
+						objectsToRemove.add(player);
+					}
+					objectsToRemove.add(item);
+					item.setToRender(false);
+
 				} else {
 					System.out.println("beginContact Item with PlayerSleep");
 					final Item item = (Item) userDataB;
 					final PlayerSleep player = (PlayerSleep) userDataA;
-					player.hitByItem(item);
-					// item.grabbed(player);
+					if (player.hitByItem(item)) {
+						objectsToRemove.add(player);
+						player.setToRender(false);
+					}
+					objectsToRemove.add(item);
+					item.setToRender(false);
 				}
 				break;
 			default:
-				System.out.println("beginContact no Contact");
+				System.out.println("default hit A: " + userDataA + " B: " + userDataB);
 				break;
 		}
 
@@ -133,7 +149,7 @@ public class MyContactListener implements ContactListener {
 
 	@Override
 	public void endContact(final Contact contact) {
-		System.out.println("endContact");
+		// System.out.println("endContact");
 	}
 
 	@Override
@@ -145,6 +161,20 @@ public class MyContactListener implements ContactListener {
 	@Override
 	public void postSolve(final Contact contact, final ContactImpulse impulse) {
 		// System.out.println("postSolve");
+	}
+
+	/**
+	 * @return the bodysToRemove
+	 */
+	protected List<GameObject> getObjectsToRemove() {
+		return this.objectsToRemove;
+	}
+
+	/**
+	 * @return the objectsToAdd
+	 */
+	protected List<GameObject> getObjectsToAdd() {
+		return this.objectsToAdd;
 	}
 
 }
