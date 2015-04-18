@@ -3,6 +3,7 @@ package at.gamejam.ktn.game;
 import java.util.ArrayList;
 import java.util.List;
 
+import at.gamejam.ktn.game.entites.Item;
 import at.gamejam.ktn.game.entites.RedBull;
 import at.gamejam.ktn.game.entities.BasicBlock;
 import at.gamejam.ktn.game.entities.Coin;
@@ -95,6 +96,17 @@ public class TopDownLevel {
 		this.gameObjects.remove(bull);
 		this.redBulls.remove(bull);
 		b2World.destroyBody(bull.getBody());
+	}
+	
+	public void addItem(Item item) {
+		if(item instanceof RedBull) {
+			this.addRedBull((RedBull)item);
+		}
+	}
+	
+	private void addRedBull(RedBull bull) {
+		this.gameObjects.add(bull);
+		this.redBulls.add(bull);
 	}
 
 	public void reset() {
