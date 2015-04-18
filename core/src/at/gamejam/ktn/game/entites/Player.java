@@ -26,6 +26,8 @@ public abstract class Player extends InteractiveObject {
 	
 	protected Direction direction;
 	
+	protected String name = "Player";
+	
 	protected void initConstructor(final Vector2 position, final World b2World) {
 		this.b2World = b2World;
 		this.position = position;
@@ -33,6 +35,8 @@ public abstract class Player extends InteractiveObject {
 	}
 	
 	protected void init() {
+		this.items = new Vector<Item>();
+		
 		this.dimension.set(0.2f, 0.2f);
 		this.origin.x = this.dimension.x / 2;
 		this.origin.y = this.dimension.y / 2;
@@ -58,7 +62,7 @@ public abstract class Player extends InteractiveObject {
 		// create fixture to attach shape to body
 		final FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = circleShape;
-		//fixtureDef.density = 1f;
+		fixtureDef.density = 0f;
 		//fixtureDef.friction = 1f;
 		//fixtureDef.restitution = 0;
 
@@ -89,7 +93,7 @@ public abstract class Player extends InteractiveObject {
 	
 	public void getNear(Object o) {
 		if(o instanceof Item) {
-			((Item)o).grabbed();
+			((Item)o).grabbed(this);
 		}
 		else if(o instanceof Pupil) {
 			((Pupil)o).isNear(this);
@@ -133,8 +137,17 @@ public abstract class Player extends InteractiveObject {
 		this.b2Body.applyForceToCenter(toApply, true);
 	}
 	
+	public boolean addItem(Item item) {
+		if(this.items.size() < this.maxItems) {
+			this.items.add(item);
+			System.out.println("Got an Item!");
+			return true;
+		}
+		return false;
+	}
+	
 	public void stop() {
-		System.out.println("Stop");
+		//System.out.println("Stop");
 		//this.b2Body.applyForceToCenter(this.b2Body.get, wake);
 		this.b2Body.setLinearVelocity(new Vector2(0,0));
 		this.b2Body.setAngularVelocity(0);
@@ -151,4 +164,15 @@ public abstract class Player extends InteractiveObject {
 	
 	public abstract void hitByItem(Item item);
 	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public String toStrign() {
+		return this.name;
+	}
 }

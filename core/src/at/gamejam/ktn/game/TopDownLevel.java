@@ -3,6 +3,7 @@ package at.gamejam.ktn.game;
 import java.util.ArrayList;
 import java.util.List;
 
+import at.gamejam.ktn.game.entites.RedBull;
 import at.gamejam.ktn.game.entities.BasicBlock;
 import at.gamejam.ktn.game.entities.Coin;
 import at.gamejam.ktn.game.entities.DecoBlock;
@@ -16,7 +17,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class TopDownLevel {
 	List<GameObject>	gameObjects;
-	private List<Coin>	coins;
+	private List<RedBull>	coins;
 	private final World	b2World;
 
 	public TopDownLevel(final World b2World) {
@@ -26,7 +27,7 @@ public class TopDownLevel {
 
 	private void init() {
 		this.gameObjects = new ArrayList<GameObject>();
-		this.coins = new ArrayList<Coin>();
+		this.coins = new ArrayList<RedBull>();
 
 		for (int i = -5; i <= 5; i++) {
 			this.gameObjects.add(new BasicBlock(new Vector2(i, 5), BasicBlock.BasicBlockType.BlockBorder, this.b2World));
@@ -69,12 +70,13 @@ public class TopDownLevel {
 		this.gameObjects.add(new BasicBlock(new Vector2(10, 1), BasicBlock.BasicBlockType.BlockSlope, this.b2World, true));
 		this.gameObjects.add(new JumpPad(new Vector2(1, 1f), this.b2World));
 		this.gameObjects.add(new Spikes(new Vector2(2f, 1f), this.b2World));
-		Coin c = new Coin(new Vector2(2.2f, 2f));
-		this.gameObjects.add(c);
-		this.coins.add(c);
-		c = new Coin(new Vector2(10, 2f));
-		this.gameObjects.add(c);
-		this.coins.add(c);
+		//RedBull r = new RedBull(new Vector2(2.2f, 2f));
+		RedBull r = new RedBull(new Vector2(0,0));
+		this.gameObjects.add(r);
+		this.coins.add(r);
+		//r = new RedBull(new Vector2(10, 2f));
+		//this.gameObjects.add(c);
+		//this.coins.add(c);
 	}
 
 	public void render(final SpriteBatch batch) {
@@ -93,7 +95,7 @@ public class TopDownLevel {
 		this.init();
 	}
 
-	public List<Coin> getCoins() {
+	public List<RedBull> getCoins() {
 		return this.coins;
 	}
 }

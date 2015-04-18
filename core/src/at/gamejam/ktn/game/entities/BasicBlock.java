@@ -78,9 +78,9 @@ public class BasicBlock extends GameObject {
 			}
 		}
 		if (this.type == BasicBlockType.BlockBorder) {
-			edgeShape.set(new Vector2(0, this.dimension.y), this.dimension);
+			edgeShape.set(new Vector2(0, 0), new Vector2(0, this.dimension.y));
 			// edgeShape.set(new Vector2(0, this.dimension.x), this.dimension);
-			edgeShape.set(new Vector2(this.dimension.x, 0), this.dimension);
+			// edgeShape.set(new Vector2(this.dimension.x, 0), this.dimension);
 			// edgeShape.set(new Vector2(this.dimension.y, 0), this.dimension);
 		} else {
 			edgeShape.set(new Vector2(0, this.dimension.y), this.dimension);

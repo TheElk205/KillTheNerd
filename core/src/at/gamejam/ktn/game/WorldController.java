@@ -1,6 +1,7 @@
 package at.gamejam.ktn.game;
 
 import at.gamejam.ktn.game.entites.PlayerSleep;
+import at.gamejam.ktn.game.entites.RedBull;
 import at.gamejam.ktn.game.entities.Coin;
 import at.gamejam.ktn.game.entites.Player;
 import at.gamejam.ktn.game.entities.Spikes;
@@ -101,15 +102,15 @@ public class WorldController extends InputAdapter {
 		final Rectangle playerRect = new Rectangle();
 		final Rectangle coinRect = new Rectangle();
 		playerRect.set(this.player.position.x, this.player.position.y, this.player.dimension.x, this.player.dimension.y);
-		for (final Coin coin : this.level.getCoins()) {
-			if (coin.isCollected()) {
+		for (final RedBull red : this.level.getCoins()) {
+			if (red.isCollected()) {
 				continue;
 			}
-			coinRect.set(coin.position.x, coin.position.y, coin.dimension.x, coin.dimension.y);
+			coinRect.set(red.position.x, red.position.y, red.dimension.x, red.dimension.y);
 			if (!playerRect.overlaps(coinRect)) {
 				continue;
 			}
-			coin.setCollected(true);
+			red.grabbed(player);
 			this.coinCount += 1;
 		}
 	}
