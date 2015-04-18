@@ -46,7 +46,7 @@ public class InputManager extends InputAdapter {
 			this.debug = !this.debug;
 			break;*/
 			case Input.Keys.SPACE:
-				this.player.throwItem();
+				this.player.setShoot(true);
 				break;
 			/*case Input.Keys.R:
 			this.reset = true;
@@ -76,6 +76,9 @@ public class InputManager extends InputAdapter {
 			case Input.Keys.DOWN:
 				this.player.setDown(false);
 				this.player.setDirectionMoving(Player.Direction.S);
+				break;
+			case Input.Keys.SPACE:
+				this.player.setShoot(false);
 				break;
 			default:
 				// System.out.println("Player Stop");
