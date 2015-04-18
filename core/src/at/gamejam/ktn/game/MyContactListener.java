@@ -2,6 +2,8 @@ package at.gamejam.ktn.game;
 
 import at.gamejam.ktn.game.entites.Item;
 import at.gamejam.ktn.game.entites.Player;
+import at.gamejam.ktn.game.entites.PlayerSleep;
+import at.gamejam.ktn.game.entites.PlayerWake;
 import at.gamejam.ktn.game.entites.RedBull;
 import at.gamejam.ktn.game.entites.ThrowableObject;
 import at.gamejam.ktn.game.entities.Spikes;
@@ -48,8 +50,11 @@ public class MyContactListener implements ContactListener {
 		if ((userDataB instanceof Player) && (userDataA instanceof Player)) {
 			collisionType = 3;
 		}
-		if (((userDataB instanceof Player) && (userDataA instanceof Item)) || ((userDataA instanceof Item) && (userDataB instanceof Player))) {
+		if (((userDataB instanceof PlayerWake) && (userDataA instanceof Item)) || ((userDataA instanceof Item) && (userDataB instanceof PlayerWake))) {
 			collisionType = 4;
+		}
+		if (((userDataB instanceof PlayerSleep) && (userDataA instanceof Item)) || ((userDataA instanceof Item) && (userDataB instanceof PlayerSleep))) {
+			collisionType = 5;
 		}
 
 		/*if (!(playerWithSpikes || playerWithThrowable || player1WithPlayer2 || playerWithItem)) {
@@ -91,17 +96,32 @@ public class MyContactListener implements ContactListener {
 			case 3:
 				System.out.println("beginContact Player1 with Player2");
 				break;
-			case 4:
+			case 4: // playerWake + any item
 				if (userDataA instanceof Item) {
-					System.out.println("beginContact Player with Item");
+					System.out.println("beginContact PlayerWake with Item");
 					final Item item = (Item) (userDataA);
-					final Player player = (Player) (userDataB);
+					final PlayerWake player = (PlayerWake) (userDataB);
 					item.grabbed(player);
 				} else {
-					System.out.println("beginContact Item with Player");
+					System.out.println("beginContact Item with PlayerWake");
 					final Item item = (Item) userDataB;
-					final Player player = (Player) userDataA;
+					final PlayerWake player = (PlayerWake) userDataA;
 					item.grabbed(player);
+				}
+				break;
+			case 5: // playerSleep + any item
+				if (userDataA instanceof Item) {
+					System.out.println("beginContact PlayerSleep with Item");
+					final Item item = (Item) (userDataA);
+					final PlayerSleep player = (PlayerSleep) userDataB;
+					player.hitByItem(item);
+					// item.hits(player);
+				} else {
+					System.out.println("beginContact Item with PlayerSleep");
+					final Item item = (Item) userDataB;
+					final PlayerSleep player = (PlayerSleep) userDataA;
+					player.hitByItem(item);
+					// item.grabbed(player);
 				}
 				break;
 			default:

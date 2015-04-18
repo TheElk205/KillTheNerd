@@ -40,6 +40,8 @@ public abstract class Player extends InteractiveObject {
 	private boolean				down;
 	private boolean				shoot;
 
+	protected int				health				= 100;
+
 	private float				timeSinceLastShoot	= 0;
 
 	protected void initConstructor(final Vector2 position, final WorldController worldcontroller) {
@@ -250,7 +252,20 @@ public abstract class Player extends InteractiveObject {
 		return this.b2Body;
 	}
 
-	public abstract void hitByItem(Item item);
+	public void hitByItem(Item item) {
+		System.out.println(this + " hit by " + item);
+		if ((item instanceof RedBull) && (this instanceof PlayerSleep)) {
+			health = health - 50;
+		}
+		/*TODO: else if(item instanceof Thesis && this instanceof PlayerWake) {
+			health = health - 20;
+		}*/
+
+		if (health <= 0) {
+			// this.getBody().setActive(false);
+			// this.b2World.destroyBody(getBody());
+		}
+	}
 
 	public void setName(final String name) {
 		this.name = name;
