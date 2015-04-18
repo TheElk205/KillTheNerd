@@ -17,7 +17,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class TopDownLevel {
 	List<GameObject>	gameObjects;
-	private List<RedBull>	coins;
+	private List<RedBull>	redBulls;
 	private final World	b2World;
 
 	public TopDownLevel(final World b2World) {
@@ -27,7 +27,7 @@ public class TopDownLevel {
 
 	private void init() {
 		this.gameObjects = new ArrayList<GameObject>();
-		this.coins = new ArrayList<RedBull>();
+		this.redBulls = new ArrayList<RedBull>();
 
 		for (int i = -5; i <= 5; i++) {
 			this.gameObjects.add(new BasicBlock(new Vector2(i, 5), BasicBlock.BasicBlockType.BlockBorder, this.b2World));
@@ -71,9 +71,9 @@ public class TopDownLevel {
 		this.gameObjects.add(new JumpPad(new Vector2(1, 1f), this.b2World));
 		this.gameObjects.add(new Spikes(new Vector2(2f, 1f), this.b2World));
 		//RedBull r = new RedBull(new Vector2(2.2f, 2f));
-		RedBull r = new RedBull(new Vector2(0,0));
+		RedBull r = new RedBull(new Vector2(0,0),this.b2World);
 		this.gameObjects.add(r);
-		this.coins.add(r);
+		this.redBulls.add(r);
 		//r = new RedBull(new Vector2(10, 2f));
 		//this.gameObjects.add(c);
 		//this.coins.add(c);
@@ -90,12 +90,18 @@ public class TopDownLevel {
 			gameObject.update(deltaTime);
 		}
 	}
+	
+	public void removeRedBull(RedBull bull) {
+		this.gameObjects.remove(bull);
+		this.redBulls.remove(bull);
+		b2World.destroyBody(bull.getBody());
+	}
 
 	public void reset() {
 		this.init();
 	}
 
-	public List<RedBull> getCoins() {
-		return this.coins;
+	public List<RedBull> getRedBulls() {
+		return this.redBulls;
 	}
 }

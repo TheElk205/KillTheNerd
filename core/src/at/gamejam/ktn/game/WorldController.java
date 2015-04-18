@@ -1,5 +1,9 @@
 package at.gamejam.ktn.game;
 
+import java.util.Map;
+import java.util.Vector;
+
+import at.gamejam.ktn.game.entites.Item;
 import at.gamejam.ktn.game.entites.PlayerSleep;
 import at.gamejam.ktn.game.entites.RedBull;
 import at.gamejam.ktn.game.entities.Coin;
@@ -55,6 +59,17 @@ public class WorldController extends InputAdapter {
 						|| ((fA.getBody().getUserData() instanceof Player) && (fB.getBody().getUserData() instanceof Spikes))) {
 					WorldController.this.reset = true;
 				}
+				else if(((fB.getBody().getUserData() instanceof Player) && (fA.getBody().getUserData() instanceof Item)))  {
+					Item item = (Item)(fA.getBody().getUserData());
+					Player player = (Player)(fB.getBody().getUserData());
+					item.grabbed(player);
+					
+				}
+				else if(((fA.getBody().getUserData() instanceof Item) && (fB.getBody().getUserData() instanceof Player))) {
+					Item item = (Item)(fB.getBody().getUserData());
+					Player player = (Player)(fA.getBody().getUserData());
+					item.grabbed(player);
+				}
 			}
 
 			@Override
@@ -78,6 +93,19 @@ public class WorldController extends InputAdapter {
 		this.timeElapsed += deltaTime * 1000;
 		this.cameraHelper.update(deltaTime);
 		this.b2World.step(1 / 60f, 3, 8); // timeStep, velocityIteration, positionIteration
+		
+		//delete items
+		Vector<Integer> tmp = new Vector<Integer>();
+		for(int i = 0; i < this.level.getRedBulls().size(); i++) {
+			if(this.level.getRedBulls().get(i).isCollected()) {
+				b2World.destroyBody(this.level.getRedBulls().get(i).getBody());
+				tmp.add(i);
+			}
+		}
+		for(int i = tmp.size()-1; i >= 0; i--) {
+			this.level.removeRedBull(this.level.getRedBulls().get(i));
+		}
+		
 		if (this.reset) {
 			this.reset();
 		}
@@ -86,7 +114,7 @@ public class WorldController extends InputAdapter {
 		if (this.player.getBody().getPosition().y < -3) {
 			this.reset = true;
 		}
-		this.testCoins();
+		//this.testCoins();
 	}
 
 	private void reset() {
@@ -102,7 +130,7 @@ public class WorldController extends InputAdapter {
 		final Rectangle playerRect = new Rectangle();
 		final Rectangle coinRect = new Rectangle();
 		playerRect.set(this.player.position.x, this.player.position.y, this.player.dimension.x, this.player.dimension.y);
-		for (final RedBull red : this.level.getCoins()) {
+		for (final RedBull red : this.level.getRedBulls()) {
 			if (red.isCollected()) {
 				continue;
 			}
@@ -125,21 +153,22 @@ public class WorldController extends InputAdapter {
 				this.cameraHelper.addZoom(0.2f);
 				break;
 			case Input.Keys.LEFT:
-				this.player.setDirection(Player.Direction.W);
+				this.player.setDirectionMoving(Player.Direction.W);
 				break;
 			case Input.Keys.RIGHT:
-				this.player.setDirection(Player.Direction.E);
+				this.player.setDirectionMoving(Player.Direction.E);
 				break;
 			case Input.Keys.UP:
-				this.player.setDirection(Player.Direction.N);
+				this.player.setDirectionMoving(Player.Direction.N);
 				break;
 			case Input.Keys.DOWN:
-				this.player.setDirection(Player.Direction.S);
+				this.player.setDirectionMoving(Player.Direction.S);
 				break;
 			case Input.Keys.D:
 				this.debug = !this.debug;
 				break;
-			case Input.Keys.SPACE:				
+			case Input.Keys.SPACE:	
+				this.player.throwItem();
 				break;
 			case Input.Keys.R:
 				this.reset = true;

@@ -14,7 +14,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public abstract class Player extends InteractiveObject {
 	protected Vector<Item> items;
-	protected int maxItems;
+	protected int maxItems = 5;
 	
 	protected int points = 0;
 	protected float startSpeed = 3f;
@@ -24,7 +24,8 @@ public abstract class Player extends InteractiveObject {
 	protected World b2World;
 	protected Body b2Body;
 	
-	protected Direction direction;
+	protected Direction directionMoving;
+	protected Direction directionLooking;
 	
 	protected String name = "Player";
 	
@@ -41,7 +42,7 @@ public abstract class Player extends InteractiveObject {
 		this.origin.x = this.dimension.x / 2;
 		this.origin.y = this.dimension.y / 2;
 		//this.texture = this.assets.findRegion("player");
-		this.direction = Direction.STAY;
+		this.directionMoving = Direction.STAY;
 		this.loadAsset();
 		this.initPhysics();
 	}
@@ -100,8 +101,11 @@ public abstract class Player extends InteractiveObject {
 		}
 	}
 	
-	public void setDirection(Direction d) {
-		this.direction = d;
+	public void setDirectionMoving(Direction d) {
+		this.directionMoving = d;
+		if(d != Direction.STAY) {
+			this.directionLooking = d;
+		}
 	}
 	@Override
 	public void render(final SpriteBatch batch) {
@@ -118,7 +122,7 @@ public abstract class Player extends InteractiveObject {
 	
 	public void move() {
 		Vector2 toApply = new Vector2();
-		switch(this.direction) {
+		switch(this.directionMoving) {
 		case N:
 			toApply.y = this.currentSpeed;
 			break;
@@ -151,11 +155,15 @@ public abstract class Player extends InteractiveObject {
 		//this.b2Body.applyForceToCenter(this.b2Body.get, wake);
 		this.b2Body.setLinearVelocity(new Vector2(0,0));
 		this.b2Body.setAngularVelocity(0);
-		this.direction = Direction.STAY;
+		this.directionMoving = Direction.STAY;
 	}
 	
-	public void throwItem(Item item) {
-		
+	public void throwItem() {
+		if(this.items.size() > 0) {
+			Item item = this.items.get(this.items.size()-1);
+			item.collected = false;
+			item.getBody().applyForceToCenter(new Vector2(1,0), true);
+		}
 	}
 	
 	public Body getBody() {
