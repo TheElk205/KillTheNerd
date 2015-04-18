@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import at.gamejam.ktn.game.entites.Item;
 import at.gamejam.ktn.game.entites.PlayerSleep;
+import at.gamejam.ktn.game.entites.PlayerWake;
 import at.gamejam.ktn.game.entites.RedBull;
 import at.gamejam.ktn.game.entities.GameObject;
 import at.gamejam.ktn.utils.CameraHelper;
@@ -14,7 +15,8 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class WorldController {
 	public CameraHelper					cameraHelper;
-	public PlayerSleep					player;
+	public PlayerSleep					playerSleep;
+	public PlayerWake					playerWake;
 	public long							timeElapsed;
 	protected int						coinCount	= 0;
 	private World						b2World;
@@ -33,23 +35,21 @@ public class WorldController {
 		this.cameraHelper = new CameraHelper();
 		// this.b2World = new World(new Vector2(0, -9.81f), true);
 		this.b2World = new World(new Vector2(0, 0), true); // no gravity
-		this.player = new PlayerSleep(new Vector2(0.5f, 1.5f), this);
-		this.cameraHelper.setTarget(this.player.getBody());
+		
+		this.playerSleep = new PlayerSleep(new Vector2(0.5f, 1.5f), this);
+		this.playerWake = new PlayerWake(new Vector2(1.5f, 0.5f),this);
+		
+		//this.cameraHelper.setTarget(this.playerSleep.getBody());
 		// this.level = new Level(this.b2World);
+		
 		this.level = new TopDownLevel(this.b2World);
 		this.b2World.setContactListener(new MyContactListener(this));
-		Gdx.input.setInputProcessor(new InputManager(this.player, this.cameraHelper));
+		Gdx.input.setInputProcessor(new InputManager(this.playerSleep, this.playerWake, this.cameraHelper));
 	}
 
 	public void update(final float deltaTime) {
 		// Add Items
-		if (this.newObjects.size() > 0) {
-
-			for (final GameObject o : this.newObjects) {
-				this.level.addGameObject(o);
-			}
-			this.newObjects.clear();
-		}
+		
 		this.timeElapsed += deltaTime * 1000;
 		this.b2World.step(1 / 60f, 3, 8); // timeStep, velocityIteration, positionIteration
 		this.cameraHelper.update(deltaTime);
@@ -66,18 +66,24 @@ public class WorldController {
 //		}
 		for(GameObject o: this.level.getGameObjects()) {
 			if(o instanceof Item) {
-				RedBull b = (RedBull) o;
+				Item b = (Item) o;
 				if(b.isCollected() && !b.destroyed) {
 					this.b2World.destroyBody(b.getBody());
 					b.destroyed = true;
 				}
 			}
 		}
-			newObjects.clear();
+		if (this.newObjects.size() > 0) {
+			for (final GameObject o : this.newObjects) {
+				this.level.addGameObject(o);
+			}
+			this.newObjects.clear();
+		}
+
 		if (this.reset) {
 			this.reset();
 		}
-		this.player.update(deltaTime);
+		this.playerSleep.update(deltaTime);
 		this.level.update(deltaTime);
 		/*if (this.player.getBody().getPosition().y < -3) {
 			this.reset = true;
@@ -87,9 +93,9 @@ public class WorldController {
 
 	private void reset() {
 		this.reset = false;
-		this.player.getBody().setTransform(new Vector2(0.5f, 1.5f), 0);
-		this.player.getBody().setLinearVelocity(new Vector2(0, 0));
-		this.player.getBody().setAngularVelocity(0);
+		this.playerSleep.getBody().setTransform(new Vector2(0.5f, 1.5f), 0);
+		this.playerSleep.getBody().setLinearVelocity(new Vector2(0, 0));
+		this.playerSleep.getBody().setAngularVelocity(0);
 		this.timeElapsed = 0;
 		this.coinCount = 0;
 	}

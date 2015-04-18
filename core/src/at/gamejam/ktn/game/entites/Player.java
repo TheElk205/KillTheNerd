@@ -269,18 +269,22 @@ public abstract class Player extends InteractiveObject {
 
 	public void setRight(final boolean b) {
 		this.right = b;
+		this.setDirectionMoving(Player.Direction.E);
 	}
 
 	public void setUp(final boolean b) {
 		this.up = b;
+		this.setDirectionMoving(Player.Direction.N);
 	}
 
 	public void setLeft(final boolean b) {
 		this.left = b;
+		this.setDirectionMoving(Player.Direction.W);
 	}
 
 	public void setDown(final boolean b) {
 		this.down = b;
+		this.setDirectionMoving(Player.Direction.S);
 	}
 
 	public boolean getRight() {

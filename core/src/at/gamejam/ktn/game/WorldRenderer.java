@@ -63,7 +63,7 @@ public class WorldRenderer implements Disposable {
 		this.batch.setProjectionMatrix(this.camera.combined);
 		this.batch.begin();
 		this.worldController.getLevel().render(this.batch);
-		this.worldController.player.render(this.batch);
+		this.worldController.playerSleep.render(this.batch);
 		this.batch.end();
 		this.renderGUI(this.batch);
 		if (this.worldController.isDebug()) {

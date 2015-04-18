@@ -145,6 +145,7 @@ public abstract class Item extends InteractiveObject {
 			this.collected = true;
 			this.grabbedBy = player;
 			this.grabbedBy.addItem(this);
+			this.destroyed = false;
 			this.disablePhysics();
 		}
 	}

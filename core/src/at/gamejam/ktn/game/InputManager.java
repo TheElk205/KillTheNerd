@@ -2,6 +2,7 @@ package at.gamejam.ktn.game;
 
 import at.gamejam.ktn.game.entites.Player;
 import at.gamejam.ktn.game.entites.PlayerSleep;
+import at.gamejam.ktn.game.entites.PlayerWake;
 import at.gamejam.ktn.utils.CameraHelper;
 
 import com.badlogic.gdx.Input;
@@ -9,50 +10,70 @@ import com.badlogic.gdx.InputAdapter;
 
 public class InputManager extends InputAdapter {
 
-	private final PlayerSleep	player;
+	private final PlayerSleep	playerSleep;
+	private final PlayerWake	playerWake;
 	private final CameraHelper	cameraHelper;
 
-	public InputManager(final PlayerSleep player, final CameraHelper cameraHelper) {
-		this.player = player;
+	public InputManager(final PlayerSleep playerSleep, final PlayerWake playerWake, final CameraHelper cameraHelper) {
+		this.playerSleep = playerSleep;
+		this.playerWake = playerWake;
 		this.cameraHelper = cameraHelper;
 	}
 
 	@Override
 	public boolean keyDown(final int keycode) {
 		switch (keycode) {
+			//Camera
 			case Input.Keys.PLUS:
 				this.cameraHelper.addZoom(-0.2f);
 				break;
 			case Input.Keys.MINUS:
 				this.cameraHelper.addZoom(0.2f);
 				break;
+				
+			//Running, Player Sleep
 			case Input.Keys.LEFT:
-				this.player.setLeft(true);
-				this.player.setDirectionMoving(Player.Direction.W);
+				this.playerSleep.setLeft(true);
 				break;
 			case Input.Keys.RIGHT:
-				this.player.setRight(true);
-				this.player.setDirectionMoving(Player.Direction.E);
+				this.playerSleep.setRight(true);
 				break;
 			case Input.Keys.UP:
-				this.player.setUp(true);
-				this.player.setDirectionMoving(Player.Direction.N);
+				this.playerSleep.setUp(true);
 				break;
 			case Input.Keys.DOWN:
-				this.player.setDown(true);
-				this.player.setDirectionMoving(Player.Direction.S);
+				this.playerSleep.setDown(true);
+				break;
+			//running Player Wake
+			case Input.Keys.A:
+				this.playerWake.setLeft(true);
+				break;
+			case Input.Keys.D:
+				this.playerWake.setRight(true);
+				break;
+			case Input.Keys.W:
+				this.playerWake.setUp(true);
+				break;
+			case Input.Keys.S:
+				this.playerWake.setDown(true);
 				break;
 			/*case Input.Keys.D:
 			this.debug = !this.debug;
 			break;*/
+			//shooting Player sleep
+			case Input.Keys.CONTROL_RIGHT:
+				this.playerSleep.setShoot(true);
+				break;
+				
+			//shooting Player wake
 			case Input.Keys.SPACE:
-				this.player.setShoot(true);
+				this.playerWake.setShoot(true);
 				break;
 			/*case Input.Keys.R:
 			this.reset = true;
 			break;*/
 			default:
-				this.player.stop();
+				this.playerSleep.stop();
 				break;
 		}
 		return true;
@@ -61,33 +82,48 @@ public class InputManager extends InputAdapter {
 	@Override
 	public boolean keyUp(final int keycode) {
 		switch (keycode) {
+			//Running Player Wake
 			case Input.Keys.LEFT:
-				this.player.setLeft(false);
-				this.player.setDirectionMoving(Player.Direction.W);
+				this.playerSleep.setLeft(false);
 				break;
 			case Input.Keys.RIGHT:
-				this.player.setRight(false);
-				this.player.setDirectionMoving(Player.Direction.E);
+				this.playerSleep.setRight(false);
 				break;
 			case Input.Keys.UP:
-				this.player.setUp(false);
-				this.player.setDirectionMoving(Player.Direction.N);
+				this.playerSleep.setUp(false);
 				break;
 			case Input.Keys.DOWN:
-				this.player.setDown(false);
-				this.player.setDirectionMoving(Player.Direction.S);
+				this.playerSleep.setDown(false);
 				break;
 			case Input.Keys.SPACE:
-				this.player.setShoot(false);
+				this.playerSleep.setShoot(false);
+				break;
+				
+			//running Player Wake
+			case Input.Keys.A:
+				this.playerWake.setLeft(false);
+				break;
+			case Input.Keys.D:
+				this.playerWake.setRight(false);
+				break;
+			case Input.Keys.W:
+				this.playerWake.setUp(false);
+				break;
+			case Input.Keys.S:
+				this.playerWake.setDown(false);
 				break;
 			default:
 				// System.out.println("Player Stop");
-				this.player.stop();
+				this.playerSleep.stop();
+				this.playerWake.stop();
 				break;
 		}
 
-		if (!this.player.getDown() && !this.player.getUp() && !this.player.getLeft() && !this.player.getRight()) {
-			this.player.stop();
+		if (!this.playerSleep.getDown() && !this.playerSleep.getUp() && !this.playerSleep.getLeft() && !this.playerSleep.getRight()) {
+			this.playerSleep.stop();
+		}
+		if (!this.playerWake.getDown() && !this.playerWake.getUp() && !this.playerWake.getLeft() && !this.playerWake.getRight()) {
+			this.playerWake.stop();
 		}
 		/*switch (keycode) {
 			case Input.Keys.LEFT:
