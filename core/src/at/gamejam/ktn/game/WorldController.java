@@ -20,7 +20,7 @@ public class WorldController {
 	public long							timeElapsed;
 	protected int						coinCount	= 0;
 	private World						b2World;
-	private TopDownLevel				level;
+	private GeneratedLevel				level;
 	private final boolean				debug		= true;
 	private boolean						reset;
 
@@ -42,7 +42,7 @@ public class WorldController {
 		//this.cameraHelper.setTarget(this.playerSleep.getBody());
 		// this.level = new Level(this.b2World);
 		
-		this.level = new TopDownLevel(this.b2World);
+		this.level = new GeneratedLevel(b2World);
 		this.b2World.setContactListener(new MyContactListener(this));
 		Gdx.input.setInputProcessor(new InputManager(this.playerSleep, this.playerWake, this.cameraHelper));
 	}
@@ -119,7 +119,7 @@ public class WorldController {
 		return this.b2World;
 	}
 
-	protected TopDownLevel getLevel() {
+	protected GeneratedLevel getLevel() {
 		return this.level;
 	}
 

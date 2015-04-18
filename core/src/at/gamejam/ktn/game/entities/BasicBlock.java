@@ -68,7 +68,6 @@ public class BasicBlock extends GameObject {
 		bodyDef.type = BodyDef.BodyType.StaticBody;
 
 		this.b2Body = this.b2World.createBody(bodyDef);
-
 		final EdgeShape edgeShape = new EdgeShape();
 		if (this.type == BasicBlockType.BlockSlope) {
 			if (this.flipped) {

@@ -11,8 +11,11 @@ import at.gamejam.ktn.game.entities.GameObject;
 import at.gamejam.ktn.game.entities.JumpPad;
 import at.gamejam.ktn.game.entities.Spikes;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class TopDownLevel {
@@ -37,7 +40,9 @@ public class TopDownLevel {
 			this.gameObjects.add(new BasicBlock(new Vector2(5, i), BasicBlock.BasicBlockType.BlockBorder, this.b2World));
 			this.gameObjects.add(new BasicBlock(new Vector2(-5, i), BasicBlock.BasicBlockType.BlockBorder, this.b2World));
 		}
-
+//		OrthographicCamera camera;
+//		camera.unproject(new Vector3(Gdx.graphics.getWidth(),0,0));
+		
 		this.gameObjects.add(new DecoBlock(new Vector2(-2, 1), DecoBlock.DecoBlockType.Bush));
 		this.gameObjects.add(new DecoBlock(new Vector2(3, 1), DecoBlock.DecoBlockType.Cactus));
 		this.gameObjects.add(new DecoBlock(new Vector2(7, 3), DecoBlock.DecoBlockType.Cloud));
