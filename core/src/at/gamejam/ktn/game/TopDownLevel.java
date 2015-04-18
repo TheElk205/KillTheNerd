@@ -6,7 +6,6 @@ import java.util.List;
 import at.gamejam.ktn.game.entites.Item;
 import at.gamejam.ktn.game.entites.RedBull;
 import at.gamejam.ktn.game.entities.BasicBlock;
-import at.gamejam.ktn.game.entities.Coin;
 import at.gamejam.ktn.game.entities.DecoBlock;
 import at.gamejam.ktn.game.entities.GameObject;
 import at.gamejam.ktn.game.entities.JumpPad;
@@ -17,9 +16,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class TopDownLevel {
-	List<GameObject>	gameObjects;
-	private List<RedBull>	redBulls;
-	private final World	b2World;
+	private List<GameObject>	gameObjects;
+	private List<RedBull>		redBulls;
+	private final World			b2World;
 
 	public TopDownLevel(final World b2World) {
 		this.b2World = b2World;
@@ -71,13 +70,13 @@ public class TopDownLevel {
 		this.gameObjects.add(new BasicBlock(new Vector2(10, 1), BasicBlock.BasicBlockType.BlockSlope, this.b2World, true));
 		this.gameObjects.add(new JumpPad(new Vector2(1, 1f), this.b2World));
 		this.gameObjects.add(new Spikes(new Vector2(2f, 1f), this.b2World));
-		//RedBull r = new RedBull(new Vector2(2.2f, 2f));
-		RedBull r = new RedBull(new Vector2(0,0),this.b2World);
+		// RedBull r = new RedBull(new Vector2(2.2f, 2f));
+		final RedBull r = new RedBull(new Vector2(0, 0), this.b2World);
 		this.gameObjects.add(r);
 		this.redBulls.add(r);
-		//r = new RedBull(new Vector2(10, 2f));
-		//this.gameObjects.add(c);
-		//this.coins.add(c);
+		// r = new RedBull(new Vector2(10, 2f));
+		// this.gameObjects.add(c);
+		// this.coins.add(c);
 	}
 
 	public void render(final SpriteBatch batch) {
@@ -91,20 +90,20 @@ public class TopDownLevel {
 			gameObject.update(deltaTime);
 		}
 	}
-	
-	public void removeRedBull(RedBull bull) {
+
+	public void removeRedBull(final RedBull bull) {
 		this.gameObjects.remove(bull);
 		this.redBulls.remove(bull);
-		b2World.destroyBody(bull.getBody());
+		this.b2World.destroyBody(bull.getBody());
 	}
-	
-	public void addItem(Item item) {
-		if(item instanceof RedBull) {
-			this.addRedBull((RedBull)item);
+
+	public void addItem(final Item item) {
+		if (item instanceof RedBull) {
+			this.addRedBull((RedBull) item);
 		}
 	}
-	
-	private void addRedBull(RedBull bull) {
+
+	private void addRedBull(final RedBull bull) {
 		this.gameObjects.add(bull);
 		this.redBulls.add(bull);
 	}
@@ -115,5 +114,9 @@ public class TopDownLevel {
 
 	public List<RedBull> getRedBulls() {
 		return this.redBulls;
+	}
+
+	public void addGameObject(final GameObject object) {
+		this.gameObjects.add(object);
 	}
 }

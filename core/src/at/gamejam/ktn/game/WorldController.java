@@ -1,28 +1,24 @@
 package at.gamejam.ktn.game;
 
-import java.util.Map;
 import java.util.Vector;
 
-import at.gamejam.ktn.game.entites.Item;
+import at.gamejam.ktn.game.entites.Player;
 import at.gamejam.ktn.game.entites.PlayerSleep;
 import at.gamejam.ktn.game.entites.RedBull;
+<<<<<<< HEAD
 import at.gamejam.ktn.game.entities.Coin;
 import at.gamejam.ktn.game.entities.GameObject;
 import at.gamejam.ktn.game.entites.Player;
 import at.gamejam.ktn.game.entities.Spikes;
+=======
+>>>>>>> origin/master
 import at.gamejam.ktn.utils.CameraHelper;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.math.Plane.PlaneSide;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 
 /**
@@ -30,7 +26,7 @@ import com.badlogic.gdx.physics.box2d.World;
  */
 public class WorldController extends InputAdapter {
 	public CameraHelper		cameraHelper;
-	public PlayerSleep			player;
+	public PlayerSleep		player;
 	public long				timeElapsed;
 	int						coinCount	= 0;
 	private World			b2World;
@@ -52,61 +48,26 @@ public class WorldController extends InputAdapter {
 		this.cameraHelper.setTarget(this.player.getBody());
 		// this.level = new Level(this.b2World);
 		this.level = new TopDownLevel(this.b2World);
-		this.b2World.setContactListener(new ContactListener() {
-			@Override
-			public void beginContact(final Contact contact) {
-				final Fixture fA = contact.getFixtureA();
-				final Fixture fB = contact.getFixtureB();
-				if (((fB.getBody().getUserData() instanceof Player) && (fA.getBody().getUserData() instanceof Spikes))
-						|| ((fA.getBody().getUserData() instanceof Player) && (fB.getBody().getUserData() instanceof Spikes))) {
-					WorldController.this.reset = true;
-				}
-				else if(((fB.getBody().getUserData() instanceof Player) && (fA.getBody().getUserData() instanceof Item)))  {
-					Item item = (Item)(fA.getBody().getUserData());
-					Player player = (Player)(fB.getBody().getUserData());
-					item.grabbed(player);
-					
-				}
-				else if(((fA.getBody().getUserData() instanceof Item) && (fB.getBody().getUserData() instanceof Player))) {
-					Item item = (Item)(fB.getBody().getUserData());
-					Player player = (Player)(fA.getBody().getUserData());
-					item.grabbed(player);
-				}
-			}
-
-			@Override
-			public void endContact(final Contact contact) {
-
-			}
-
-			@Override
-			public void preSolve(final Contact contact, final Manifold oldManifold) {
-
-			}
-
-			@Override
-			public void postSolve(final Contact contact, final ContactImpulse impulse) {
-
-			}
-		});
+		this.b2World.setContactListener(new MyContactListener(this));
 	}
 
 	public void update(final float deltaTime) {
 		this.timeElapsed += deltaTime * 1000;
 		this.cameraHelper.update(deltaTime);
 		this.b2World.step(1 / 60f, 3, 8); // timeStep, velocityIteration, positionIteration
-		
-		//delete items
-		Vector<Integer> tmp = new Vector<Integer>();
-		for(int i = 0; i < this.level.getRedBulls().size(); i++) {
-			if(this.level.getRedBulls().get(i).isCollected()) {
-				b2World.destroyBody(this.level.getRedBulls().get(i).getBody());
+
+		// delete items
+		final Vector<Integer> tmp = new Vector<Integer>();
+		for (int i = 0; i < this.level.getRedBulls().size(); i++) {
+			if (this.level.getRedBulls().get(i).isCollected()) {
+				this.b2World.destroyBody(this.level.getRedBulls().get(i).getBody());
 				tmp.add(i);
 			}
 		}
-		for(int i = tmp.size()-1; i >= 0; i--) {
+		for (int i = tmp.size() - 1; i >= 0; i--) {
 			this.level.removeRedBull(this.level.getRedBulls().get(i));
 		}
+<<<<<<< HEAD
 		
 		//Add Items
 		if(newObjects.size() > 0) {
@@ -115,6 +76,9 @@ public class WorldController extends InputAdapter {
 			}
 		}
 		
+=======
+
+>>>>>>> origin/master
 		if (this.reset) {
 			this.reset();
 		}
@@ -123,7 +87,7 @@ public class WorldController extends InputAdapter {
 		if (this.player.getBody().getPosition().y < -3) {
 			this.reset = true;
 		}
-		//this.testCoins();
+		// this.testCoins();
 	}
 
 	private void reset() {
@@ -147,7 +111,7 @@ public class WorldController extends InputAdapter {
 			if (!playerRect.overlaps(coinRect)) {
 				continue;
 			}
-			red.grabbed(player);
+			red.grabbed(this.player);
 			this.coinCount += 1;
 		}
 	}
@@ -176,7 +140,7 @@ public class WorldController extends InputAdapter {
 			case Input.Keys.D:
 				this.debug = !this.debug;
 				break;
-			case Input.Keys.SPACE:	
+			case Input.Keys.SPACE:
 				this.player.throwItem();
 				break;
 			case Input.Keys.R:
@@ -205,12 +169,12 @@ public class WorldController extends InputAdapter {
 			this.reset();
 		}
 		if (screenX < (Gdx.graphics.getWidth() / 3)) {
-			//this.player.setLeft(true);
+			// this.player.setLeft(true);
 		} else
 			if (screenX > ((Gdx.graphics.getWidth() / 3) * 2)) {
-				//this.player.setRight(true);
+				// this.player.setRight(true);
 			} else {
-				//this.player.jump();
+				// this.player.jump();
 			}
 		return true;
 	}
@@ -218,10 +182,10 @@ public class WorldController extends InputAdapter {
 	@Override
 	public boolean touchUp(final int screenX, final int screenY, final int pointer, final int button) {
 		if (screenX < (Gdx.graphics.getWidth() / 3)) {
-			//this.player.setLeft(false);
+			// this.player.setLeft(false);
 		} else
 			if (screenX > ((Gdx.graphics.getWidth() / 3) * 2)) {
-				//this.player.setRight(false);
+				// this.player.setRight(false);
 			}
 		return true;
 	}
@@ -239,11 +203,15 @@ public class WorldController extends InputAdapter {
 		return this.debug;
 	}
 
-	public World getB2World() {
+	protected World getB2World() {
 		return this.b2World;
 	}
 
-	public TopDownLevel getLevel() {
+	protected TopDownLevel getLevel() {
 		return this.level;
 	}
+
+	/*protected void addAbstractItem(final GameObject object) {
+		this.level.addGameObject(object);
+	}*/
 }
