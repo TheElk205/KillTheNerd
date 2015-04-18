@@ -172,36 +172,44 @@ public abstract class Player extends InteractiveObject {
 	
 	public void throwItem() {
 		if(itemCount > 0) {
-			RedBull bull = new RedBull(this.position, this.b2World);
-			//bull.init(true);
-			bull.collected = false;
-			bull.collectable = false;
+			Vector2 initPos = this.position;
+			
+			initPos.x -= this.dimension.x/2f;
+			initPos.y -= this.dimension.x/2f;
+			
+			float offset = 0.1f;
 			Vector2 toApply = new Vector2();
-			System.out.println(bull.position);
 			switch(directionLooking) {
 			case N:
-				//toApply.y = throwingSpeed;
-				bull.position.y += 2;
-				System.out.print("UP");
+				toApply.y = throwingSpeed;
+				initPos.y += this.dimension.y + offset;
+				System.out.println("UP");
 				break;
 			case S:
-				//toApply.y = -throwingSpeed;
-				bull.position.y -= 2;
+				toApply.y = -throwingSpeed;
+				initPos.y -= (this.dimension.y + offset);
+				System.out.println("DOWN");
 				break;
 			case E:
-				//toApply.x = throwingSpeed;
-				bull.position.x += 2;
+				toApply.x = throwingSpeed;
+				initPos.x += this.dimension.x + offset;
+				System.out.println("LEFT");
 				break;
 			case W:
-				//toApply.x = -throwingSpeed;
-				bull.position.x -= 2;
+				toApply.x = -throwingSpeed;
+				initPos.x -= (this.dimension.x + offset);
+				System.out.println("RIGHT");
 				break;
 			default:
 				System.out.println("What the fuck");
 				break;
 			}
-			System.out.println(bull.position);
-			System.out.println(this.position);
+			RedBull bull = new RedBull(initPos, this.b2World);
+			//bull.init(true);
+			bull.collected = false;
+			bull.collectable = true;
+//			System.out.println(bull.position);
+//			System.out.println(this.position);
 			bull.getBody().applyForceToCenter(toApply, true);
 			worldController.addRedBull(bull);
 			//this.items.remove(this.items.size()-1);

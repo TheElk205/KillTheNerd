@@ -71,7 +71,6 @@ public class WorldController extends InputAdapter {
 				b.destroyed = true;
 			}
 		}
-
 			newObjects.clear();
 		if (this.reset) {
 			this.reset();
@@ -196,7 +195,7 @@ public class WorldController extends InputAdapter {
 
 	public void addRedBull(final RedBull bull) {
 		this.addTempGameObject(bull);
-		//this.level.addItem(bull);
+		//this.level.addItem(item);
 	}
 
 	public boolean isDebug() {
