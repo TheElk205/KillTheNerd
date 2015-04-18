@@ -55,15 +55,21 @@ public class WorldController extends InputAdapter {
 		this.b2World.step(1 / 60f, 3, 8); // timeStep, velocityIteration, positionIteration
 
 		// delete items
-		final Vector<Integer> tmp = new Vector<Integer>();
-		for (int i = 0; i < this.level.getRedBulls().size(); i++) {
-			if (this.level.getRedBulls().get(i).isCollected()) {
-				this.b2World.destroyBody(this.level.getRedBulls().get(i).getBody());
-				tmp.add(i);
+//		final Vector<Integer> tmp = new Vector<Integer>();
+//		for (int i = 0; i < this.level.getRedBulls().size(); i++) {
+//			if (this.level.getRedBulls().get(i).isCollected()) {
+//				this.b2World.destroyBody(this.level.getRedBulls().get(i).getBody());
+//				tmp.add(i);
+//			}
+//		}
+//		for (int i = tmp.size() - 1; i >= 0; i--) {
+//			this.level.removeRedBull(this.level.getRedBulls().get(i));
+//		}
+		for(RedBull b: this.level.getRedBulls()) {
+			if(b.isCollected() && !b.destroyed) {
+				this.b2World.destroyBody(b.getBody());
+				b.destroyed = true;
 			}
-		}
-		for (int i = tmp.size() - 1; i >= 0; i--) {
-			this.level.removeRedBull(this.level.getRedBulls().get(i));
 		}
 		
 		//Add Items
@@ -71,6 +77,7 @@ public class WorldController extends InputAdapter {
 			for(GameObject o : newObjects) {
 				this.level.getGameObjects().add(o);
 			}
+			newObjects.clear();
 		}
 
 		if (this.reset) {
@@ -190,7 +197,7 @@ public class WorldController extends InputAdapter {
 	
 	public void addRedBull(RedBull bull) {
 		this.addGameObject(bull);
-		this.level.getRedBulls().add(bull);
+		//this.level.addItem(bull);
 	}
 
 	public boolean isDebug() {
