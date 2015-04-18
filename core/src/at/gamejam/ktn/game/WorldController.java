@@ -5,34 +5,27 @@ import java.util.Vector;
 import at.gamejam.ktn.game.entites.Player;
 import at.gamejam.ktn.game.entites.PlayerSleep;
 import at.gamejam.ktn.game.entites.RedBull;
-import at.gamejam.ktn.game.entities.Coin;
 import at.gamejam.ktn.game.entities.GameObject;
-import at.gamejam.ktn.game.entites.Player;
-import at.gamejam.ktn.game.entities.Spikes;
-
 import at.gamejam.ktn.utils.CameraHelper;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
-/**
- * Created by Lukas on 11.04.2015.
- */
 public class WorldController extends InputAdapter {
-	public CameraHelper		cameraHelper;
-	public PlayerSleep		player;
-	public long				timeElapsed;
-	int						coinCount	= 0;
-	private World			b2World;
-	private TopDownLevel	level;
-	private boolean			debug		= true;
-	private boolean			reset;
+	public CameraHelper					cameraHelper;
+	public PlayerSleep					player;
+	public long							timeElapsed;
+	protected int						coinCount	= 0;
+	private World						b2World;
+	private TopDownLevel				level;
+	private boolean						debug		= true;
+	private boolean						reset;
 
-	Vector<GameObject> newObjects = new Vector<GameObject>();
+	private final Vector<GameObject>	newObjects	= new Vector<GameObject>();
+
 	public WorldController() {
 		this.init();
 	}
@@ -50,10 +43,17 @@ public class WorldController extends InputAdapter {
 	}
 
 	public void update(final float deltaTime) {
-		this.timeElapsed += deltaTime * 1000;
-		this.cameraHelper.update(deltaTime);
-		this.b2World.step(1 / 60f, 3, 8); // timeStep, velocityIteration, positionIteration
+		// Add Items
+		if (this.newObjects.size() > 0) {
 
+			for (final GameObject o : this.newObjects) {
+				this.level.addGameObject(o);
+			}
+			this.newObjects.clear();
+		}
+		this.timeElapsed += deltaTime * 1000;
+		this.b2World.step(1 / 60f, 3, 8); // timeStep, velocityIteration, positionIteration
+		this.cameraHelper.update(deltaTime);
 		// delete items
 //		final Vector<Integer> tmp = new Vector<Integer>();
 //		for (int i = 0; i < this.level.getRedBulls().size(); i++) {
@@ -71,15 +71,8 @@ public class WorldController extends InputAdapter {
 				b.destroyed = true;
 			}
 		}
-		
-		//Add Items
-		if(newObjects.size() > 0) {
-			for(GameObject o : newObjects) {
-				this.level.getGameObjects().add(o);
-			}
-			newObjects.clear();
-		}
 
+			newObjects.clear();
 		if (this.reset) {
 			this.reset();
 		}
@@ -100,7 +93,7 @@ public class WorldController extends InputAdapter {
 		this.coinCount = 0;
 	}
 
-	private void testCoins() {
+	/*private void testCoins() {
 		final Rectangle playerRect = new Rectangle();
 		final Rectangle coinRect = new Rectangle();
 		playerRect.set(this.player.position.x, this.player.position.y, this.player.dimension.x, this.player.dimension.y);
@@ -115,7 +108,7 @@ public class WorldController extends InputAdapter {
 			red.grabbed(this.player);
 			this.coinCount += 1;
 		}
-	}
+	}*/
 
 	@Override
 	public boolean keyDown(final int keycode) {
@@ -147,6 +140,8 @@ public class WorldController extends InputAdapter {
 			case Input.Keys.R:
 				this.reset = true;
 				break;
+			default:
+				break;
 		}
 		return true;
 	}
@@ -160,11 +155,14 @@ public class WorldController extends InputAdapter {
 			case Input.Keys.DOWN:
 				this.player.stop();
 				break;
+			default:
+				this.player.stop();
+				break;
 		}
 		return false;
 	}
 
-	@Override
+	/*@Override
 	public boolean touchDown(final int screenX, final int screenY, final int pointer, final int button) {
 		if (screenY < (Gdx.graphics.getHeight() / 4)) {
 			this.reset();
@@ -189,14 +187,15 @@ public class WorldController extends InputAdapter {
 				// this.player.setRight(false);
 			}
 		return true;
+	}*/
+
+	public void addTempGameObject(final GameObject object) {
+		this.newObjects.add(object);
+		System.out.println("temp new Objects:" + this.newObjects.size());
 	}
-	
-	public void addGameObject(GameObject object) {
-		newObjects.add(object);
-	}
-	
-	public void addRedBull(RedBull bull) {
-		this.addGameObject(bull);
+
+	public void addRedBull(final RedBull bull) {
+		this.addTempGameObject(bull);
 		//this.level.addItem(bull);
 	}
 
