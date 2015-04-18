@@ -4,7 +4,6 @@ import at.gamejam.ktn.game.entites.Item;
 import at.gamejam.ktn.game.entites.Player;
 import at.gamejam.ktn.game.entites.RedBull;
 import at.gamejam.ktn.game.entites.ThrowableObject;
-import at.gamejam.ktn.game.entities.GameObject;
 import at.gamejam.ktn.game.entities.Spikes;
 
 import com.badlogic.gdx.math.Vector2;
@@ -59,20 +58,29 @@ public class MyContactListener implements ContactListener {
 
 		switch (collisionType) {
 			case 1:
+				RedBull newItem = null;
 				// WorldController.this.reset = true;
+				final Vector2 itemPosition = new Vector2(2, 2);
 				System.out.println("beginContact Player with Spikes");
 				if (userDataA instanceof Spikes) {
-					System.out.println("userDataA is Item");
+					System.out.println("userDataA is Spikes");
 					// final Vector2 itemPosition = ((Spikes) userDataA).position;
-					final Vector2 itemPosition = new Vector2(0, 0);
+
 					System.out.println("spikePosition: " + itemPosition + "playerPosition: " + ((Player) userDataB).position);
-					final RedBull newItem = new RedBull(itemPosition, this.wContr.getB2World());
-					// this.wContr.addAbstractItem(newItem);
-				} else {
-					final Vector2 itemPosition = ((GameObject) userDataB).position;
-					final RedBull newItem = new RedBull(itemPosition, this.wContr.getB2World());
-					// this.wContr.addAbstractItem(newItem);
-				}
+					newItem = new RedBull(itemPosition, this.wContr.getB2World(), false);
+					this.wContr.addTempGameObject(newItem);
+				} else
+					if ((userDataB instanceof Spikes)) {
+						System.out.println("userDataB is Spikes");
+
+						// final Vector2 itemPosition = ((GameObject) userDataB).position;
+						newItem = new RedBull(itemPosition, this.wContr.getB2World(), false);
+						this.wContr.addTempGameObject(newItem);
+
+					} else {
+						System.out.println("ERROR");
+					}
+				newItem.initPhysics();
 				break;
 			case 2:
 				System.out.println("beginContact Player with TrowableObject");
@@ -110,6 +118,7 @@ public class MyContactListener implements ContactListener {
 
 	@Override
 	public void preSolve(final Contact contact, final Manifold oldManifold) {
+		// contact.setEnabled(false);
 		// System.out.println("preSolve");
 	}
 

@@ -17,19 +17,19 @@ public abstract class Item extends InteractiveObject {
 	protected TextureRegion		texture;
 
 	// animated
-	protected TextureRegion[] textureRegion;
-	protected Animation	animation;
-	protected float startTime = 0;
-	protected int numPictures = 0;
+	protected TextureRegion[]	textureRegion;
+	protected Animation			animation;
+	protected float				startTime	= 0;
+	protected int				numPictures	= 0;
 
 	// all
-	boolean	collected = false;
-	boolean	animated = false;
-	boolean collectable = true;
-	Player grabbedBy;
+	boolean						collected	= false;
+	boolean						animated	= false;
+	boolean						collectable	= true;
+	Player						grabbedBy;
 
-	private Body b2Body;
-	private final World	b2World;
+	private Body				b2Body;
+	private final World			b2World;
 
 	public Item(final Vector2 position, final World b2World) {
 		super();
@@ -47,7 +47,7 @@ public abstract class Item extends InteractiveObject {
 	// super();
 	// this.animated = animated;
 	// }
-	
+
 	protected void init(final boolean animated) {
 		this.animated = animated;
 		this.collected = false;
@@ -57,8 +57,20 @@ public abstract class Item extends InteractiveObject {
 		this.initPhysics();
 	}
 
-	private void initPhysics() {
+	protected void init(final boolean animated, final boolean physics) {
+		this.animated = animated;
+		this.collected = false;
+		if (this.animated) {
+			this.initAnimated();
+		}
+		if (physics) {
+			this.initPhysics();
+		}
+	}
+
+	public void initPhysics() {
 		final BodyDef bodyDef = new BodyDef();
+		System.out.println(this.dimension + " " + this.position);
 		bodyDef.position.set(new Vector2(this.position.x + (this.dimension.x / 2f), this.position.y + (this.dimension.y / 2f)));
 		bodyDef.type = BodyDef.BodyType.DynamicBody;
 		this.b2Body = this.b2World.createBody(bodyDef);
@@ -102,12 +114,12 @@ public abstract class Item extends InteractiveObject {
 	public void update(final float deltaTime) {
 		super.update(deltaTime);
 		this.startTime += deltaTime;
-		this.position = this.b2Body.getPosition();
-		
-		this.position.x = this.position.x - this.dimension.x/2;
-		this.position.y = this.position.y - this.dimension.y/2;
-		
-		this.rotation = this.b2Body.getAngle() * MathUtils.radiansToDegrees;
+		if (this.b2Body != null) {
+			this.position = this.b2Body.getPosition();
+			this.position.x = this.position.x - (this.dimension.x / 2);
+			this.position.y = this.position.y - (this.dimension.y / 2);
+			this.rotation = this.b2Body.getAngle() * MathUtils.radiansToDegrees;
+		}
 	}
 
 	public boolean isCollected() {
@@ -115,8 +127,9 @@ public abstract class Item extends InteractiveObject {
 	}
 
 	public void setCollected(final boolean b) {
-		if(collectable)
+		if (this.collectable) {
 			this.collected = b;
+		}
 	}
 
 	public Body getBody() {
@@ -125,7 +138,7 @@ public abstract class Item extends InteractiveObject {
 
 	// interactions
 	public void grabbed(final Player player) {
-		if(collectable) {
+		if (this.collectable) {
 			System.out.println("Item grabbed by: " + player);
 			this.collected = true;
 			this.grabbedBy = player;
