@@ -84,6 +84,7 @@ public class WorldController {
 			this.reset();
 		}
 		this.playerSleep.update(deltaTime);
+		this.playerWake.update(deltaTime);
 		this.level.update(deltaTime);
 		/*if (this.player.getBody().getPosition().y < -3) {
 			this.reset = true;

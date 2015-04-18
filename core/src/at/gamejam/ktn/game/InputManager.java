@@ -95,7 +95,8 @@ public class InputManager extends InputAdapter {
 			case Input.Keys.DOWN:
 				this.playerSleep.setDown(false);
 				break;
-			case Input.Keys.SPACE:
+			//shoot Player Sleep
+			case Input.Keys.CONTROL_RIGHT:
 				this.playerSleep.setShoot(false);
 				break;
 				
@@ -111,6 +112,10 @@ public class InputManager extends InputAdapter {
 				break;
 			case Input.Keys.S:
 				this.playerWake.setDown(false);
+				break;
+			//shooting player wake
+			case Input.Keys.SPACE:
+				this.playerWake.setShoot(false);
 				break;
 			default:
 				// System.out.println("Player Stop");

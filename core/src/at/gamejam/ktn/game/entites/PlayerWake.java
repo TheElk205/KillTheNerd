@@ -13,4 +13,10 @@ public class PlayerWake extends Player {
 	protected void loadAsset() {
 		this.texture = this.assets.findRegion("player");
 	}
+
+	@Override
+	public void hitByItem(Item item) {
+		// TODO Auto-generated method stub
+		
+	}
 }
