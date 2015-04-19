@@ -16,13 +16,13 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
 public abstract class Item extends InteractiveObject {
-	private Sound				sound;
+	private Sound				grabSound		= Gdx.audio.newSound(Gdx.files.internal(Constants.GRAB_SOUND));
 	// not animated
 	// protected TextureRegion texture;
 
 	// all
 	public boolean				collected		= false;
-
+	// private Sound sound;
 	public boolean				collectable		= true;
 	private Player				grabbedBy;
 	public Player				itemIsThrownBy	= null;
@@ -37,7 +37,7 @@ public abstract class Item extends InteractiveObject {
 		itemList.add(this);
 		// this.dimension = new Vector2(0.25f, 0.2f);
 		this.dimension = new Vector2(0.15f, 0.15f);
-		this.sound = Gdx.audio.newSound(Gdx.files.internal(Constants.THROW_SOUND));
+		// this.sound = Gdx.audio.newSound(Gdx.files.internal(Constants.THROW_SOUND));
 		this.b2World = b2World;
 	}
 
@@ -47,6 +47,8 @@ public abstract class Item extends InteractiveObject {
 		if (this.animated) {
 			this.loadAsset();
 			this.initAnimated();
+		} else {
+
 		}
 		if (initPhysics) {
 			this.initPhysics();
@@ -77,10 +79,11 @@ public abstract class Item extends InteractiveObject {
 			// System.out.println(this.dimension.x);
 			polygonShape.setAsBox(this.dimension.x / 2f, this.dimension.y / 2f);
 			final FixtureDef fixtureDef = new FixtureDef();
-			fixtureDef.density = 0f;
+			fixtureDef.density = 5f;
 			fixtureDef.friction = 0f;
 			fixtureDef.restitution = 0;
 			fixtureDef.shape = polygonShape;
+			this.b2Body.setBullet(true);
 			this.b2Body.createFixture(fixtureDef);
 			this.b2Body.setUserData(this);
 		}
@@ -92,6 +95,12 @@ public abstract class Item extends InteractiveObject {
 	public void render(final SpriteBatch batch) {
 		if (this.animated && !this.collected && this.toRender) {
 			batch.draw(this.animation.getKeyFrame(this.startTime, true), this.position.x, this.position.y, this.dimension.x, this.dimension.y);
+		}
+		if (!this.animated && !this.collectable && this.toRender) {
+
+			batch.draw(this.texture, this.position.x - (this.dimension.x / 2), this.position.y - (this.dimension.y / 2), this.origin.x, this.origin.y, this.dimension.x, this.dimension.y,
+					this.scale.x, this.scale.y, this.rotation);
+
 		}
 	}
 
@@ -125,8 +134,8 @@ public abstract class Item extends InteractiveObject {
 			// player.incrItemCount();
 			this.grabbedBy = player;
 			if (this.grabbedBy.addItem(this)) {
+				this.grabSound.play();
 				this.collected = true;
-				this.sound.play();
 				this.destroyed = false;
 			} else {
 				this.grabbedBy = null;

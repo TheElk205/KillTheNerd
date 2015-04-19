@@ -31,7 +31,7 @@ public class DesktopMidiPlayer {
 		// create a stream from a file
 		// FileHandle fh = Gdx.files.internal(Constants.MUSIC);
 		// InputStream is = new BufferedInputStream(new FileInputStream(fh.file()));
-		InputStream is = new BufferedInputStream(new FileInputStream(new File(Constants.MUSIC)));
+		InputStream is = new BufferedInputStream(new FileInputStream(new File(Constants.MUSIC2)));
 		// Sets the current sequence on which the sequencer operates.
 		// The stream must point to MIDI file data.
 		sequencer.setSequence(is);

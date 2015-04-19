@@ -2,11 +2,14 @@ package at.gamejam.ktn.game;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import at.gamejam.ktn.game.entites.DelayBar;
 import at.gamejam.ktn.game.entites.Item;
 import at.gamejam.ktn.game.entites.PlayerSleep;
 import at.gamejam.ktn.game.entites.PlayerWake;
+import at.gamejam.ktn.game.entites.RedBull;
+import at.gamejam.ktn.game.entites.Thesis;
 import at.gamejam.ktn.game.entities.GameObject;
 import at.gamejam.ktn.utils.CameraHelper;
 import at.gamejam.ktn.utils.Constants;
@@ -30,7 +33,8 @@ public class WorldController {
 	// private int redBullCount = Constants.START_ITEM_COUNT;
 	private World					b2World;
 	private GeneratedLevel			level;
-	private final boolean			debug			= true;
+	private float					lastSpawn		= 0;
+	private final boolean			debug			= false;
 	// private boolean reset;
 
 	private InputManager			inputManager;
@@ -142,9 +146,22 @@ public class WorldController {
 			if (item.isFlying) {
 				item.flyingTime += deltaTime;
 			}
-			if (item.flyingTime > 1) {
+			if (item.flyingTime > 0.5) {
 				item.collectable = true;
 			}
+		}
+
+		this.lastSpawn = this.lastSpawn + deltaTime;
+		if (this.lastSpawn > 10) {
+			this.lastSpawn = 0;
+
+			Random rnd = new Random();
+			float i = rnd.nextFloat();
+			this.addTempGameObject(new RedBull(new Vector2(2f + i, 2f), this.b2World, true));
+			this.addTempGameObject(new Thesis(new Vector2(2f + i, -2.5f), this.b2World, true));
+
+			this.addTempGameObject(new RedBull(new Vector2(-1.5f, 1f + i), this.b2World, true));
+			this.addTempGameObject(new Thesis(new Vector2(-2f, -1.5f + i), this.b2World, true));
 		}
 	}
 
@@ -169,12 +186,12 @@ public class WorldController {
 	}
 
 	/*private void reset() {
-		this.reset = false;
-		this.playerSleep.getBody().setTransform(new Vector2(0.5f, 1.5f), 0);
-		this.playerSleep.getBody().setLinearVelocity(new Vector2(0, 0));
-		this.playerSleep.getBody().setAngularVelocity(0);
-		this.timeElapsed = 0;
-		this.coinCount = 0;
+	this.reset = false;
+	this.playerSleep.getBody().setTransform(new Vector2(0.5f, 1.5f), 0);
+	this.playerSleep.getBody().setLinearVelocity(new Vector2(0, 0));
+	this.playerSleep.getBody().setAngularVelocity(0);
+	this.timeElapsed = 0;
+	this.coinCount = 0;
 	}*/
 
 	public void addTempGameObject(final GameObject object) {
@@ -195,7 +212,7 @@ public class WorldController {
 	}
 
 	/*protected void addAbstractItem(final GameObject object) {
-		this.level.addGameObject(object);
+	this.level.addGameObject(object);
 	}*/
 
 	public InputManager getInputManager() {

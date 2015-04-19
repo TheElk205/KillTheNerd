@@ -13,8 +13,8 @@ public class InputManager extends InputAdapter {
 	private final PlayerSleep	playerSleep;
 	private final CameraHelper	cameraHelper;
 
-	private boolean enabled = true;
-	
+	private boolean				enabled	= true;
+
 	public InputManager(final PlayerWake playerWake, final PlayerSleep playerSleep, final CameraHelper cameraHelper) {
 		this.playerWake = playerWake;
 		this.playerSleep = playerSleep;
@@ -23,7 +23,7 @@ public class InputManager extends InputAdapter {
 
 	@Override
 	public boolean keyDown(final int keycode) {
-		if(!enabled) {
+		if (!enabled) {
 			return false;
 		}
 		switch (keycode) {
@@ -70,14 +70,14 @@ public class InputManager extends InputAdapter {
 				break;
 
 				// shooting Player wake
-			case Input.Keys.SPACE:
+			case Input.Keys.CONTROL_LEFT:
 				this.playerSleep.setShoot(true);
 				break;
 			/*case Input.Keys.R:
 			this.reset = true;
 			break;*/
 			default:
-				this.playerWake.stop();
+				// this.playerWake.stop();
 				break;
 		}
 		return true;
@@ -118,13 +118,13 @@ public class InputManager extends InputAdapter {
 				this.playerSleep.setDown(false);
 				break;
 			// shooting player wake
-			case Input.Keys.SPACE:
+			case Input.Keys.CONTROL_LEFT:
 				this.playerSleep.setShoot(false);
 				break;
 			default:
 				// System.out.println("Player Stop");
-				this.playerWake.stop();
-				this.playerSleep.stop();
+				// this.playerWake.stop();
+				// this.playerSleep.stop();
 				break;
 		}
 

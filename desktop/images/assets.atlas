@@ -6,7 +6,7 @@ filter: Nearest,Nearest
 repeat: none
 afro_american_pixels
   rotate: false
-  xy: 333, 1
+  xy: 1, 5
   size: 5, 5
   orig: 5, 5
   offset: 0, 0
@@ -18,34 +18,6 @@ badlogic
   orig: 256, 256
   offset: 0, 0
   index: -1
-betty_back
-  rotate: false
-  xy: 1, 28
-  size: 192, 48
-  orig: 192, 48
-  offset: 0, 0
-  index: -1
-betty_front
-  rotate: false
-  xy: 789, 406
-  size: 192, 48
-  orig: 192, 48
-  offset: 0, 0
-  index: -1
-betty_left
-  rotate: false
-  xy: 765, 356
-  size: 192, 48
-  orig: 192, 48
-  offset: 0, 0
-  index: -1
-betty_right
-  rotate: false
-  xy: 403, 317
-  size: 192, 48
-  orig: 192, 48
-  offset: 0, 0
-  index: -1
 book_green
   rotate: false
   xy: 403, 447
@@ -55,35 +27,35 @@ book_green
   index: -1
 book_green_small
   rotate: false
-  xy: 959, 340
+  xy: 547, 235
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 border_top
   rotate: false
-  xy: 403, 83
+  xy: 243, 1
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 bush
   rotate: false
-  xy: 453, 145
+  xy: 789, 384
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 cactus
   rotate: false
-  xy: 597, 295
+  xy: 259, 216
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 chair
   rotate: false
-  xy: 814, 250
+  xy: 277, 1
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -97,7 +69,7 @@ cloud1
   index: -1
 coinGold
   rotate: false
-  xy: 776, 246
+  xy: 814, 346
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
@@ -111,212 +83,177 @@ coin_gold
   index: -1
 corner_back_left
   rotate: false
-  xy: 848, 250
+  xy: 852, 350
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corner_back_right
   rotate: false
-  xy: 882, 250
+  xy: 886, 350
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corner_bottom_left
   rotate: false
-  xy: 916, 250
+  xy: 920, 350
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corner_bottom_right
   rotate: false
-  xy: 983, 422
+  xy: 954, 350
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corner_front_left
   rotate: false
-  xy: 950, 249
+  xy: 765, 298
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corner_front_right
   rotate: false
-  xy: 621, 39
+  xy: 757, 264
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corner_top_left
   rotate: false
-  xy: 621, 5
+  xy: 547, 144
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corner_top_right
   rotate: false
-  xy: 984, 249
+  xy: 541, 110
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 cup_coffee
   rotate: false
-  xy: 195, 12
-  size: 64, 64
-  orig: 64, 64
+  xy: 403, 381
+  size: 384, 64
+  orig: 384, 64
   offset: 0, 0
   index: -1
 dirtCliffLeft
   rotate: false
-  xy: 669, 295
+  xy: 861, 384
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 dirtMid
   rotate: false
-  xy: 261, 7
+  xy: 259, 144
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 flagBlue2
   rotate: false
-  xy: 741, 284
+  xy: 933, 384
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 flagBlueHanging
   rotate: false
-  xy: 813, 284
+  xy: 99, 6
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 floor
   rotate: false
-  xy: 646, 137
+  xy: 541, 76
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 floor_top_left_corner
   rotate: false
-  xy: 646, 103
+  xy: 581, 144
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 floor_top_right_corner
   rotate: false
-  xy: 680, 140
+  xy: 575, 110
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 floor_top_wall
   rotate: false
-  xy: 680, 106
+  xy: 575, 76
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-george_back
-  rotate: false
-  xy: 389, 267
-  size: 192, 48
-  orig: 192, 48
-  offset: 0, 0
-  index: -1
-george_front
-  rotate: false
-  xy: 357, 217
-  size: 192, 48
-  orig: 192, 48
-  offset: 0, 0
-  index: -1
-george_left
-  rotate: false
-  xy: 259, 167
-  size: 192, 48
-  orig: 192, 48
-  offset: 0, 0
-  index: -1
-george_right
-  rotate: false
-  xy: 259, 117
-  size: 192, 48
-  orig: 192, 48
-  offset: 0, 0
-  index: -1
 grass
   rotate: false
-  xy: 885, 284
+  xy: 171, 6
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 grassCenter
   rotate: false
-  xy: 333, 8
+  xy: 259, 72
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 grassCliffRight
   rotate: false
-  xy: 453, 73
+  xy: 331, 216
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 grassHillLeft
   rotate: false
-  xy: 405, 1
+  xy: 331, 144
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 grassHillLeft2
   rotate: false
-  xy: 477, 1
+  xy: 331, 72
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 grassMid
   rotate: false
-  xy: 525, 145
+  xy: 403, 229
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 green_pixels
   rotate: false
-  xy: 340, 1
+  xy: 389, 354
   size: 5, 5
   orig: 5, 5
   offset: 0, 0
   index: -1
 interface
   rotate: false
-  xy: 727, 201
+  xy: 988, 350
   size: 32, 32
   orig: 32, 32
-  offset: 0, 0
-  index: -1
-map1
-  rotate: false
-  xy: 551, 245
-  size: 30, 20
-  orig: 30, 20
   offset: 0, 0
   index: -1
 newRedBull_2_true
@@ -328,154 +265,161 @@ newRedBull_2_true
   index: -1
 plant
   rotate: false
-  xy: 525, 73
+  xy: 403, 157
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 player
   rotate: false
-  xy: 597, 122
+  xy: 315, 23
   size: 47, 47
   orig: 47, 47
   offset: 0, 0
   index: -1
 player-ouch
   rotate: false
-  xy: 597, 73
+  xy: 364, 23
   size: 47, 47
   orig: 47, 47
   offset: 0, 0
   index: -1
 playerWake
   rotate: false
-  xy: 669, 174
+  xy: 413, 36
   size: 47, 47
   orig: 47, 47
   offset: 0, 0
   index: -1
 player_chill
   rotate: false
-  xy: 727, 235
+  xy: 765, 332
   size: 47, 47
   orig: 47, 47
   offset: 0, 0
   index: -1
 redBull
   rotate: false
-  xy: 957, 283
+  xy: 547, 178
   size: 50, 55
   orig: 50, 55
   offset: 0, 0
   index: -1
 red_pixels
   rotate: false
-  xy: 347, 1
+  xy: 396, 354
   size: 5, 5
   orig: 5, 5
   offset: 0, 0
   index: -1
 rock
   rotate: false
-  xy: 549, 1
+  xy: 475, 229
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
+single_cup_coffee
+  rotate: false
+  xy: 475, 91
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 sleep
   rotate: false
-  xy: 765, 429
+  xy: 311, 5
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 snowMid
   rotate: false
-  xy: 583, 223
+  xy: 403, 85
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 snowRight
   rotate: false
-  xy: 655, 223
+  xy: 475, 157
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 spikes
   rotate: false
-  xy: 331, 80
+  xy: 243, 35
   size: 70, 35
   orig: 70, 35
   offset: 0, 0
   index: -1
 springboardDown
   rotate: false
-  xy: 259, 79
+  xy: 685, 263
   size: 70, 36
   orig: 70, 36
   offset: 0, 0
   index: -1
 springboardUp
   rotate: false
-  xy: 597, 171
+  xy: 613, 249
   size: 70, 50
   orig: 70, 50
   offset: 0, 0
   index: -1
 sun
   rotate: false
-  xy: 357, 270
+  xy: 329, 5
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 table
   rotate: false
-  xy: 259, 222
+  xy: 1, 12
   size: 96, 64
   orig: 96, 64
   offset: 0, 0
   index: -1
 table_bottom_left
   rotate: false
-  xy: 718, 167
+  xy: 799, 298
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 table_bottom_middle
   rotate: false
-  xy: 714, 133
+  xy: 791, 264
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 table_bottom_right
   rotate: false
-  xy: 714, 99
+  xy: 685, 229
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 table_top_left
   rotate: false
-  xy: 761, 201
+  xy: 719, 229
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 table_top_middle
   rotate: false
-  xy: 752, 167
+  xy: 613, 215
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 table_top_right
   rotate: false
-  xy: 748, 133
+  xy: 647, 215
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -489,70 +433,70 @@ victory_basic
   index: -1
 wall_bottom
   rotate: false
-  xy: 748, 99
+  xy: 599, 181
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 wall_left
   rotate: false
-  xy: 680, 72
+  xy: 633, 181
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 wall_left_top
   rotate: false
-  xy: 714, 65
+  xy: 615, 147
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 wall_right
   rotate: false
-  xy: 748, 65
+  xy: 649, 147
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 wall_right_top
   rotate: false
-  xy: 786, 167
+  xy: 667, 181
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 wall_top
   rotate: false
-  xy: 782, 133
+  xy: 701, 195
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 wall_top_left
   rotate: false
-  xy: 782, 99
+  xy: 683, 147
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 wall_top_right
   rotate: false
-  xy: 782, 65
+  xy: 735, 195
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 worker
   rotate: false
-  xy: 403, 367
+  xy: 403, 301
   size: 360, 78
   orig: 360, 78
   offset: 0, 0
   index: -1
 yellow_pixels
   rotate: false
-  xy: 354, 1
+  xy: 403, 78
   size: 5, 5
   orig: 5, 5
   offset: 0, 0

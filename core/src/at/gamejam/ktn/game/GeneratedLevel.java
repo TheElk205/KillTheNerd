@@ -5,7 +5,6 @@ import java.util.List;
 
 import at.gamejam.ktn.game.entites.EnergyBar;
 import at.gamejam.ktn.game.entites.NPC;
-import at.gamejam.ktn.game.entites.Scoreboard;
 import at.gamejam.ktn.game.entities.GameObject;
 import at.gmaejam.ktn.mapbuilder.MapParser;
 import at.gmaejam.ktn.mapbuilder.Tile;
@@ -67,51 +66,51 @@ public class GeneratedLevel {
 	public void addNPCs() {
 		NPC npc1 = new NPC(new Vector2(1, -5), this.b2world, 50);
 		EnergyBar energy1 = new EnergyBar(npc1);
-		
+
 		this.gameObjects.add(npc1);
 		this.gameObjects.add(energy1);
-		
+
 		NPC npc2 = new NPC(new Vector2(1, 0), this.b2world, 50);
 		EnergyBar energy2 = new EnergyBar(npc2);
-		
+
 		this.gameObjects.add(npc2);
 		this.gameObjects.add(energy2);
-		
+
 		NPC npc3 = new NPC(new Vector2(-4, -3), this.b2world, 50);
 		EnergyBar energy3 = new EnergyBar(npc3);
-		
+
 		this.gameObjects.add(npc3);
 		this.gameObjects.add(energy3);
-		
+
 		NPC npc4 = new NPC(new Vector2(-2, 2), this.b2world, 50);
 		EnergyBar energy4 = new EnergyBar(npc4);
-		
+
 		this.gameObjects.add(npc4);
 		this.gameObjects.add(energy4);
-		
+
 		NPC npc5 = new NPC(new Vector2(5, -1), this.b2world, 50);
 		EnergyBar energy5 = new EnergyBar(npc5);
 		
 		this.gameObjects.add(npc5);
 		this.gameObjects.add(energy5);
 		
-//		this.gameObjects.add(new NPC(new Vector2(3, 0), this.b2world, 50));
-//		this.gameObjects.add(new NPC(new Vector2(1, -3), this.b2world, 50));
-//		this.gameObjects.add(new NPC(new Vector2(0, 2), this.b2world, 50));
-//		this.gameObjects.add(new NPC(new Vector2(2, 0), this.b2world, 50));
-//		this.gameObjects.add(new NPC(new Vector2(0, -4), this.b2world, 50));
-//		this.gameObjects.add(new NPC(new Vector2(-2, 1), this.b2world, 0));
-//		this.gameObjects.add(new NPC(new Vector2(3, 1), this.b2world, 0));
-//		this.gameObjects.add(new NPC(new Vector2(2, 1), this.b2world, 0));
-//		this.gameObjects.add(new NPC(new Vector2(1, 3), this.b2world, 0));
-//		this.gameObjects.add(new NPC(new Vector2(4, 2.6f), this.b2world, 100));
-//		this.gameObjects.add(new NPC(new Vector2(1, 3f), this.b2world, 100));
-//		this.gameObjects.add(new NPC(new Vector2(5, 1), this.b2world, 100));
-//		this.gameObjects.add(new NPC(new Vector2(2, 2), this.b2world, 100));
+		// this.gameObjects.add(new NPC(new Vector2(3, 0), this.b2world, 50));
+		// this.gameObjects.add(new NPC(new Vector2(1, -3), this.b2world, 50));
+		// this.gameObjects.add(new NPC(new Vector2(0, 2), this.b2world, 50));
+		// this.gameObjects.add(new NPC(new Vector2(2, 0), this.b2world, 50));
+		// this.gameObjects.add(new NPC(new Vector2(0, -4), this.b2world, 50));
+		// this.gameObjects.add(new NPC(new Vector2(-2, 1), this.b2world, 0));
+		// this.gameObjects.add(new NPC(new Vector2(3, 1), this.b2world, 0));
+		// this.gameObjects.add(new NPC(new Vector2(2, 1), this.b2world, 0));
+		// this.gameObjects.add(new NPC(new Vector2(1, 3), this.b2world, 0));
+		// this.gameObjects.add(new NPC(new Vector2(4, 2.6f), this.b2world, 100));
+		// this.gameObjects.add(new NPC(new Vector2(1, 3f), this.b2world, 100));
+		// this.gameObjects.add(new NPC(new Vector2(5, 1), this.b2world, 100));
+		// this.gameObjects.add(new NPC(new Vector2(2, 2), this.b2world, 100));
 		this.npcCount = 4;
-		
+
 	}
-	
+
 	public List<GameObject> getGameObjects() {
 		return this.gameObjects;
 	}
@@ -121,20 +120,21 @@ public class GeneratedLevel {
 	}
 
 	public void update(final float deltaTime) {
-		sleepingcount = 0;
-		awakecount = 0;
+		this.sleepingcount = 0;
+		this.awakecount = 0;
 		for (final GameObject gameObject : this.gameObjects) {
 			gameObject.update(deltaTime);
-			if(gameObject instanceof NPC) {
+			if (gameObject instanceof NPC) {
 				NPC npc = (NPC) gameObject;
-				if(npc.getState() == 1) {
-					awakecount++;
+				if (npc.getState() == 1) {
+					this.awakecount++;
 				}
-				if(npc.getState() == -1) {
-					sleepingcount++;
+				if (npc.getState() == -1) {
+					this.sleepingcount++;
 				}
 			}
 		}
+
 	}
 
 	public void render(final SpriteBatch batch) {
@@ -142,16 +142,16 @@ public class GeneratedLevel {
 			gameObject.render(batch);
 		}
 	}
-	
+
 	public int getSleepingcount() {
-		return sleepingcount;
+		return this.sleepingcount;
 	}
-	
+
 	public int getAwakecoutn() {
-		return awakecount;
+		return this.awakecount;
 	}
-	
+
 	public int getNpcCount() {
-		return npcCount;
+		return this.npcCount;
 	}
 }
