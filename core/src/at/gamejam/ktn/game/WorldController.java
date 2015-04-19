@@ -23,8 +23,8 @@ public class WorldController {
 	public int						coinCount		= Constants.START_ITEM_COUNT;
 	public int						redBullCount	= Constants.START_ITEM_COUNT;
 	private World					b2World;
-	private TopDownLevel			level;
-	private final boolean			debug			= false;
+	private GeneratedLevel			level;
+	private final boolean			debug			= true;
 	// private boolean reset;
 
 	private final List<GameObject>	objectsToAdd	= new ArrayList<GameObject>();
@@ -43,10 +43,10 @@ public class WorldController {
 		this.playerSleep = new PlayerSleep(new Vector2(-1.5f, -1.0f), this);
 		this.playerWake = new PlayerWake(new Vector2(1.5f, -1.0f), this);
 
-		this.cameraHelper.setTarget(this.playerSleep.getB2Body());
+		//this.cameraHelper.setTarget(this.playerSleep.getB2Body());
 		// this.level = new Level(this.b2World);
 
-		this.level = new TopDownLevel(this.b2World);
+		this.level = new GeneratedLevel(this.b2World);
 		this.contactListener = new MyContactListener(this);
 		this.b2World.setContactListener(this.contactListener);
 		Gdx.input.setInputProcessor(new InputManager(this.playerWake, this.playerSleep, this.cameraHelper));
@@ -132,7 +132,7 @@ public class WorldController {
 		return this.b2World;
 	}
 
-	protected TopDownLevel getLevel() {
+	protected GeneratedLevel getLevel() {
 		return this.level;
 	}
 

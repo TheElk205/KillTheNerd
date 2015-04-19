@@ -30,7 +30,7 @@ public class Tile extends GameObject {
 		this.dimension = new Vector2(0.5f,0.5f);
 	}
 	
-	private void initPhysics() {
+	public void initPhysics() {
 		final BodyDef bodyDef = new BodyDef();
 		bodyDef.position.set(new Vector2(this.position.x+this.dimension.x/4f,this.position.y+this.dimension.y/4f));
 		bodyDef.type = BodyType.StaticBody;

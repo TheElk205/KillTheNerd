@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.gamejam.ktn.game.entites.Item;
+import at.gamejam.ktn.game.entites.NPC;
 import at.gamejam.ktn.game.entites.Player;
 import at.gamejam.ktn.game.entites.PlayerSleep;
 import at.gamejam.ktn.game.entites.PlayerWake;
@@ -70,6 +71,9 @@ public class MyContactListener implements ContactListener {
 		}
 		if (((userDataB instanceof Thesis) && (userDataA instanceof RedBull)) || ((userDataA instanceof Thesis) && (userDataB instanceof RedBull))) {
 			collisionType = 6;
+		}
+		if (((userDataB instanceof Player) && (userDataA instanceof NPC)) || ((userDataB instanceof NPC) && (userDataA instanceof Player))) {
+			collisionType = 7;
 		}
 
 		/*if (!(playerWithSpikes || playerWithThrowable || player1WithPlayer2 || playerWithItem)) {
@@ -142,6 +146,18 @@ public class MyContactListener implements ContactListener {
 			case 6:
 				// ((Item)userDataA).getB2Body()
 				break;
+			case 7: //Set Player wake
+				System.out.println("richtig");
+				if(userDataA instanceof NPC) {
+					NPC npc = (NPC) userDataA;
+					Player player = (Player) userDataB;
+					npc.addFactor(player.getFactor());
+				}
+				else if (userDataB instanceof NPC) {
+					NPC npc = (NPC) userDataB;
+					Player player = (Player) userDataA;
+					npc.addFactor(player.getFactor());
+				}
 			default:
 				System.out.println("default hit A: " + userDataA + " B: " + userDataB);
 				/*if (userDataA instanceof Item) {
@@ -219,7 +235,23 @@ public class MyContactListener implements ContactListener {
 		if (((userDataB instanceof PlayerSleep) && (userDataA instanceof Item)) || ((userDataA instanceof Item) && (userDataB instanceof PlayerSleep))) {
 			collisionType = 5;
 		}
-
+		
+		if (((userDataB instanceof Player) && (userDataA instanceof NPC)) || ((userDataB instanceof NPC) && (userDataA instanceof Player))) {
+			collisionType = 7;
+		}
+		switch(collisionType) {
+		case 7:
+			if(userDataA instanceof NPC) {
+				NPC npc = (NPC) userDataA;
+				Player player = (Player) userDataB;
+				npc.addFactor(-player.getFactor());
+			}
+			else if (userDataB instanceof NPC) {
+				NPC npc = (NPC) userDataB;
+				Player player = (Player) userDataA;
+				npc.addFactor(-player.getFactor());
+			}
+		}
 	}
 
 	@Override

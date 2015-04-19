@@ -44,6 +44,8 @@ public abstract class Player extends InteractiveObject {
 
 	protected ItemType			itemType			= ItemType.REDBULL;
 
+	protected float factor = 0.0f;
+	
 	public enum ItemType {
 		REDBULL, THESIS
 	}
@@ -339,6 +341,10 @@ public abstract class Player extends InteractiveObject {
 
 	public boolean getShoot() {
 		return this.shoot;
+	}
+	
+	public float getFactor() {
+		return this.factor;
 	}
 
 }
