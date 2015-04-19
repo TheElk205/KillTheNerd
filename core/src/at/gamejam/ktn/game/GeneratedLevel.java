@@ -27,10 +27,10 @@ public class GeneratedLevel {
 	private TileParser			tileParser;
 	private MapParser			mapParser;
 
-	int sleepingcount = 0, awakecount = 0;
-	
-	int npcCount = 2;
-	
+	int							sleepingcount	= 0, awakecount = 0;
+
+	int							npcCount		= 2;
+
 	public GeneratedLevel(final World b2World) {
 		this.b2world = b2World;
 		this.tileParser = new TileParser(this.pathConfig);
@@ -90,10 +90,10 @@ public class GeneratedLevel {
 
 		NPC npc5 = new NPC(new Vector2(5, -1), this.b2world, 50);
 		EnergyBar energy5 = new EnergyBar(npc5);
-		
+
 		this.gameObjects.add(npc5);
 		this.gameObjects.add(energy5);
-		
+
 		// this.gameObjects.add(new NPC(new Vector2(3, 0), this.b2world, 50));
 		// this.gameObjects.add(new NPC(new Vector2(1, -3), this.b2world, 50));
 		// this.gameObjects.add(new NPC(new Vector2(0, 2), this.b2world, 50));
@@ -107,7 +107,7 @@ public class GeneratedLevel {
 		// this.gameObjects.add(new NPC(new Vector2(1, 3f), this.b2world, 100));
 		// this.gameObjects.add(new NPC(new Vector2(5, 1), this.b2world, 100));
 		// this.gameObjects.add(new NPC(new Vector2(2, 2), this.b2world, 100));
-		this.npcCount = 4;
+		this.npcCount = 5;
 
 	}
 
