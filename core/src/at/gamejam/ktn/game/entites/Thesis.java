@@ -6,7 +6,7 @@ import com.badlogic.gdx.physics.box2d.World;
 public class Thesis extends Item {
 	public Thesis(final Vector2 position, final World b2World, final boolean init) {
 		super(position, b2World);
-		this.numPictures = 8;
+		this.numPictures = 6;
 		if (init) {
 			this.init(true, init);
 		}
@@ -14,7 +14,7 @@ public class Thesis extends Item {
 
 	@Override
 	protected void loadAsset() {
-		this.texture = this.assets.findRegion("coin_gold");
+		this.texture = this.assets.findRegion("book_green");
 	}
 
 }
