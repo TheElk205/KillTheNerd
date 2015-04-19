@@ -7,32 +7,52 @@ repeat: none
 afro_american_pixels
   rotate: false
 <<<<<<< HEAD
-  xy: 1011, 505
+  xy: 333, 1
 =======
-  xy: 1, 2
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 1, 5
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 5, 5
   orig: 5, 5
   offset: 0, 0
   index: -1
 badlogic
   rotate: false
-<<<<<<< HEAD
-  xy: 1, 254
-=======
-  xy: 1, 100
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 1, 103
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
+betty_back
+  rotate: false
+  xy: 1, 28
+  size: 192, 48
+  orig: 192, 48
+  offset: 0, 0
+  index: -1
+betty_front
+  rotate: false
+  xy: 789, 406
+  size: 192, 48
+  orig: 192, 48
+  offset: 0, 0
+  index: -1
+betty_left
+  rotate: false
+  xy: 765, 356
+  size: 192, 48
+  orig: 192, 48
+  offset: 0, 0
+  index: -1
+betty_right
+  rotate: false
+  xy: 403, 317
+  size: 192, 48
+  orig: 192, 48
+  offset: 0, 0
+  index: -1
 book_green
   rotate: false
-<<<<<<< HEAD
-  xy: 259, 446
-=======
-  xy: 403, 444
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 403, 447
   size: 384, 64
   orig: 384, 64
   offset: 0, 0
@@ -40,10 +60,10 @@ book_green
 book_green_small
   rotate: false
 <<<<<<< HEAD
-  xy: 73, 91
+  xy: 959, 340
 =======
-  xy: 243, 3
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 547, 235
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -51,10 +71,10 @@ book_green_small
 border_top
   rotate: false
 <<<<<<< HEAD
-  xy: 211, 101
+  xy: 403, 83
 =======
-  xy: 683, 258
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 243, 1
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -62,10 +82,10 @@ border_top
 bush
   rotate: false
 <<<<<<< HEAD
-  xy: 389, 294
+  xy: 453, 145
 =======
-  xy: 259, 213
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 789, 384
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
@@ -73,10 +93,10 @@ bush
 cactus
   rotate: false
 <<<<<<< HEAD
-  xy: 1, 91
+  xy: 597, 295
 =======
-  xy: 259, 141
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 259, 216
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
@@ -84,21 +104,17 @@ cactus
 chair
   rotate: false
 <<<<<<< HEAD
-  xy: 211, 67
+  xy: 814, 250
 =======
-  xy: 717, 258
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 277, 1
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 cloud1
   rotate: false
-<<<<<<< HEAD
-  xy: 259, 293
-=======
-  xy: 259, 285
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 259, 288
   size: 128, 71
   orig: 128, 71
   offset: 0, 0
@@ -106,21 +122,17 @@ cloud1
 coinGold
   rotate: false
 <<<<<<< HEAD
-  xy: 820, 417
+  xy: 776, 246
 =======
-  xy: 645, 254
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 814, 346
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 coin_gold
   rotate: false
-<<<<<<< HEAD
-  xy: 1, 229
-=======
-  xy: 1, 75
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 1, 78
   size: 256, 23
   orig: 256, 23
   offset: 0, 0
@@ -128,10 +140,10 @@ coin_gold
 corner_back_left
   rotate: false
 <<<<<<< HEAD
-  xy: 211, 33
+  xy: 848, 250
 =======
-  xy: 981, 419
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 852, 350
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -139,10 +151,10 @@ corner_back_left
 corner_back_right
   rotate: false
 <<<<<<< HEAD
-  xy: 245, 115
+  xy: 882, 250
 =======
-  xy: 981, 385
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 886, 350
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -150,10 +162,10 @@ corner_back_right
 corner_bottom_left
   rotate: false
 <<<<<<< HEAD
-  xy: 245, 81
+  xy: 916, 250
 =======
-  xy: 375, 35
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 920, 350
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -161,10 +173,10 @@ corner_bottom_left
 corner_bottom_right
   rotate: false
 <<<<<<< HEAD
-  xy: 279, 115
+  xy: 983, 422
 =======
-  xy: 375, 1
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 954, 350
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -172,10 +184,10 @@ corner_bottom_right
 corner_front_left
   rotate: false
 <<<<<<< HEAD
-  xy: 245, 47
+  xy: 950, 249
 =======
-  xy: 455, 162
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 765, 298
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -183,10 +195,10 @@ corner_front_left
 corner_front_right
   rotate: false
 <<<<<<< HEAD
-  xy: 279, 81
+  xy: 621, 39
 =======
-  xy: 489, 172
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 757, 264
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -194,10 +206,10 @@ corner_front_right
 corner_top_left
   rotate: false
 <<<<<<< HEAD
-  xy: 313, 115
+  xy: 621, 5
 =======
-  xy: 455, 128
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 547, 144
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -205,10 +217,10 @@ corner_top_left
 corner_top_right
   rotate: false
 <<<<<<< HEAD
-  xy: 279, 47
+  xy: 984, 249
 =======
-  xy: 489, 138
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 541, 110
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -216,21 +228,23 @@ corner_top_right
 cup_coffee
   rotate: false
 <<<<<<< HEAD
-  xy: 73, 25
-=======
-  xy: 309, 3
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 195, 12
   size: 64, 64
   orig: 64, 64
+=======
+  xy: 403, 381
+  size: 384, 64
+  orig: 384, 64
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   offset: 0, 0
   index: -1
 dirtCliffLeft
   rotate: false
 <<<<<<< HEAD
-  xy: 461, 294
+  xy: 669, 295
 =======
-  xy: 99, 3
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 861, 384
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
@@ -238,10 +252,10 @@ dirtCliffLeft
 dirtMid
   rotate: false
 <<<<<<< HEAD
-  xy: 1, 19
+  xy: 261, 7
 =======
-  xy: 171, 3
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 259, 144
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
@@ -249,10 +263,10 @@ dirtMid
 flagBlue2
   rotate: false
 <<<<<<< HEAD
-  xy: 533, 294
+  xy: 741, 284
 =======
-  xy: 259, 69
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 933, 384
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
@@ -260,10 +274,10 @@ flagBlue2
 flagBlueHanging
   rotate: false
 <<<<<<< HEAD
-  xy: 99, 157
+  xy: 813, 284
 =======
-  xy: 331, 213
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 99, 6
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
@@ -271,10 +285,10 @@ flagBlueHanging
 floor
   rotate: false
 <<<<<<< HEAD
-  xy: 313, 81
+  xy: 646, 137
 =======
-  xy: 452, 94
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 541, 76
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -282,10 +296,10 @@ floor
 floor_top_left_corner
   rotate: false
 <<<<<<< HEAD
-  xy: 347, 115
+  xy: 646, 103
 =======
-  xy: 749, 330
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 581, 144
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -293,10 +307,10 @@ floor_top_left_corner
 floor_top_right_corner
   rotate: false
 <<<<<<< HEAD
-  xy: 313, 47
+  xy: 680, 140
 =======
-  xy: 749, 296
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 575, 110
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -304,21 +318,49 @@ floor_top_right_corner
 floor_top_wall
   rotate: false
 <<<<<<< HEAD
-  xy: 347, 81
+  xy: 680, 106
 =======
-  xy: 751, 262
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 575, 76
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
+  offset: 0, 0
+  index: -1
+george_back
+  rotate: false
+  xy: 389, 267
+  size: 192, 48
+  orig: 192, 48
+  offset: 0, 0
+  index: -1
+george_front
+  rotate: false
+  xy: 357, 217
+  size: 192, 48
+  orig: 192, 48
+  offset: 0, 0
+  index: -1
+george_left
+  rotate: false
+  xy: 259, 167
+  size: 192, 48
+  orig: 192, 48
+  offset: 0, 0
+  index: -1
+george_right
+  rotate: false
+  xy: 259, 117
+  size: 192, 48
+  orig: 192, 48
   offset: 0, 0
   index: -1
 grass
   rotate: false
 <<<<<<< HEAD
-  xy: 171, 157
+  xy: 885, 284
 =======
-  xy: 331, 141
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 171, 6
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
@@ -326,10 +368,10 @@ grass
 grassCenter
   rotate: false
 <<<<<<< HEAD
-  xy: 259, 221
+  xy: 333, 8
 =======
-  xy: 331, 69
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 259, 72
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
@@ -337,10 +379,10 @@ grassCenter
 grassCliffRight
   rotate: false
 <<<<<<< HEAD
-  xy: 331, 221
+  xy: 453, 73
 =======
-  xy: 765, 372
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 331, 216
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
@@ -348,10 +390,10 @@ grassCliffRight
 grassHillLeft
   rotate: false
 <<<<<<< HEAD
-  xy: 403, 222
+  xy: 405, 1
 =======
-  xy: 837, 381
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 331, 144
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
@@ -359,10 +401,10 @@ grassHillLeft
 grassHillLeft2
   rotate: false
 <<<<<<< HEAD
-  xy: 475, 222
+  xy: 477, 1
 =======
-  xy: 909, 381
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 331, 72
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
@@ -370,10 +412,10 @@ grassHillLeft2
 grassMid
   rotate: false
 <<<<<<< HEAD
-  xy: 547, 222
+  xy: 525, 145
 =======
-  xy: 389, 286
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 403, 229
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
@@ -381,10 +423,10 @@ grassMid
 green_pixels
   rotate: false
 <<<<<<< HEAD
-  xy: 1018, 505
+  xy: 340, 1
 =======
-  xy: 789, 446
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 389, 354
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 5, 5
   orig: 5, 5
   offset: 0, 0
@@ -392,32 +434,27 @@ green_pixels
 interface
   rotate: false
 <<<<<<< HEAD
-  xy: 347, 47
+  xy: 727, 201
 =======
-  xy: 783, 338
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 988, 350
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
+<<<<<<< HEAD
 map1
   rotate: false
-<<<<<<< HEAD
-  xy: 211, 135
-=======
-  xy: 887, 291
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 551, 245
   size: 30, 20
   orig: 30, 20
   offset: 0, 0
   index: -1
+=======
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
 newRedBull_2_true
   rotate: false
-<<<<<<< HEAD
-  xy: 645, 455
-=======
-  xy: 789, 453
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 789, 456
   size: 220, 55
   orig: 220, 55
   offset: 0, 0
@@ -425,10 +462,10 @@ newRedBull_2_true
 plant
   rotate: false
 <<<<<<< HEAD
-  xy: 867, 440
+  xy: 525, 73
 =======
-  xy: 461, 292
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 403, 157
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
@@ -436,10 +473,10 @@ plant
 player
   rotate: false
 <<<<<<< HEAD
-  xy: 673, 406
+  xy: 597, 122
 =======
-  xy: 403, 90
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 315, 23
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 47, 47
   orig: 47, 47
   offset: 0, 0
@@ -447,10 +484,10 @@ player
 player-ouch
   rotate: false
 <<<<<<< HEAD
-  xy: 722, 406
+  xy: 597, 73
 =======
-  xy: 475, 206
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 364, 23
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 47, 47
   orig: 47, 47
   offset: 0, 0
@@ -458,10 +495,10 @@ player-ouch
 playerWake
   rotate: false
 <<<<<<< HEAD
-  xy: 771, 406
+  xy: 669, 174
 =======
-  xy: 547, 243
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 413, 36
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 47, 47
   orig: 47, 47
   offset: 0, 0
@@ -469,10 +506,10 @@ playerWake
 player_chill
   rotate: false
 <<<<<<< HEAD
-  xy: 621, 340
+  xy: 727, 235
 =======
-  xy: 596, 243
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 765, 332
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 47, 47
   orig: 47, 47
   offset: 0, 0
@@ -480,10 +517,10 @@ player_chill
 redBull
   rotate: false
 <<<<<<< HEAD
-  xy: 621, 389
+  xy: 957, 283
 =======
-  xy: 403, 139
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 547, 178
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 50, 55
   orig: 50, 55
   offset: 0, 0
@@ -491,10 +528,10 @@ redBull
 red_pixels
   rotate: false
 <<<<<<< HEAD
-  xy: 243, 222
+  xy: 347, 1
 =======
-  xy: 645, 247
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 396, 354
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 5, 5
   orig: 5, 5
   offset: 0, 0
@@ -502,21 +539,28 @@ red_pixels
 rock
   rotate: false
 <<<<<<< HEAD
-  xy: 939, 440
+  xy: 549, 1
 =======
-  xy: 533, 292
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 475, 229
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 70, 70
   orig: 70, 70
+  offset: 0, 0
+  index: -1
+single_cup_coffee
+  rotate: false
+  xy: 475, 91
+  size: 64, 64
+  orig: 64, 64
   offset: 0, 0
   index: -1
 sleep
   rotate: false
 <<<<<<< HEAD
-  xy: 1, 1
+  xy: 765, 429
 =======
-  xy: 524, 237
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 311, 5
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
@@ -524,10 +568,10 @@ sleep
 snowMid
   rotate: false
 <<<<<<< HEAD
-  xy: 243, 149
+  xy: 583, 223
 =======
-  xy: 605, 292
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 403, 85
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
@@ -535,10 +579,10 @@ snowMid
 snowRight
   rotate: false
 <<<<<<< HEAD
-  xy: 315, 149
+  xy: 655, 223
 =======
-  xy: 677, 292
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 475, 157
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
@@ -546,10 +590,10 @@ snowRight
 spikes
   rotate: false
 <<<<<<< HEAD
-  xy: 139, 30
+  xy: 331, 80
 =======
-  xy: 475, 255
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 243, 35
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 70, 35
   orig: 70, 35
   offset: 0, 0
@@ -557,10 +601,10 @@ spikes
 springboardDown
   rotate: false
 <<<<<<< HEAD
-  xy: 139, 67
+  xy: 259, 79
 =======
-  xy: 403, 196
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 685, 263
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 70, 36
   orig: 70, 36
   offset: 0, 0
@@ -568,10 +612,10 @@ springboardDown
 springboardUp
   rotate: false
 <<<<<<< HEAD
-  xy: 139, 105
+  xy: 597, 171
 =======
-  xy: 403, 234
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 613, 249
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 70, 50
   orig: 70, 50
   offset: 0, 0
@@ -579,10 +623,10 @@ springboardUp
 sun
   rotate: false
 <<<<<<< HEAD
-  xy: 455, 204
+  xy: 357, 270
 =======
-  xy: 403, 72
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 329, 5
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
@@ -590,10 +634,10 @@ sun
 table
   rotate: false
 <<<<<<< HEAD
-  xy: 1, 163
+  xy: 259, 222
 =======
-  xy: 1, 9
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 1, 12
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 96, 64
   orig: 96, 64
   offset: 0, 0
@@ -601,10 +645,10 @@ table
 table_bottom_left
   rotate: false
 <<<<<<< HEAD
-  xy: 605, 306
+  xy: 718, 167
 =======
-  xy: 783, 304
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 799, 298
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -612,10 +656,10 @@ table_bottom_left
 table_bottom_middle
   rotate: false
 <<<<<<< HEAD
-  xy: 639, 306
+  xy: 714, 133
 =======
-  xy: 785, 270
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 791, 264
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -623,10 +667,10 @@ table_bottom_middle
 table_bottom_right
   rotate: false
 <<<<<<< HEAD
-  xy: 619, 272
+  xy: 714, 99
 =======
-  xy: 817, 338
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 685, 229
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -634,10 +678,10 @@ table_bottom_right
 table_top_left
   rotate: false
 <<<<<<< HEAD
-  xy: 619, 238
+  xy: 761, 201
 =======
-  xy: 817, 304
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 719, 229
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -645,10 +689,10 @@ table_top_left
 table_top_middle
   rotate: false
 <<<<<<< HEAD
-  xy: 653, 272
+  xy: 752, 167
 =======
-  xy: 819, 270
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 613, 215
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -656,17 +700,17 @@ table_top_middle
 table_top_right
   rotate: false
 <<<<<<< HEAD
-  xy: 653, 238
+  xy: 748, 133
 =======
-  xy: 851, 347
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 647, 215
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 victory_basic
   rotate: false
-  xy: 1, 358
+  xy: 1, 361
   size: 400, 150
   orig: 400, 150
   offset: 0, 0
@@ -674,10 +718,10 @@ victory_basic
 wall_bottom
   rotate: false
 <<<<<<< HEAD
-  xy: 673, 372
+  xy: 748, 99
 =======
-  xy: 851, 313
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 599, 181
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -685,10 +729,10 @@ wall_bottom
 wall_left
   rotate: false
 <<<<<<< HEAD
-  xy: 707, 372
+  xy: 680, 72
 =======
-  xy: 885, 347
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 633, 181
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -696,10 +740,10 @@ wall_left
 wall_left_top
   rotate: false
 <<<<<<< HEAD
-  xy: 741, 372
+  xy: 714, 65
 =======
-  xy: 885, 313
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 615, 147
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -707,10 +751,10 @@ wall_left_top
 wall_right
   rotate: false
 <<<<<<< HEAD
-  xy: 775, 372
+  xy: 748, 65
 =======
-  xy: 919, 347
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 649, 147
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -718,10 +762,10 @@ wall_right
 wall_right_top
   rotate: false
 <<<<<<< HEAD
-  xy: 387, 187
+  xy: 786, 167
 =======
-  xy: 919, 313
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 667, 181
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -729,10 +773,10 @@ wall_right_top
 wall_top
   rotate: false
 <<<<<<< HEAD
-  xy: 387, 153
+  xy: 782, 133
 =======
-  xy: 953, 347
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 701, 195
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -740,10 +784,10 @@ wall_top
 wall_top_left
   rotate: false
 <<<<<<< HEAD
-  xy: 421, 188
+  xy: 782, 99
 =======
-  xy: 953, 313
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 683, 147
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -751,10 +795,10 @@ wall_top_left
 wall_top_right
   rotate: false
 <<<<<<< HEAD
-  xy: 421, 154
+  xy: 782, 65
 =======
-  xy: 853, 279
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 735, 195
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -762,10 +806,10 @@ wall_top_right
 worker
   rotate: false
 <<<<<<< HEAD
-  xy: 259, 366
+  xy: 403, 367
 =======
-  xy: 403, 364
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 403, 301
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 360, 78
   orig: 360, 78
   offset: 0, 0
@@ -773,10 +817,10 @@ worker
 yellow_pixels
   rotate: false
 <<<<<<< HEAD
-  xy: 645, 448
+  xy: 354, 1
 =======
-  xy: 1011, 503
->>>>>>> 8dbeadbc355c765b03ff742b1d5ca6b23df74a17
+  xy: 403, 78
+>>>>>>> 5f7578ec61d04e12aa18581d19e8394eb05487ca
   size: 5, 5
   orig: 5, 5
   offset: 0, 0
