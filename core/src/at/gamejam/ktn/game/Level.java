@@ -14,13 +14,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
-/**
- * Created by Lukas on 11.04.2015.
- */
 public class Level {
-	List<GameObject>	gameObjects;
-	private List<Coin>	coins;
-	private final World	b2World;
+	private List<GameObject>	gameObjects;
+	private List<Coin>			coins;
+	private final World			b2World;
 
 	public Level(final World b2World) {
 		this.b2World = b2World;

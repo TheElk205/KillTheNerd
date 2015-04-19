@@ -8,7 +8,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 
 public class DesktopLauncher {
-	private final static boolean	rebuildAtlas	= true;
+	private final static boolean	rebuildAtlas	= false;
 
 	public static void main(final String[] arg) {
 		if (DesktopLauncher.rebuildAtlas) {

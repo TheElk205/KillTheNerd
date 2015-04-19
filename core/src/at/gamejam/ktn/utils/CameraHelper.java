@@ -5,16 +5,14 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
-/**
- * Created by Lukas on 11.04.2015.
- */
 public class CameraHelper {
-	private final float	MAX_ZOOM_IN		= 0.25f;
-	private final float	MAX_ZOOM_OUT	= 10.0f;
+	private final float	MAX_ZOOM_IN		= 0.8f;
+	private final float	MAX_ZOOM_OUT	= 1.8f;
 
 	private Vector2		position;
 	private float		zoom;
 	private Body		target;
+	private Vector2		calcPosition;
 
 	public CameraHelper() {
 		this.position = new Vector2();
@@ -22,10 +20,15 @@ public class CameraHelper {
 	}
 
 	public void update(final float deltaTime) {
-		if (!this.hasTarget()) {
+		/*if (!this.hasTarget()) {
 			return;
 		}
-		this.position = this.target.getPosition();
+		if (this.target != null) {
+			// this.position = this.target.getPosition();
+		} else {*/
+		this.position = this.calcPosition;
+
+		// }
 	}
 
 	public void setPosition(final float x, final float y) {
@@ -56,6 +59,10 @@ public class CameraHelper {
 		this.target = target;
 	}
 
+	public void setTarget(final Vector2 position) {
+		this.calcPosition = position;
+	}
+
 	public boolean hasTarget() {
 		return this.target != null;
 	}
@@ -69,5 +76,9 @@ public class CameraHelper {
 		camera.position.y = this.position.y;
 		camera.zoom = this.zoom;
 		camera.update();
+	}
+
+	public void update(Vector2 vector) {
+		this.position = vector;
 	}
 }

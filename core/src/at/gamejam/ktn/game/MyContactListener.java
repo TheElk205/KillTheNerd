@@ -41,6 +41,13 @@ public class MyContactListener implements ContactListener {
 		final Object userDataB = fB.getBody().getUserData();
 		final Object userDataA = fA.getBody().getUserData();
 
+		/*if (userDataA instanceof Item) {TODO: hold an item list in controller to set collectable again?
+			((Item) userDataA).collectable = true;
+		}
+		if (userDataB instanceof Item) {
+			((Item) userDataB).collectable = true;
+		}*/
+
 		// fixture ist verbindung zwischen body und shape
 		// body physikalische eigenschaften
 		// shape kreis
