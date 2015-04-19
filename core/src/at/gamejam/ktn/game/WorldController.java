@@ -1,15 +1,7 @@
 package at.gamejam.ktn.game;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MidiSystem;
-import javax.sound.midi.MidiUnavailableException;
-import javax.sound.midi.Sequencer;
 
 import at.gamejam.ktn.game.entites.Item;
 import at.gamejam.ktn.game.entites.PlayerSleep;
@@ -19,23 +11,26 @@ import at.gamejam.ktn.utils.CameraHelper;
 import at.gamejam.ktn.utils.Constants;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class WorldController {
+	public Sound					ingameMusic;
+	public Sound					winMusic;
 	public CameraHelper				cameraHelper;
 	public PlayerSleep				playerSleep;
 	public PlayerWake				playerWake;
 	public long						timeElapsed;
-	public int						coinCount		= Constants.START_ITEM_COUNT;
-	public int						redBullCount	= Constants.START_ITEM_COUNT;
+	// private int coinCount = Constants.START_ITEM_COUNT;
+	// private int redBullCount = Constants.START_ITEM_COUNT;
 	private World					b2World;
 	private GeneratedLevel			level;
-	private final boolean			debug			= true;
+	private final boolean			debug			= false;
 	// private boolean reset;
-	
-	private InputManager inputManager;
+
+	private InputManager			inputManager;
 
 	private final List<GameObject>	objectsToAdd	= new ArrayList<GameObject>();
 	private MyContactListener		contactListener;
@@ -45,7 +40,8 @@ public class WorldController {
 	}
 
 	public void init() {
-
+		this.ingameMusic = Gdx.audio.newSound(Gdx.files.internal(Constants.MUSIC2));
+		this.winMusic = Gdx.audio.newSound(Gdx.files.internal(Constants.VICTORY));
 		this.cameraHelper = new CameraHelper();
 		// this.b2World = new World(new Vector2(0, -9.81f), true);
 		this.b2World = new World(new Vector2(0, 0), true); // no gravity
@@ -64,21 +60,24 @@ public class WorldController {
 		this.inputManager = new InputManager(this.playerWake, this.playerSleep, this.cameraHelper);
 		Gdx.input.setInputProcessor(this.inputManager);
 		// Gdx.audio.newSound(Gdx.files.internal(Constants.MUSIC)).play();
-//		try {
-//			Sequencer sequencer = MidiSystem.getSequencer();
-//
-//			//sequencer.setSequence(MidiSystem.getSequence(new FileInputStream(new File(Constants.MUSIC))));
-//
-//			//sequencer.open();
-//			//sequencer.start();
-//		} catch (InvalidMidiDataException | IOException | MidiUnavailableException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		// try {
+		// Sequencer sequencer = MidiSystem.getSequencer();
+		//
+		// //sequencer.setSequence(MidiSystem.getSequence(new FileInputStream(new File(Constants.MUSIC))));
+		//
+		// //sequencer.open();
+		// //sequencer.start();
+		// } catch (InvalidMidiDataException | IOException | MidiUnavailableException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
 		/*midiPlayer.open(Constants.MUSIC);
 		midiPlayer.setLooping(true);
 		midiPlayer.setVolume(0.5f);
 		midiPlayer.play();*/
+
+		this.ingameMusic.play();
+		this.ingameMusic.setVolume(1, 0.5f);
 	}
 
 	public void update(final float deltaTime) {
@@ -192,7 +191,7 @@ public class WorldController {
 	/*protected void addAbstractItem(final GameObject object) {
 		this.level.addGameObject(object);
 	}*/
-	
+
 	public InputManager getInputManager() {
 		return this.inputManager;
 	}

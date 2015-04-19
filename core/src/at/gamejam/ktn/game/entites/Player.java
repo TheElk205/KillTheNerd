@@ -18,8 +18,8 @@ import com.badlogic.gdx.physics.box2d.World;
 public abstract class Player extends InteractiveObject {
 	private Sound				sound;
 	protected Vector<Item>		items;
-	protected int				maxItems			= 6;
-	public int					itemCount			= Constants.START_ITEM_COUNT;
+	protected int				maxItems			= 15;
+	private int					itemCount			= Constants.START_ITEM_COUNT;
 
 	protected int				points				= 0;
 	
@@ -47,7 +47,7 @@ public abstract class Player extends InteractiveObject {
 
 	protected ItemType			itemType			= ItemType.REDBULL;
 
-	protected float factor = 0.0f;
+	protected float				factor				= 0.0f;
 	protected float handicap = 1f;	//0: nix geht mehr, 1: alles Normal, >1: Besser
 	protected float dealHandicap = 0.5f;
 	
@@ -55,7 +55,7 @@ public abstract class Player extends InteractiveObject {
 	protected float handicapDuration = 5f;
 	
 	protected float time = 0.0f;
-	
+
 	public enum ItemType {
 		REDBULL, THESIS
 	}
@@ -210,7 +210,8 @@ public abstract class Player extends InteractiveObject {
 			// this.items.add(item);
 			if (item.collectable) {
 				item.collectable = false;
-				this.itemCount++;
+				this.incrItemCount();
+				// this.itemCount++;
 				// System.out.println("Got an Item! " + this.itemCount);
 				return true;
 			}
@@ -266,20 +267,22 @@ public abstract class Player extends InteractiveObject {
 				bull.getB2Body().applyForceToCenter(toApply, true);
 				this.worldController.addTempGameObject(bull);
 				bull.itemIsThrownBy = this;
+				// this.worldController.redBullCount--;
+				this.decrItemCount();
 				bull.collectable = false;
 				bull.isFlying = true;
-				this.worldController.redBullCount--;
 			} else
 				if (this.itemType == ItemType.THESIS) {
 					Thesis thesis = new Thesis(initPos, this.b2World, true);
 					thesis.getB2Body().applyForceToCenter(toApply, true);
 					this.worldController.addTempGameObject(thesis);
 					thesis.itemIsThrownBy = this;
-					this.worldController.coinCount--;
+					// this.worldController.coinCount--;
+					this.decrItemCount();
 					thesis.collectable = false;
 					thesis.isFlying = true;
 				}
-			this.itemCount--;
+
 			// System.out.println("Item Thrown: " + itemCount);
 		}
 	}
@@ -364,7 +367,7 @@ public abstract class Player extends InteractiveObject {
 	public boolean getShoot() {
 		return this.shoot;
 	}
-	
+
 	public float getFactor() {
 		return this.factor*handicap;
 	}
@@ -380,5 +383,19 @@ public abstract class Player extends InteractiveObject {
 	
 	public float dealHandicap() {
 		return this.dealHandicap;
+	}
+	private void incrItemCount() {
+		this.itemCount++;
+	}
+
+	private void decrItemCount() {
+		this.itemCount--;
+	}
+
+	/**
+	 * @return the itemCount
+	 */
+	public int getItemCount() {
+		return this.itemCount;
 	}
 }
