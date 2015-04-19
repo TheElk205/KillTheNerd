@@ -381,14 +381,14 @@ public abstract class Player extends InteractiveObject {
 			this.timeSinceLastShoot = 0;
 			Vector2 initPos = this.position;
 			Vector2 toApply = new Vector2();
-			initPos.x -= this.dimension.x / 2f;
-			initPos.y -= this.dimension.x / 2f;
+			initPos.x = this.dimension.x;
+			initPos.y -= this.dimension.y / 2f;
 
 			float offset = 0.001f;
 			switch (this.directionLooking) {
 				case N:
 					toApply.y = this.throwingSpeed;
-					initPos.y += this.dimension.y + offset;
+					initPos.y += this.dimension.y/2 + offset;
 					break;
 				case S:
 					toApply.y = -this.throwingSpeed;

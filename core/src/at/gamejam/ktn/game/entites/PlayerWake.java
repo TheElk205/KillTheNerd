@@ -9,7 +9,7 @@ public class PlayerWake extends Player {
 	public PlayerWake(final Vector2 position, WorldController world) {
 		this.initConstructor(position, world);
 		this.itemType = ItemType.REDBULL;
-		this.factor = 5;
+		this.factor = 10;
 		this.loadPictures();
 	}
 
