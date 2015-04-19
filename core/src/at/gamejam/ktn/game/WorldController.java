@@ -3,6 +3,7 @@ package at.gamejam.ktn.game;
 import java.util.ArrayList;
 import java.util.List;
 
+import at.gamejam.ktn.game.entites.DelayBar;
 import at.gamejam.ktn.game.entites.Item;
 import at.gamejam.ktn.game.entites.PlayerSleep;
 import at.gamejam.ktn.game.entites.PlayerWake;
@@ -21,13 +22,15 @@ public class WorldController {
 	public Sound					winMusic;
 	public CameraHelper				cameraHelper;
 	public PlayerSleep				playerSleep;
+	public DelayBar					sleepBar;
 	public PlayerWake				playerWake;
+	public DelayBar					wakeBar;
 	public long						timeElapsed;
 	// private int coinCount = Constants.START_ITEM_COUNT;
 	// private int redBullCount = Constants.START_ITEM_COUNT;
 	private World					b2World;
 	private GeneratedLevel			level;
-	private final boolean			debug			= false;
+	private final boolean			debug			= true;
 	// private boolean reset;
 
 	private InputManager			inputManager;
@@ -47,8 +50,9 @@ public class WorldController {
 		this.b2World = new World(new Vector2(0, 0), true); // no gravity
 
 		this.playerSleep = new PlayerSleep(new Vector2(-1.5f, -1.0f), this);
+		this.sleepBar = new DelayBar(playerSleep);
 		this.playerWake = new PlayerWake(new Vector2(1.5f, -1.0f), this);
-
+		this.wakeBar= new DelayBar(playerWake);
 		// this.cameraHelper.setTarget(this.playerSleep.getB2Body());
 		this.cameraHelper.setTarget(new Vector2(this.playerSleep.position.x - this.playerWake.position.x, this.playerSleep.position.y - this.playerWake.position.y));
 		// Vector(x2-x1,y2-y1
@@ -124,6 +128,8 @@ public class WorldController {
 
 		this.playerSleep.update(deltaTime);
 		this.playerWake.update(deltaTime);
+		this.sleepBar.update(deltaTime);
+		this.wakeBar.update(deltaTime);
 		this.level.update(deltaTime);
 		/*if (this.player.getBody().getPosition().y < -3) {
 			this.reset = true;

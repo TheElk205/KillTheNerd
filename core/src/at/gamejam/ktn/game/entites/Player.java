@@ -7,7 +7,9 @@ import at.gamejam.ktn.utils.Constants;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -55,11 +57,107 @@ public abstract class Player extends InteractiveObject {
 	protected float handicapDuration = 5f;
 	
 	protected float time = 0.0f;
+	
+	protected Animation		aMoveUp,	aMoveDown,		aMoveLeft,		aMoveRight;
+	protected TextureRegion tRMoveUp[], tRMoveDown[], 	tRMoveLeft[], 	tRMoveRight[];
+	protected TextureRegion tRStandUp,	tRStandDown,	tRStandLeft,	tRStandRight;
+	protected TextureRegion tUp,		tDown,			tLeft,			tRight;
+	
 
 	public enum ItemType {
 		REDBULL, THESIS
 	}
 
+	protected void initAnimations() {
+		TextureRegion[][] tmpUp = getSinglePictures(tUp, 4);
+		this.tRMoveUp = getRegionMoving(tmpUp);
+		this.aMoveUp = getAnimation(tRMoveUp, 0.2f);
+		this.tRStandUp = tRMoveUp[0];
+		
+		TextureRegion[][] tmpDown = getSinglePictures(tDown, 4);
+		this.tRMoveDown = getRegionMoving(tmpDown);
+		this.aMoveDown = getAnimation(tRMoveDown, 0.2f);
+		this.tRStandDown = tRMoveDown[0];
+		
+		TextureRegion[][] tmpLeft = getSinglePictures(tLeft, 4);
+		this.tRMoveLeft = getRegionMoving(tmpLeft);
+		this.aMoveLeft = getAnimation(tRMoveLeft, 0.2f);
+		this.tRStandLeft = tRMoveLeft[0];
+		
+		TextureRegion[][] tmpRight = getSinglePictures(tRight, 4);
+		this.tRMoveRight = getRegionMoving(tmpRight);
+		this.aMoveRight = getAnimation(tRMoveRight, 0.2f);
+		this.tRStandRight = tRMoveRight[0];
+		
+		if(aMoveUp == null) {
+			System.out.println("Fehler");
+		}
+	}
+	
+	protected void setInitialPictures(TextureRegion tUp, TextureRegion tDown, TextureRegion tLeft, TextureRegion tRight) {
+		this.tUp = tUp;
+		this.tDown = tDown;
+		this.tLeft = tLeft;
+		this.tRight = tRight;
+		if((tUp != null) && tDown != null && tLeft != null && tRight != null){
+			System.out.println("Animationen richtig gesetzt");
+		}
+		initAnimations();
+	}
+	
+	protected TextureRegion[][] getSinglePictures(TextureRegion originalPicture, int numPictures) {
+		TextureRegion[][] tmp = null;
+		try {
+			if(originalPicture == null) {
+				System.out.println("is null");
+				return null;
+			}
+			tmp = originalPicture.split(originalPicture.getRegionWidth() / numPictures, originalPicture.getRegionHeight());
+		} catch (Exception e) {
+			int a;
+			System.out.println("sad");
+		}
+		return tmp;
+	}
+	
+	protected TextureRegion[] getRegionMoving(TextureRegion[][] pictures) {
+		TextureRegion[] tmp = new TextureRegion[pictures[0].length];
+		for (int j = 0; j < pictures[0].length; j++) {
+			tmp[j] = pictures[0][j];
+		}
+		return tmp;
+	}
+	
+	protected Animation getAnimation(TextureRegion[] pictures, float time) {
+		return new Animation(time, pictures);
+	}
+	
+//	protected void createAnimations (TextureRegion originalPicture, int numPictures, TextureRegion standing, TextureRegion[] moving, Animation animation) {
+//		TextureRegion[][] tmp = null;
+//		try {
+//			if(originalPicture == null) {
+//				System.out.println("is null");
+//				return;
+//			}
+//			tmp = originalPicture.split(originalPicture.getRegionWidth() / numPictures, originalPicture.getRegionHeight());
+//		} catch (Exception e) {
+//			int a;
+//			System.out.println("sad");
+//		}
+//		moving = new TextureRegion[numPictures];
+//		int index = 0;
+//		for (int j = 0; j < numPictures; j++) {
+//			moving[index++] = tmp[0][j];
+//		}
+//		
+//		standing = tmp[0][0];
+//		if(standing == null) {
+//			System.out.println("Statische NICHT gesetzt");
+//		}
+//		this.animation = new Animation(0.2f, moving);
+//		System.out.println("Animation added");
+//	}
+	
 	protected void initConstructor(final Vector2 position, final WorldController worldcontroller) {
 		this.worldController = worldcontroller;
 		this.b2World = this.worldController.getB2World();
@@ -68,10 +166,10 @@ public abstract class Player extends InteractiveObject {
 		this.init(true, true);
 	}
 
-	private void init(boolean animation, boolean initPhysics) {
+	protected void init(boolean animation, boolean initPhysics) {
 		this.items = new Vector<Item>();
 
-		this.dimension.set(0.2f, 0.2f);
+		this.dimension.set(0.75f, 0.75f);
 		this.origin.x = 0;
 		this.origin.y = 0;
 		// this.texture = this.assets.findRegion("player");
@@ -81,6 +179,7 @@ public abstract class Player extends InteractiveObject {
 		if (initPhysics) {
 			this.initPhysics();
 		}
+		//initAnimations();
 	}
 
 	@Override
@@ -97,7 +196,7 @@ public abstract class Player extends InteractiveObject {
 
 			// create shape
 			final CircleShape circleShape = new CircleShape();
-			circleShape.setRadius(this.dimension.x / 2);
+			circleShape.setRadius(this.dimension.x / 4);
 
 			// create fixture to attach shape to body
 			final FixtureDef fixtureDef = new FixtureDef();
@@ -143,16 +242,60 @@ public abstract class Player extends InteractiveObject {
 
 	public void setDirectionMoving(final Direction d) {
 		this.directionMoving = d;
-		if (d != Direction.STAY) {
-			this.directionLooking = d;
-		}
+//		if (d != Direction.STAY) {
+//			this.directionLooking = d;
+//		}
 	}
 
 	@Override
 	public void render(final SpriteBatch batch) {
 		if (this.toRender) {
-			batch.draw(this.texture, this.position.x - (this.dimension.x / 2), this.position.y - (this.dimension.y / 2), this.origin.x, this.origin.y, this.dimension.x, this.dimension.y,
-					this.scale.x, this.scale.y, this.rotation);
+			if(this.directionMoving == Direction.STAY) {
+				switch(this.directionLooking) {
+				case S:
+					batch.draw(this.tRStandDown, this.position.x - (this.dimension.x / 2), this.position.y - (this.dimension.y / 2), this.origin.x, this.origin.y, this.dimension.x, this.dimension.y,
+						this.scale.x, this.scale.y, this.rotation);
+					break;
+				case N:
+					batch.draw(this.tRStandUp, this.position.x - (this.dimension.x / 2), this.position.y - (this.dimension.y / 2), this.origin.x, this.origin.y, this.dimension.x, this.dimension.y,
+						this.scale.x, this.scale.y, this.rotation);
+					break;
+				case E:
+					batch.draw(this.tRStandRight, this.position.x - (this.dimension.x / 2), this.position.y - (this.dimension.y / 2), this.origin.x, this.origin.y, this.dimension.x, this.dimension.y,
+						this.scale.x, this.scale.y, this.rotation);
+					break;
+				case W:
+					batch.draw(this.tRStandLeft, this.position.x - (this.dimension.x / 2), this.position.y - (this.dimension.y / 2), this.origin.x, this.origin.y, this.dimension.x, this.dimension.y,
+						this.scale.x, this.scale.y, this.rotation);
+					break;
+				default:
+					break;
+					
+				}
+			}
+			else if(this.directionMoving != Direction.STAY) {
+				switch(this.directionLooking) {
+				case S:
+					batch.draw(this.aMoveDown.getKeyFrame(time, true), this.position.x - (this.dimension.x / 2), this.position.y - (this.dimension.y / 2), this.origin.x, this.origin.y, this.dimension.x, this.dimension.y,
+						this.scale.x, this.scale.y, this.rotation);
+					break;
+				case N:
+					batch.draw(this.aMoveUp.getKeyFrame(time, true), this.position.x - (this.dimension.x / 2), this.position.y - (this.dimension.y / 2), this.origin.x, this.origin.y, this.dimension.x, this.dimension.y,
+						this.scale.x, this.scale.y, this.rotation);
+					break;
+				case E:
+					batch.draw(this.aMoveRight.getKeyFrame(time, true), this.position.x - (this.dimension.x / 2), this.position.y - (this.dimension.y / 2), this.origin.x, this.origin.y, this.dimension.x, this.dimension.y,
+						this.scale.x, this.scale.y, this.rotation);
+					break;
+				case W:
+					batch.draw(this.aMoveLeft.getKeyFrame(time, true), this.position.x - (this.dimension.x / 2), this.position.y - (this.dimension.y / 2), this.origin.x, this.origin.y, this.dimension.x, this.dimension.y,
+						this.scale.x, this.scale.y, this.rotation);
+					break;
+				default:
+					break;
+					
+				}
+			}
 		}
 	}
 
@@ -326,22 +469,41 @@ public abstract class Player extends InteractiveObject {
 
 	public void setRight(final boolean b) {
 		this.right = b;
+		setLooking();
 		this.setDirectionMoving(Player.Direction.E);
 	}
 
 	public void setUp(final boolean b) {
 		this.up = b;
+		setLooking();
 		this.setDirectionMoving(Player.Direction.N);
 	}
 
 	public void setLeft(final boolean b) {
 		this.left = b;
+		setLooking();
 		this.setDirectionMoving(Player.Direction.W);
 	}
 
 	public void setDown(final boolean b) {
 		this.down = b;
+		setLooking();
 		this.setDirectionMoving(Player.Direction.S);
+	}
+	
+	public void setLooking() {
+		if(this.up){
+			this.directionLooking = Direction.N;
+		}
+		if(this.down) {
+			this.directionLooking = Direction.S;
+		}
+		if(this.left) {
+			this.directionLooking = Direction.W;
+		}
+		if(this.right) {
+			this.directionLooking = Direction.E;
+		}
 	}
 
 	public boolean getRight() {
@@ -397,5 +559,13 @@ public abstract class Player extends InteractiveObject {
 	 */
 	public int getItemCount() {
 		return this.itemCount;
+	}
+	
+	public float getHandicapduration() {
+		return this.handicapDuration;
+	}
+	
+	public float getHandicap() {
+		return this.handicap;
 	}
 }

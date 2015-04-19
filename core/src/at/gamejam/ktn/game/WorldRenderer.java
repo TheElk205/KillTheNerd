@@ -94,6 +94,7 @@ public class WorldRenderer implements Disposable {
 	public void drawScoreboard() {
 		this.score.update(0);
 		this.score.render(this.batch);
+		
 		if (this.score.won() != 0) {
 			this.worldController.getInputManager().setEnabled(false);
 			this.batch.draw(this.victory, 300, 300, 400, 150);
@@ -112,6 +113,8 @@ public class WorldRenderer implements Disposable {
 		this.worldController.getLevel().render(this.batch);
 		this.worldController.playerSleep.render(this.batch);
 		this.worldController.playerWake.render(this.batch); // TODO make global list.. forgot player wake..
+		this.worldController.sleepBar.render(this.batch);
+		this.worldController.wakeBar.render(this.batch);
 		this.batch.end();
 		this.renderGUI(this.batch);
 		if (this.worldController.isDebug()) {

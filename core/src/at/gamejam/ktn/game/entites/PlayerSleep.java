@@ -2,6 +2,7 @@ package at.gamejam.ktn.game.entites;
 
 import at.gamejam.ktn.game.WorldController;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 public class PlayerSleep extends Player {
@@ -10,10 +11,29 @@ public class PlayerSleep extends Player {
 		this.itemType = ItemType.THESIS;
 		this.factor = -5;
 		//this.handicap = 0.5f;
+		this.loadPictures();
 	}
 
 	@Override
 	protected void loadAsset() {
 		this.texture = this.assets.findRegion("player");
+	}
+	
+	@Override
+	protected void init(boolean animation, boolean initPhysics) {
+		super.init(animation,initPhysics);
+		//this.initAnimations();
+	}
+	private void loadPictures() {
+		TextureRegion up, down, left, right;
+		up = this.assets.findRegion("betty_back");
+		if(up == null) {
+			System.out.println("up is null");
+		}
+		down = this.assets.findRegion("betty_front");
+		left = this.assets.findRegion("betty_left");
+		right = this.assets.findRegion("betty_right");
+		
+		this.setInitialPictures(up, down, left, right);
 	}
 }
