@@ -2,6 +2,7 @@ package at.gamejam.ktn.game;
 
 import java.util.concurrent.TimeUnit;
 
+import at.gamejam.ktn.game.entites.Scoreboard;
 import at.gamejam.ktn.utils.Assets;
 import at.gamejam.ktn.utils.Constants;
 
@@ -22,9 +23,12 @@ public class WorldRenderer implements Disposable {
 	private BitmapFont				font;
 	private TextureRegion			coinTexture;
 	private TextureRegion			redbullTexture;
+	private TextureRegion			victory;
 	public int						coinPosition	= 40;
 	public int						redBullPosition	= 40;
 
+	private Scoreboard score;
+	
 	public WorldRenderer(final WorldController worldController) {
 		this.worldController = worldController;
 		this.init();
@@ -46,6 +50,10 @@ public class WorldRenderer implements Disposable {
 		this.font = new BitmapFont(true); // default 15pt Arial
 		this.coinTexture = Assets.getInstance(new AssetManager()).findRegion("coinGold");
 		this.redbullTexture = Assets.getInstance(new AssetManager()).findRegion("redBull");
+		this.victory = Assets.getInstance(new AssetManager()).findRegion("victory_basic");
+		this.victory.flip(false, true);
+		score = new Scoreboard(this.worldController.getLevel());
+		score.setPosition(280, 10);
 	}
 
 	public void renderGUI(final SpriteBatch batch) {
@@ -56,15 +64,18 @@ public class WorldRenderer implements Disposable {
 		this.font.draw(batch, mmss, 10, 10);
 
 		this.font.draw(batch, Integer.toString(this.worldController.coinCount), 35, 40);
-		this.font.draw(batch, Integer.toString(this.worldController.redBullCount), 570, 40);
+		this.font.draw(batch, Integer.toString(this.worldController.redBullCount), 980, 40);
+		
 		this.drawMunition();
+		this.drawScoreboard();
+		
 		batch.end();
 	}
 
 	public void drawMunition() {
 		int offset = 0;
 		for (int i = 0; i < this.worldController.playerWake.itemCount; i++) {
-			this.batch.draw(this.redbullTexture, 550, this.redBullPosition + offset, 20, 20);
+			this.batch.draw(this.redbullTexture, 1000, this.redBullPosition + offset, 20, 20);
 			offset += 30;
 		}
 
@@ -72,6 +83,16 @@ public class WorldRenderer implements Disposable {
 		for (int i = 0; i < this.worldController.playerSleep.itemCount; i++) {
 			this.batch.draw(this.coinTexture, 10, this.coinPosition + offset, 20, 20);
 			offset += 30;
+		}
+	}
+	
+	public void drawScoreboard() {
+		score.update(0);
+		score.render(batch);
+		if(score.won() != 0) {
+			System.out.println("Speilende");
+			this.worldController.getInputManager().setEnabled(false);
+			this.batch.draw(victory, 300, 300, 400, 150);
 		}
 	}
 

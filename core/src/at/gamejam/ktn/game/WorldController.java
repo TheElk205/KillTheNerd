@@ -34,6 +34,8 @@ public class WorldController {
 	private GeneratedLevel			level;
 	private final boolean			debug			= true;
 	// private boolean reset;
+	
+	private InputManager inputManager;
 
 	private final List<GameObject>	objectsToAdd	= new ArrayList<GameObject>();
 	private MyContactListener		contactListener;
@@ -59,19 +61,20 @@ public class WorldController {
 		this.level = new GeneratedLevel(this.b2World);
 		this.contactListener = new MyContactListener(this);
 		this.b2World.setContactListener(this.contactListener);
-		Gdx.input.setInputProcessor(new InputManager(this.playerWake, this.playerSleep, this.cameraHelper));
+		this.inputManager = new InputManager(this.playerWake, this.playerSleep, this.cameraHelper);
+		Gdx.input.setInputProcessor(this.inputManager);
 		// Gdx.audio.newSound(Gdx.files.internal(Constants.MUSIC)).play();
-		try {
-			Sequencer sequencer = MidiSystem.getSequencer();
-
-			sequencer.setSequence(MidiSystem.getSequence(new FileInputStream(new File(Constants.MUSIC))));
-
-			sequencer.open();
-			sequencer.start();
-		} catch (InvalidMidiDataException | IOException | MidiUnavailableException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			Sequencer sequencer = MidiSystem.getSequencer();
+//
+//			//sequencer.setSequence(MidiSystem.getSequence(new FileInputStream(new File(Constants.MUSIC))));
+//
+//			//sequencer.open();
+//			//sequencer.start();
+//		} catch (InvalidMidiDataException | IOException | MidiUnavailableException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		/*midiPlayer.open(Constants.MUSIC);
 		midiPlayer.setLooping(true);
 		midiPlayer.setVolume(0.5f);
@@ -189,4 +192,8 @@ public class WorldController {
 	/*protected void addAbstractItem(final GameObject object) {
 		this.level.addGameObject(object);
 	}*/
+	
+	public InputManager getInputManager() {
+		return this.inputManager;
+	}
 }

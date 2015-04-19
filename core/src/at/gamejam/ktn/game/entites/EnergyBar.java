@@ -45,7 +45,7 @@ public class EnergyBar extends InteractiveObject {
 		if(state == 1) {
 			batch.draw(sun, this.belongsTo.position.x + this.belongsTo.dimension.x /2f, this.belongsTo.position.y + this.belongsTo.dimension.y, this.dimension.x*5, this.dimension.y*5);
 		}
-		System.out.println(this.belongsTo.dimension.x);
+		//System.out.println(this.belongsTo.dimension.x);
 	}
 	
 	private void loadAssets() {
