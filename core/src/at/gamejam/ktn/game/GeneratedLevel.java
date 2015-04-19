@@ -77,6 +77,18 @@ public class GeneratedLevel {
 		this.gameObjects.add(npc2);
 		this.gameObjects.add(energy2);
 		
+		NPC npc3 = new NPC(new Vector2(-4, -3), this.b2world, 50);
+		EnergyBar energy3 = new EnergyBar(npc3);
+		
+		this.gameObjects.add(npc3);
+		this.gameObjects.add(energy3);
+		
+		NPC npc4 = new NPC(new Vector2(-2, 2), this.b2world, 50);
+		EnergyBar energy4 = new EnergyBar(npc4);
+		
+		this.gameObjects.add(npc4);
+		this.gameObjects.add(energy4);
+		
 //		this.gameObjects.add(new NPC(new Vector2(3, 0), this.b2world, 50));
 //		this.gameObjects.add(new NPC(new Vector2(1, -3), this.b2world, 50));
 //		this.gameObjects.add(new NPC(new Vector2(0, 2), this.b2world, 50));
@@ -90,7 +102,7 @@ public class GeneratedLevel {
 //		this.gameObjects.add(new NPC(new Vector2(1, 3f), this.b2world, 100));
 //		this.gameObjects.add(new NPC(new Vector2(5, 1), this.b2world, 100));
 //		this.gameObjects.add(new NPC(new Vector2(2, 2), this.b2world, 100));
-		this.npcCount = 2;
+		this.npcCount = 4;
 		
 	}
 	

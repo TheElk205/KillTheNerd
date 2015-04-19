@@ -49,10 +49,14 @@ public class WorldRenderer implements Disposable {
 		this.cameraGUI.update();
 
 		this.font = new BitmapFont(true); // default 15pt Arial
-		this.coinTexture = Assets.getInstance(new AssetManager()).findRegion("coinGold");
-		this.redbullTexture = Assets.getInstance(new AssetManager()).findRegion("redBull");
+		this.coinTexture = Assets.getInstance(new AssetManager()).findRegion("book_green_small");
+		this.redbullTexture = Assets.getInstance(new AssetManager()).findRegion("cup_coffee");
 		this.victory = Assets.getInstance(new AssetManager()).findRegion("victory_basic");
 		this.victory.flip(false, true);
+		
+		this.coinTexture.flip(false, true);
+		this.redbullTexture.flip(false, true);
+		
 		this.score = new Scoreboard(this.worldController.getLevel());
 		this.score.setPosition(280, 10);
 	}
@@ -76,13 +80,13 @@ public class WorldRenderer implements Disposable {
 	public void drawMunition() {
 		int offset = 0;
 		for (int i = 0; i < this.worldController.playerWake.getItemCount(); i++) {
-			this.batch.draw(this.redbullTexture, 1000, this.redBullPosition + offset, 20, 20);
+			this.batch.draw(this.redbullTexture, 1000, this.redBullPosition + offset, 30, 30);
 			offset += 30;
 		}
 
 		offset = 0;
 		for (int i = 0; i < this.worldController.playerSleep.getItemCount(); i++) {
-			this.batch.draw(this.coinTexture, 10, this.coinPosition + offset, 20, 20);
+			this.batch.draw(this.coinTexture, 10, this.coinPosition + offset, 30, 30);
 			offset += 30;
 		}
 	}
