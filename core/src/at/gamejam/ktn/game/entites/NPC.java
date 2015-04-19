@@ -16,6 +16,10 @@ public class NPC extends InteractiveObject {
 	
 	private int state = 0; //-1 asleep, 1 awake
 	
+	private boolean isNear = true;
+	
+	private Player[] areNear;
+	
 	/**
 	 * @param startValue
 	 *            0 awake, 100 sleeps
@@ -25,7 +29,10 @@ public class NPC extends InteractiveObject {
 		this.dimension = new Vector2(1.5f, 1.5f);
 		this.b2World = b2World;
 		this.numPictures = 5;
-		this.frameDuration = 0.25f;
+		
+		int i = (int) (Math.random()*40+1);
+		
+		this.frameDuration = (float)i/100;
 		// this.numPictures = 5 * 13;
 		// this.frameDuration = 0.15f;
 		this.animated = true;
@@ -33,6 +40,11 @@ public class NPC extends InteractiveObject {
 			this.loadAsset();
 			this.initAnimated();
 		}
+		
+		areNear = new Player[2];
+		areNear[0] = null;
+		areNear[1] = null;
+		
 		
 		this.initPhysics();
 	}
@@ -64,7 +76,15 @@ public class NPC extends InteractiveObject {
 		timeSinceLasttick += deltaTime;
 		if(timeSinceLasttick > energyTime) {
 			timeSinceLasttick = 0;
-			this.energy += factor;
+			float f1 = 0.0f;
+			if(areNear[0] != null) {
+				f1 = areNear[0].getFactor();
+			}
+			float f2 = 0.0f;
+			if(areNear[1] != null) {
+				f2 = areNear[1].getFactor();
+			}
+			this.energy += f1 + f2;
 			if(this.energy > 100) {
 				this.energy = 100;
 			}
@@ -114,5 +134,30 @@ public class NPC extends InteractiveObject {
 	
 	public int getState() {
 		return this.state;
+	}
+	
+	//Kacke aber geht
+	public void addPlayer(Player player) {
+		System.out.println("Palyer added");
+		if(this.areNear[0] != null) {
+			if(this.areNear[1] != null) {
+				return;
+			}
+			this.areNear[1] = player;
+			System.out.println("Zweite Stelle");
+			return;
+		}
+		this.areNear[0] = player;
+		System.out.println("Erste Stelle");
+	}
+	
+	public void removePlayer(Player player) {
+		if(this.areNear[0] == player) {
+			this.areNear[0] = this.areNear[1];
+			this.areNear[1] = null;
+		}
+		if(this.areNear[1] == player) {
+			this.areNear[1] = null;
+		}
 	}
 }

@@ -35,8 +35,6 @@ public class Scoreboard extends InteractiveObject {
 		float pos1 = length * sleeping;
 		float pos2 = length - length * awake;
 		
-		System.out.println("Pos1: " +pos1 + " Sleeping: " + sleepingCount);
-		System.out.println("Pos2: " + pos2 + " awake: " + awakeCount);
 		float diff = pos2-pos1;
 		
 		batch.draw(red, posX, posY, pos1, this.dimension.y);

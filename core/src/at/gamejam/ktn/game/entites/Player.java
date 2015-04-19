@@ -22,6 +22,7 @@ public abstract class Player extends InteractiveObject {
 	public int					itemCount			= Constants.START_ITEM_COUNT;
 
 	protected int				points				= 0;
+	
 	protected float				startSpeed			= 5f;
 	protected float				currentSpeed		= this.startSpeed;
 
@@ -47,6 +48,13 @@ public abstract class Player extends InteractiveObject {
 	protected ItemType			itemType			= ItemType.REDBULL;
 
 	protected float factor = 0.0f;
+	protected float handicap = 1f;	//0: nix geht mehr, 1: alles Normal, >1: Besser
+	protected float dealHandicap = 0.5f;
+	
+	protected float handicapSetAt = 0.0f;
+	protected float handicapDuration = 5f;
+	
+	protected float time = 0.0f;
 	
 	public enum ItemType {
 		REDBULL, THESIS
@@ -150,10 +158,16 @@ public abstract class Player extends InteractiveObject {
 
 	@Override
 	public void update(final float deltaTime) {
+		this.time += deltaTime;
+		
 		this.move();
 		this.throwItem(deltaTime);
 		this.position = this.b2Body.getPosition();
 		this.rotation = this.b2Body.getAngle() * MathUtils.radiansToDegrees;
+		
+		if(this.time - this.handicapSetAt > this.handicapDuration) {
+			this.resetHandycap();
+		}
 	}
 
 	public void move() {
@@ -176,16 +190,16 @@ public abstract class Player extends InteractiveObject {
 		}*/
 
 		if (this.up) {
-			toApply.y = this.currentSpeed;
+			toApply.y = this.currentSpeed*this.handicap;
 		}
 		if (this.down) {
-			toApply.y = -this.currentSpeed;
+			toApply.y = -(this.currentSpeed*this.handicap);
 		}
 		if (this.right) {
-			toApply.x = this.currentSpeed;
+			toApply.x = this.currentSpeed*this.handicap;
 		}
 		if (this.left) {
-			toApply.x = -this.currentSpeed;
+			toApply.x = -this.currentSpeed*this.handicap;
 		}
 		// System.out.println("currentSpeed: " + this.currentSpeed);
 		this.b2Body.applyForceToCenter(toApply, true);
@@ -281,7 +295,7 @@ public abstract class Player extends InteractiveObject {
 	public boolean hitByItem(Item item) {
 		// System.out.println(this + " hit by " + item);
 		if ((item instanceof RedBull) && (this instanceof PlayerSleep)) {
-			this.health = this.health - 50;
+			//this.health = this.health - 50;
 		}
 		/*TODO: else if(item instanceof Thesis && this instanceof PlayerWake) {
 			health = health - 20;
@@ -352,7 +366,19 @@ public abstract class Player extends InteractiveObject {
 	}
 	
 	public float getFactor() {
-		return this.factor;
+		return this.factor*handicap;
 	}
-
+	
+	public void setHandicap(float handicap) {
+		this.handicap = Math.abs(handicap);
+		this.handicapSetAt = this.time;
+	}
+	
+	public void resetHandycap() {
+		this.handicap = 1;
+	}
+	
+	public float dealHandicap() {
+		return this.dealHandicap;
+	}
 }

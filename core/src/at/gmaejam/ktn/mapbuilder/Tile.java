@@ -51,7 +51,9 @@ public class Tile extends GameObject {
 	private void createBoxBorder(Body b2Body) {
 		final PolygonShape poly = new PolygonShape();
 		poly.setAsBox(this.dimension.x / 4f, this.dimension.y / 4f);
+		
 		final FixtureDef fixtureDef = new FixtureDef();
+		
 		fixtureDef.shape = poly;
 		this.b2Body.createFixture(fixtureDef);
 		this.b2Body.setUserData(this);

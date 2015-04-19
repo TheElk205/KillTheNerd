@@ -9,6 +9,7 @@ public class PlayerSleep extends Player {
 		this.initConstructor(position, world);
 		this.itemType = ItemType.THESIS;
 		this.factor = -5;
+		//this.handicap = 0.5f;
 	}
 
 	@Override

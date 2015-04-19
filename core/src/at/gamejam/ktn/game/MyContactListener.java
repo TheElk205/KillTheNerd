@@ -158,12 +158,12 @@ public class MyContactListener implements ContactListener {
 				if(userDataA instanceof NPC) {
 					NPC npc = (NPC) userDataA;
 					Player player = (Player) userDataB;
-					npc.addFactor(player.getFactor());
+					npc.addPlayer(player);
 				}
 				else if (userDataB instanceof NPC) {
 					NPC npc = (NPC) userDataB;
 					Player player = (Player) userDataA;
-					npc.addFactor(player.getFactor());
+					npc.addPlayer(player);
 				}
 			default:
 				System.out.println("default hit A: " + userDataA + " B: " + userDataB);
@@ -187,6 +187,7 @@ public class MyContactListener implements ContactListener {
 				player.setToRender(false);
 				this.objectsToRemove.add(player);
 			}
+			player.setHandicap(thesis.itemIsThrownBy.dealHandicap());
 			thesis.setToRender(false);
 			this.objectsToRemove.add(thesis);
 		}
@@ -200,6 +201,7 @@ public class MyContactListener implements ContactListener {
 				player.setToRender(false);
 				this.objectsToRemove.add(player);
 			}
+			player.setHandicap(item.itemIsThrownBy.dealHandicap());
 			item.setToRender(false);
 			this.objectsToRemove.add(item);
 		}
@@ -251,13 +253,12 @@ public class MyContactListener implements ContactListener {
 			if(userDataA instanceof NPC) {
 				NPC npc = (NPC) userDataA;
 				Player player = (Player) userDataB;
-				npc.addFactor(-player.getFactor());
+				npc.removePlayer(player);
 			}
 			else if (userDataB instanceof NPC) {
 				NPC npc = (NPC) userDataB;
 				Player player = (Player) userDataA;
-				npc.addFactor(-player.getFactor());
-			}
+				npc.removePlayer(player);			}
 		}
 	}
 
