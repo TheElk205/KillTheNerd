@@ -153,20 +153,21 @@ public class MyContactListener implements ContactListener {
 			case 6:
 				// ((Item)userDataA).getB2Body()
 				break;
-			case 7: //Set Player wake
-				System.out.println("richtig");
-				if(userDataA instanceof NPC) {
+			case 7: // Set Player wake
+
+				if (userDataA instanceof NPC) {
 					NPC npc = (NPC) userDataA;
 					Player player = (Player) userDataB;
 					npc.addFactor(player.getFactor());
-				}
-				else if (userDataB instanceof NPC) {
-					NPC npc = (NPC) userDataB;
-					Player player = (Player) userDataA;
-					npc.addFactor(player.getFactor());
-				}
+				} else
+					if (userDataB instanceof NPC) {
+						NPC npc = (NPC) userDataB;
+						Player player = (Player) userDataA;
+						npc.addFactor(player.getFactor());
+					}
+				break;
 			default:
-				System.out.println("default hit A: " + userDataA + " B: " + userDataB);
+				// System.out.println("default hit A: " + userDataA + " B: " + userDataB);
 				/*if (userDataA instanceof Item) {
 					((Item) userDataA).getB2Body().applyForceToCenter(new Vector2(), true);
 				}
@@ -208,14 +209,14 @@ public class MyContactListener implements ContactListener {
 	private void sleepWithThesis(Object userDataA, Object userDataB) {
 		final Item item = (Item) userDataB;
 		final PlayerSleep player = (PlayerSleep) userDataA;
-		this.wContr.coinCount++;
+		// this.wContr.coinCount++;
 		item.grabbedBy(player);
 	}
 
 	private void wakeWithRedbull(Object userDataA, Object userDataB) {
 		final Item item = (Item) userDataB;
 		final PlayerWake player = (PlayerWake) userDataA;
-		this.wContr.redBullCount++;
+		// this.wContr.redBullCount++;
 		item.grabbedBy(player);
 	}
 
@@ -242,22 +243,22 @@ public class MyContactListener implements ContactListener {
 		if (((userDataB instanceof PlayerSleep) && (userDataA instanceof Item)) || ((userDataA instanceof Item) && (userDataB instanceof PlayerSleep))) {
 			collisionType = 5;
 		}
-		
+
 		if (((userDataB instanceof Player) && (userDataA instanceof NPC)) || ((userDataB instanceof NPC) && (userDataA instanceof Player))) {
 			collisionType = 7;
 		}
-		switch(collisionType) {
-		case 7:
-			if(userDataA instanceof NPC) {
-				NPC npc = (NPC) userDataA;
-				Player player = (Player) userDataB;
-				npc.addFactor(-player.getFactor());
-			}
-			else if (userDataB instanceof NPC) {
-				NPC npc = (NPC) userDataB;
-				Player player = (Player) userDataA;
-				npc.addFactor(-player.getFactor());
-			}
+		switch (collisionType) {
+			case 7:
+				if (userDataA instanceof NPC) {
+					NPC npc = (NPC) userDataA;
+					Player player = (Player) userDataB;
+					npc.addFactor(-player.getFactor());
+				} else
+					if (userDataB instanceof NPC) {
+						NPC npc = (NPC) userDataB;
+						Player player = (Player) userDataA;
+						npc.addFactor(-player.getFactor());
+					}
 		}
 	}
 

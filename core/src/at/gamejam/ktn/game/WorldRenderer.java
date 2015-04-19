@@ -24,11 +24,12 @@ public class WorldRenderer implements Disposable {
 	private TextureRegion			coinTexture;
 	private TextureRegion			redbullTexture;
 	private TextureRegion			victory;
-	public int						coinPosition	= 40;
-	public int						redBullPosition	= 40;
+	public int						coinPosition			= 40;
+	public int						redBullPosition			= 40;
 
-	private Scoreboard score;
-	
+	private Scoreboard				score;
+	private boolean					winMusicAlreadyStarted	= false;
+
 	public WorldRenderer(final WorldController worldController) {
 		this.worldController = worldController;
 		this.init();
@@ -52,8 +53,8 @@ public class WorldRenderer implements Disposable {
 		this.redbullTexture = Assets.getInstance(new AssetManager()).findRegion("redBull");
 		this.victory = Assets.getInstance(new AssetManager()).findRegion("victory_basic");
 		this.victory.flip(false, true);
-		score = new Scoreboard(this.worldController.getLevel());
-		score.setPosition(280, 10);
+		this.score = new Scoreboard(this.worldController.getLevel());
+		this.score.setPosition(280, 10);
 	}
 
 	public void renderGUI(final SpriteBatch batch) {
@@ -63,36 +64,40 @@ public class WorldRenderer implements Disposable {
 				TimeUnit.MILLISECONDS.toSeconds(this.worldController.timeElapsed) % TimeUnit.MINUTES.toSeconds(1));
 		this.font.draw(batch, mmss, 10, 10);
 
-		this.font.draw(batch, Integer.toString(this.worldController.coinCount), 35, 40);
-		this.font.draw(batch, Integer.toString(this.worldController.redBullCount), 980, 40);
-		
+		this.font.draw(batch, Integer.toString(this.worldController.playerSleep.getItemCount()), 35, 40);
+		this.font.draw(batch, Integer.toString(this.worldController.playerWake.getItemCount()), 980, 40);
+
 		this.drawMunition();
 		this.drawScoreboard();
-		
+
 		batch.end();
 	}
 
 	public void drawMunition() {
 		int offset = 0;
-		for (int i = 0; i < this.worldController.playerWake.itemCount; i++) {
+		for (int i = 0; i < this.worldController.playerWake.getItemCount(); i++) {
 			this.batch.draw(this.redbullTexture, 1000, this.redBullPosition + offset, 20, 20);
 			offset += 30;
 		}
 
 		offset = 0;
-		for (int i = 0; i < this.worldController.playerSleep.itemCount; i++) {
+		for (int i = 0; i < this.worldController.playerSleep.getItemCount(); i++) {
 			this.batch.draw(this.coinTexture, 10, this.coinPosition + offset, 20, 20);
 			offset += 30;
 		}
 	}
-	
+
 	public void drawScoreboard() {
-		score.update(0);
-		score.render(batch);
-		if(score.won() != 0) {
-			System.out.println("Speilende");
+		this.score.update(0);
+		this.score.render(this.batch);
+		if (this.score.won() != 0) {
 			this.worldController.getInputManager().setEnabled(false);
-			this.batch.draw(victory, 300, 300, 400, 150);
+			this.batch.draw(this.victory, 300, 300, 400, 150);
+			if (!this.winMusicAlreadyStarted) {
+				this.worldController.ingameMusic.dispose();
+				this.worldController.winMusic.play();
+				this.winMusicAlreadyStarted = true;
+			}
 		}
 	}
 

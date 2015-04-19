@@ -119,13 +119,18 @@ public abstract class Item extends InteractiveObject {
 
 	// interactions
 	public void grabbedBy(final Player player) {
-		if (this.collectable) {
-			this.sound.play();
+		if (this.collectable && !this.collected) { // TODO: !this.collected prevent taking twice bug!?
+
 			// System.out.println("Item grabbed by: " + player);
-			this.collected = true;
+			// player.incrItemCount();
 			this.grabbedBy = player;
-			this.grabbedBy.addItem(this);
-			this.destroyed = false;
+			if (this.grabbedBy.addItem(this)) {
+				this.collected = true;
+				this.sound.play();
+				this.destroyed = false;
+			} else {
+				this.grabbedBy = null;
+			}
 			// this.disablePhysics();
 		}
 	}
