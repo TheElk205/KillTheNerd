@@ -159,21 +159,27 @@ public class MyContactListener implements ContactListener {
 					NPC npc = (NPC) userDataA;
 					Player player = (Player) userDataB;
 					npc.addPlayer(player);
-				}
-				else if (userDataB instanceof NPC) {
-					NPC npc = (NPC) userDataB;
-					Player player = (Player) userDataA;
-					npc.addPlayer(player);
+				} else
+					if (userDataB instanceof NPC) {
+						NPC npc = (NPC) userDataB;
+						Player player = (Player) userDataA;
+						npc.addPlayer(player);
 					}
 				break;
 			default:
-				// System.out.println("default hit A: " + userDataA + " B: " + userDataB);
-				/*if (userDataA instanceof Item) {
-					((Item) userDataA).getB2Body().applyForceToCenter(new Vector2(), true);
+				System.out.println("default hit - A: " + userDataA + " B: " + userDataB);
+				if (userDataA instanceof Item) {
+					// ((Item) userDataA).getB2Body().applyForceToCenter(new Vector2(), true);
+					((Item) userDataA).isFlying = false;
+					((Item) userDataA).collectable = true;
+					((Item) userDataA).collected = false;
 				}
 				if (userDataB instanceof Item) {
-					((Item) userDataB).getB2Body().applyForceToCenter(new Vector2(), true);
-				}*/
+					// ((Item) userDataB).getB2Body().applyForceToCenter(new Vector2(), true);
+					((Item) userDataB).isFlying = false;
+					((Item) userDataB).collectable = true;
+					((Item) userDataB).collected = false;
+				}
 				break;
 		}
 
@@ -183,7 +189,7 @@ public class MyContactListener implements ContactListener {
 		// TODO nothing to do , ZzZzZ 5sec aussetzen
 		final PlayerWake player = (PlayerWake) (playerWake);
 		final Thesis thesis = (Thesis) userDataB;
-		if (thesis.itemIsThrownBy instanceof PlayerSleep) {
+		if ((thesis.itemIsThrownBy instanceof PlayerSleep) && thesis.isFlying) {
 			if (player.hitByItem(thesis)) {
 				player.setToRender(false);
 				this.objectsToRemove.add(player);
@@ -197,7 +203,7 @@ public class MyContactListener implements ContactListener {
 	public void sleepWithRedbull(final Object userDataB, final Object userDataA) {
 		final Item item = (Item) (userDataA);
 		final PlayerSleep player = (PlayerSleep) userDataB;
-		if (item.itemIsThrownBy instanceof PlayerWake) {
+		if ((item.itemIsThrownBy instanceof PlayerWake) && item.isFlying) {
 			if (player.hitByItem(item)) {
 				player.setToRender(false);
 				this.objectsToRemove.add(player);
@@ -254,12 +260,13 @@ public class MyContactListener implements ContactListener {
 				if (userDataA instanceof NPC) {
 					NPC npc = (NPC) userDataA;
 					Player player = (Player) userDataB;
-				npc.removePlayer(player);
+					npc.removePlayer(player);
 				} else
 					if (userDataB instanceof NPC) {
 						NPC npc = (NPC) userDataB;
 						Player player = (Player) userDataA;
-				npc.removePlayer(player);			}
+						npc.removePlayer(player);
+					}
 		}
 	}
 

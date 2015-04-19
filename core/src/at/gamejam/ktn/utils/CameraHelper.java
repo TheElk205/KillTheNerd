@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
 public class CameraHelper {
-	private final float	MAX_ZOOM_IN		= 0.8f;
+	private final float	MAX_ZOOM_IN		= 1.1f;
 	private final float	MAX_ZOOM_OUT	= 1.8f;
 
 	private Vector2		position;

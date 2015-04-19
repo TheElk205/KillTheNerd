@@ -50,13 +50,13 @@ public class WorldRenderer implements Disposable {
 
 		this.font = new BitmapFont(true); // default 15pt Arial
 		this.coinTexture = Assets.getInstance(new AssetManager()).findRegion("book_green_small");
-		this.redbullTexture = Assets.getInstance(new AssetManager()).findRegion("cup_coffee");
+		this.redbullTexture = Assets.getInstance(new AssetManager()).findRegion("single_cup_coffee");
 		this.victory = Assets.getInstance(new AssetManager()).findRegion("victory_basic");
 		this.victory.flip(false, true);
-		
+
 		this.coinTexture.flip(false, true);
 		this.redbullTexture.flip(false, true);
-		
+
 		this.score = new Scoreboard(this.worldController.getLevel());
 		this.score.setPosition(280, 10);
 	}

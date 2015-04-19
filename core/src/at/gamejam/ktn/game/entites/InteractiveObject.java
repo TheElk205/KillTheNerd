@@ -29,8 +29,7 @@ public abstract class InteractiveObject extends GameObject {
 		try {
 			tmp = this.texture.split(this.texture.getRegionWidth() / this.numPictures, this.texture.getRegionHeight());
 		} catch (Exception e) {
-			int a;
-			System.out.println("sad");
+
 		}
 		this.textureRegion = new TextureRegion[this.numPictures];
 		int index = 0;
