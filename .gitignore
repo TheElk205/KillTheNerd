@@ -71,3 +71,5 @@ desktop/.classpath
 core/.classpath
 *.classpath
 core/.classpath
+desktop/images/assets.atlas
+desktop/images/assets.png
