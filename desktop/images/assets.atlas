@@ -6,490 +6,497 @@ filter: Nearest,Nearest
 repeat: none
 afro_american_pixels
   rotate: false
-  xy: 1011, 505
+  xy: 1, 2
   size: 5, 5
   orig: 5, 5
   offset: 0, 0
   index: -1
 badlogic
   rotate: false
-  xy: 1, 254
+  xy: 1, 100
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 book_green
   rotate: false
-  xy: 259, 446
+  xy: 403, 444
   size: 384, 64
   orig: 384, 64
   offset: 0, 0
   index: -1
 book_green_small
   rotate: false
-  xy: 73, 91
+  xy: 243, 3
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 border_top
   rotate: false
-  xy: 211, 101
+  xy: 683, 258
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 bush
   rotate: false
-  xy: 389, 294
+  xy: 259, 213
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 cactus
   rotate: false
-  xy: 1, 91
+  xy: 259, 141
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 chair
   rotate: false
-  xy: 211, 67
+  xy: 717, 258
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 cloud1
   rotate: false
-  xy: 259, 293
+  xy: 259, 285
   size: 128, 71
   orig: 128, 71
   offset: 0, 0
   index: -1
 coinGold
   rotate: false
-  xy: 820, 417
+  xy: 645, 254
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 coin_gold
   rotate: false
-  xy: 1, 229
+  xy: 1, 75
   size: 256, 23
   orig: 256, 23
   offset: 0, 0
   index: -1
 corner_back_left
   rotate: false
-  xy: 211, 33
+  xy: 981, 419
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corner_back_right
   rotate: false
-  xy: 245, 115
+  xy: 981, 385
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corner_bottom_left
   rotate: false
-  xy: 245, 81
+  xy: 375, 35
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corner_bottom_right
   rotate: false
-  xy: 279, 115
+  xy: 375, 1
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corner_front_left
   rotate: false
-  xy: 245, 47
+  xy: 455, 162
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corner_front_right
   rotate: false
-  xy: 279, 81
+  xy: 489, 172
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corner_top_left
   rotate: false
-  xy: 313, 115
+  xy: 455, 128
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corner_top_right
   rotate: false
-  xy: 279, 47
+  xy: 489, 138
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 cup_coffee
   rotate: false
-  xy: 73, 25
+  xy: 309, 3
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 dirtCliffLeft
   rotate: false
-  xy: 461, 294
+  xy: 99, 3
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 dirtMid
   rotate: false
-  xy: 1, 19
+  xy: 171, 3
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 flagBlue2
   rotate: false
-  xy: 533, 294
+  xy: 259, 69
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 flagBlueHanging
   rotate: false
-  xy: 99, 157
+  xy: 331, 213
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 floor
   rotate: false
-  xy: 313, 81
+  xy: 452, 94
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 floor_top_left_corner
   rotate: false
-  xy: 347, 115
+  xy: 749, 330
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 floor_top_right_corner
   rotate: false
-  xy: 313, 47
+  xy: 749, 296
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 floor_top_wall
   rotate: false
-  xy: 347, 81
+  xy: 751, 262
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 grass
   rotate: false
-  xy: 171, 157
+  xy: 331, 141
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 grassCenter
   rotate: false
-  xy: 259, 221
+  xy: 331, 69
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 grassCliffRight
   rotate: false
-  xy: 331, 221
+  xy: 765, 372
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 grassHillLeft
   rotate: false
-  xy: 403, 222
+  xy: 837, 381
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 grassHillLeft2
   rotate: false
-  xy: 475, 222
+  xy: 909, 381
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 grassMid
   rotate: false
-  xy: 547, 222
+  xy: 389, 286
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 green_pixels
   rotate: false
-  xy: 1018, 505
+  xy: 789, 446
   size: 5, 5
   orig: 5, 5
   offset: 0, 0
   index: -1
 interface
   rotate: false
-  xy: 347, 47
+  xy: 783, 338
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 map1
   rotate: false
-  xy: 211, 135
+  xy: 887, 291
   size: 30, 20
   orig: 30, 20
   offset: 0, 0
   index: -1
 newRedBull_2_true
   rotate: false
-  xy: 645, 455
+  xy: 789, 453
   size: 220, 55
   orig: 220, 55
   offset: 0, 0
   index: -1
 plant
   rotate: false
-  xy: 867, 440
+  xy: 461, 292
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 player
   rotate: false
-  xy: 673, 406
+  xy: 403, 90
   size: 47, 47
   orig: 47, 47
   offset: 0, 0
   index: -1
 player-ouch
   rotate: false
-  xy: 722, 406
+  xy: 475, 206
   size: 47, 47
   orig: 47, 47
   offset: 0, 0
   index: -1
 playerWake
   rotate: false
-  xy: 771, 406
+  xy: 547, 243
   size: 47, 47
   orig: 47, 47
   offset: 0, 0
   index: -1
 player_chill
   rotate: false
-  xy: 621, 340
+  xy: 596, 243
   size: 47, 47
   orig: 47, 47
   offset: 0, 0
   index: -1
 redBull
   rotate: false
-  xy: 621, 389
+  xy: 403, 139
   size: 50, 55
   orig: 50, 55
   offset: 0, 0
   index: -1
 red_pixels
   rotate: false
-  xy: 243, 222
+  xy: 645, 247
   size: 5, 5
   orig: 5, 5
   offset: 0, 0
   index: -1
 rock
   rotate: false
-  xy: 939, 440
+  xy: 533, 292
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 sleep
   rotate: false
-  xy: 1, 1
+  xy: 524, 237
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 snowMid
   rotate: false
-  xy: 243, 149
+  xy: 605, 292
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 snowRight
   rotate: false
-  xy: 315, 149
+  xy: 677, 292
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 spikes
   rotate: false
-  xy: 139, 30
+  xy: 475, 255
   size: 70, 35
   orig: 70, 35
   offset: 0, 0
   index: -1
 springboardDown
   rotate: false
-  xy: 139, 67
+  xy: 403, 196
   size: 70, 36
   orig: 70, 36
   offset: 0, 0
   index: -1
 springboardUp
   rotate: false
-  xy: 139, 105
+  xy: 403, 234
   size: 70, 50
   orig: 70, 50
   offset: 0, 0
   index: -1
 sun
   rotate: false
-  xy: 455, 204
+  xy: 403, 72
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 table
   rotate: false
-  xy: 1, 163
+  xy: 1, 9
   size: 96, 64
   orig: 96, 64
   offset: 0, 0
   index: -1
 table_bottom_left
   rotate: false
-  xy: 605, 306
+  xy: 783, 304
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 table_bottom_middle
   rotate: false
-  xy: 639, 306
+  xy: 785, 270
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 table_bottom_right
   rotate: false
-  xy: 619, 272
+  xy: 817, 338
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 table_top_left
   rotate: false
-  xy: 619, 238
+  xy: 817, 304
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 table_top_middle
   rotate: false
-  xy: 653, 272
+  xy: 819, 270
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 table_top_right
   rotate: false
-  xy: 653, 238
+  xy: 851, 347
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
+victory_basic
+  rotate: false
+  xy: 1, 358
+  size: 400, 150
+  orig: 400, 150
+  offset: 0, 0
+  index: -1
 wall_bottom
   rotate: false
-  xy: 673, 372
+  xy: 851, 313
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 wall_left
   rotate: false
-  xy: 707, 372
+  xy: 885, 347
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 wall_left_top
   rotate: false
-  xy: 741, 372
+  xy: 885, 313
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 wall_right
   rotate: false
-  xy: 775, 372
+  xy: 919, 347
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 wall_right_top
   rotate: false
-  xy: 387, 187
+  xy: 919, 313
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 wall_top
   rotate: false
-  xy: 387, 153
+  xy: 953, 347
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 wall_top_left
   rotate: false
-  xy: 421, 188
+  xy: 953, 313
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 wall_top_right
   rotate: false
-  xy: 421, 154
+  xy: 853, 279
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 worker
   rotate: false
-  xy: 259, 366
+  xy: 403, 364
   size: 360, 78
   orig: 360, 78
   offset: 0, 0
   index: -1
 yellow_pixels
   rotate: false
-  xy: 645, 448
+  xy: 1011, 503
   size: 5, 5
   orig: 5, 5
   offset: 0, 0

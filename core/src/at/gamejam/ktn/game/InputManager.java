@@ -13,6 +13,8 @@ public class InputManager extends InputAdapter {
 	private final PlayerSleep	playerSleep;
 	private final CameraHelper	cameraHelper;
 
+	private boolean enabled = true;
+	
 	public InputManager(final PlayerWake playerWake, final PlayerSleep playerSleep, final CameraHelper cameraHelper) {
 		this.playerWake = playerWake;
 		this.playerSleep = playerSleep;
@@ -21,6 +23,9 @@ public class InputManager extends InputAdapter {
 
 	@Override
 	public boolean keyDown(final int keycode) {
+		if(!enabled) {
+			return false;
+		}
 		switch (keycode) {
 			// Camera
 			case Input.Keys.PLUS:
@@ -170,4 +175,7 @@ public class InputManager extends InputAdapter {
 		return true;
 	}*/
 
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 }

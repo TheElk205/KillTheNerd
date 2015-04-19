@@ -18,30 +18,30 @@ public class Scoreboard extends InteractiveObject {
 	
 	private int npcCount = 0;
 	
-	public Scoreboard(GeneratedLevel level, int npcCount) {
+	private int posX = 0, posY = 0;
+	public Scoreboard(GeneratedLevel level) {
 		this.level = level;
-		this.dimension = new Vector2(0.1f,0.1f);
+		this.dimension = new Vector2(500f,20);
 		this.loadAssets();
-		this.npcCount = npcCount;
+		this.npcCount = level.getNpcCount();
 	}
 	
 	@Override
 	public void render(final SpriteBatch batch) {
-		float length = 3;
-		float sleeping = sleepingCount / npcCount;
-		float awake = awakeCount / npcCount;
+		float length = this.dimension.x;
+		float sleeping = (float)sleepingCount / (float)npcCount;
+		float awake = (float)awakeCount / (float)npcCount;
 		
 		float pos1 = length * sleeping;
 		float pos2 = length - length * awake;
 		
+		System.out.println("Pos1: " +pos1 + " Sleeping: " + sleepingCount);
+		System.out.println("Pos2: " + pos2 + " awake: " + awakeCount);
 		float diff = pos2-pos1;
 		
-		float startx = 0.0f;
-		float starty = 0.0f;
-		
-		batch.draw(green, startx, starty, pos1, this.dimension.y);
-		batch.draw(yellow, startx + pos1, starty, diff, this.dimension.y);
-		batch.draw(red, startx+pos1+diff, starty, length - pos2, this.dimension.y);
+		batch.draw(red, posX, posY, pos1, this.dimension.y);
+		batch.draw(yellow, posX + pos1, posY, diff, this.dimension.y);
+		batch.draw(green, posX+pos1+diff, posY, length - pos2, this.dimension.y);
 	}
 	
 	private void loadAssets() {
@@ -52,7 +52,8 @@ public class Scoreboard extends InteractiveObject {
 
 	@Override
 	public void update(float deltaTime) {
-		// TODO Auto-generated method stub
+		this.setSleepingCount(this.level.getSleepingcount());
+		this.setAwakeCount(this.level.getAwakecoutn());
 		
 	}
 	
@@ -61,6 +62,31 @@ public class Scoreboard extends InteractiveObject {
 	}
 	
 	public void setAwakeCount(int c) {
-		this.sleepingCount = c;
+		this.awakeCount = c;
+	}
+	
+	public void setPosX(int posX) {
+		this.posX = posX;
+	}
+	
+	public void setPosY(int posY) {
+		this.posY = posY;
+	}
+	
+	public void setPosition(int x, int y) {
+		this.posX = x;
+		this.posY = y;
+	}
+	
+	public int won() {
+		if(this.npcCount == this.awakeCount) {
+			return 1;
+		}
+		if(this.npcCount == this.sleepingCount) {
+			return -1;
+		}
+		else {
+			return 0;
+		}
 	}
 }

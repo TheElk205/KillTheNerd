@@ -83,7 +83,7 @@ public class NPC extends InteractiveObject {
 			if(energy == 100) {
 				state = 1;
 			}
-			System.out.println("New Energy: " + energy);
+			//System.out.println("New Energy: " + energy);
 		}
 
 	}
@@ -101,7 +101,7 @@ public class NPC extends InteractiveObject {
 
 	public void addFactor(float factor) {
 		this.factor += factor;
-		System.out.println("New Factor" + factor);
+		//System.out.println("New Factor" + factor);
 	}
 	
 	public void resetFactor() {

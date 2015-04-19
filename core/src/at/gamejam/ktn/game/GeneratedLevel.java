@@ -28,7 +28,9 @@ public class GeneratedLevel {
 	private TileParser			tileParser;
 	private MapParser			mapParser;
 
-	private Scoreboard score;
+	int sleepingcount = 0, awakecount = 0;
+	
+	int npcCount = 2;
 	
 	public GeneratedLevel(final World b2World) {
 		this.b2world = b2World;
@@ -63,13 +65,17 @@ public class GeneratedLevel {
 	}
 
 	public void addNPCs() {
-		NPC npc = new NPC(new Vector2(1, -5), this.b2world, 50);
-		EnergyBar energy = new EnergyBar(npc);
+		NPC npc1 = new NPC(new Vector2(1, -5), this.b2world, 50);
+		EnergyBar energy1 = new EnergyBar(npc1);
 		
-		score = new Scoreboard(this, 10);
+		this.gameObjects.add(npc1);
+		this.gameObjects.add(energy1);
 		
-		this.gameObjects.add(npc);
-		this.gameObjects.add(energy);
+		NPC npc2 = new NPC(new Vector2(1, 0), this.b2world, 50);
+		EnergyBar energy2 = new EnergyBar(npc2);
+		
+		this.gameObjects.add(npc2);
+		this.gameObjects.add(energy2);
 		
 //		this.gameObjects.add(new NPC(new Vector2(3, 0), this.b2world, 50));
 //		this.gameObjects.add(new NPC(new Vector2(1, -3), this.b2world, 50));
@@ -84,8 +90,8 @@ public class GeneratedLevel {
 //		this.gameObjects.add(new NPC(new Vector2(1, 3f), this.b2world, 100));
 //		this.gameObjects.add(new NPC(new Vector2(5, 1), this.b2world, 100));
 //		this.gameObjects.add(new NPC(new Vector2(2, 2), this.b2world, 100));
+		this.npcCount = 2;
 		
-		this.gameObjects.add(score);
 	}
 	
 	public List<GameObject> getGameObjects() {
@@ -97,7 +103,8 @@ public class GeneratedLevel {
 	}
 
 	public void update(final float deltaTime) {
-		int sleepingcount = 0, awakecount = 0;
+		sleepingcount = 0;
+		awakecount = 0;
 		for (final GameObject gameObject : this.gameObjects) {
 			gameObject.update(deltaTime);
 			if(gameObject instanceof NPC) {
@@ -110,13 +117,23 @@ public class GeneratedLevel {
 				}
 			}
 		}
-		score.setAwakeCount(awakecount);
-		score.setSleepingCount(awakecount);
 	}
 
 	public void render(final SpriteBatch batch) {
 		for (final GameObject gameObject : this.gameObjects) {
 			gameObject.render(batch);
 		}
+	}
+	
+	public int getSleepingcount() {
+		return sleepingcount;
+	}
+	
+	public int getAwakecoutn() {
+		return awakecount;
+	}
+	
+	public int getNpcCount() {
+		return npcCount;
 	}
 }
