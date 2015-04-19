@@ -1,5 +1,12 @@
 package at.gamejam.ktn.game.entites;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import at.gamejam.ktn.utils.Constants;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -9,23 +16,28 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
 public abstract class Item extends InteractiveObject {
-
+	private Sound				sound;
 	// not animated
 	// protected TextureRegion texture;
 
 	// all
-	boolean			collected		= false;
+	public boolean				collected		= false;
 
-	boolean			collectable		= true;
-	private Player	grabbedBy;
-	public Player	itemIsThrownBy	= null;
+	public boolean				collectable		= true;
+	private Player				grabbedBy;
+	public Player				itemIsThrownBy	= null;
 
-	public boolean	destroyed		= false;
+	public boolean				destroyed		= false;
+	public static List<Item>	itemList		= new ArrayList<Item>();
+	public float				flyingTime		= 0;
+	public boolean				isFlying		= false;
 
 	public Item(final Vector2 position, final World b2World) {
 		this.position = position;
+		itemList.add(this);
 		// this.dimension = new Vector2(0.25f, 0.2f);
 		this.dimension = new Vector2(0.15f, 0.15f);
+		this.sound = Gdx.audio.newSound(Gdx.files.internal(Constants.THROW_SOUND));
 		this.b2World = b2World;
 	}
 
@@ -108,6 +120,7 @@ public abstract class Item extends InteractiveObject {
 	// interactions
 	public void grabbedBy(final Player player) {
 		if (this.collectable) {
+			this.sound.play();
 			// System.out.println("Item grabbed by: " + player);
 			this.collected = true;
 			this.grabbedBy = player;

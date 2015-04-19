@@ -13,9 +13,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Disposable;
 
-/**
- * Created by Lukas on 11.04.2015.
- */
 public class WorldRenderer implements Disposable {
 	private OrthographicCamera		camera;
 	private OrthographicCamera		cameraGUI;

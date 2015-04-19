@@ -1,7 +1,15 @@
 package at.gamejam.ktn.game;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Sequencer;
 
 import at.gamejam.ktn.game.entites.Item;
 import at.gamejam.ktn.game.entites.PlayerSleep;
@@ -23,7 +31,7 @@ public class WorldController {
 	public int						coinCount		= Constants.START_ITEM_COUNT;
 	public int						redBullCount	= Constants.START_ITEM_COUNT;
 	private World					b2World;
-	private TopDownLevel			level;
+	private GeneratedLevel			level;
 	private final boolean			debug			= false;
 	// private boolean reset;
 
@@ -43,13 +51,31 @@ public class WorldController {
 		this.playerSleep = new PlayerSleep(new Vector2(-1.5f, -1.0f), this);
 		this.playerWake = new PlayerWake(new Vector2(1.5f, -1.0f), this);
 
-		this.cameraHelper.setTarget(this.playerSleep.getB2Body());
+		// this.cameraHelper.setTarget(this.playerSleep.getB2Body());
+		this.cameraHelper.setTarget(new Vector2(this.playerSleep.position.x - this.playerWake.position.x, this.playerSleep.position.y - this.playerWake.position.y));
+		// Vector(x2-x1,y2-y1
 		// this.level = new Level(this.b2World);
 
-		this.level = new TopDownLevel(this.b2World);
+		this.level = new GeneratedLevel(this.b2World);
 		this.contactListener = new MyContactListener(this);
 		this.b2World.setContactListener(this.contactListener);
 		Gdx.input.setInputProcessor(new InputManager(this.playerWake, this.playerSleep, this.cameraHelper));
+		// Gdx.audio.newSound(Gdx.files.internal(Constants.MUSIC)).play();
+		try {
+			Sequencer sequencer = MidiSystem.getSequencer();
+
+			sequencer.setSequence(MidiSystem.getSequence(new FileInputStream(new File(Constants.MUSIC))));
+
+			sequencer.open();
+			sequencer.start();
+		} catch (InvalidMidiDataException | IOException | MidiUnavailableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		/*midiPlayer.open(Constants.MUSIC);
+		midiPlayer.setLooping(true);
+		midiPlayer.setVolume(0.5f);
+		midiPlayer.play();*/
 	}
 
 	public void update(final float deltaTime) {
@@ -66,7 +92,22 @@ public class WorldController {
 		}
 		this.contactListener.getObjectsToRemove().clear();
 
-		this.cameraHelper.update(deltaTime);
+		// this.cameraHelper.update(deltaTime);
+		Vector2 vector = new Vector2();
+		vector.x = (this.playerWake.position.x + this.playerSleep.position.x) / 2;
+		vector.y = (this.playerWake.position.y + this.playerSleep.position.y) / 2;
+		this.cameraHelper.update(vector);
+		double temp1 = Math.pow((this.playerWake.position.x - this.playerSleep.position.x), 2);
+		double temp2 = Math.pow((this.playerWake.position.y - this.playerSleep.position.y), 2);
+		double distance = Math.sqrt(temp1 + temp2);
+		// System.out.println(distance);
+		double factor = 0.2;
+		/*if (distance < 5) {
+			factor = factor * (-1);
+		}*/
+		this.cameraHelper.setZoom((float) (distance * factor));
+		// System.out.println(distance);
+
 		for (GameObject o : this.level.getGameObjects()) {
 			if (o instanceof Item) {
 				Item b = (Item) o;
@@ -88,6 +129,15 @@ public class WorldController {
 			this.reset();
 		}*/
 		// this.testCoins();
+
+		for (Item item : Item.itemList) {
+			if (item.isFlying) {
+				item.flyingTime += deltaTime;
+			}
+			if (item.flyingTime > 1) {
+				item.collectable = true;
+			}
+		}
 	}
 
 	/**
@@ -132,7 +182,7 @@ public class WorldController {
 		return this.b2World;
 	}
 
-	protected TopDownLevel getLevel() {
+	protected GeneratedLevel getLevel() {
 		return this.level;
 	}
 

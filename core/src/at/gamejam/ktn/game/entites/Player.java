@@ -5,6 +5,8 @@ import java.util.Vector;
 import at.gamejam.ktn.game.WorldController;
 import at.gamejam.ktn.utils.Constants;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -14,7 +16,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 
 public abstract class Player extends InteractiveObject {
-
+	private Sound				sound;
 	protected Vector<Item>		items;
 	protected int				maxItems			= 6;
 	public int					itemCount			= Constants.START_ITEM_COUNT;
@@ -52,6 +54,7 @@ public abstract class Player extends InteractiveObject {
 		this.worldController = worldcontroller;
 		this.b2World = this.worldController.getB2World();
 		this.position = position;
+		this.sound = Gdx.audio.newSound(Gdx.files.internal(Constants.THROW_SOUND));
 		this.init(true, true);
 	}
 
@@ -212,30 +215,31 @@ public abstract class Player extends InteractiveObject {
 	}
 
 	public void throwItem(float deltaTime) {
-		timeSinceLastShoot += deltaTime;
-		if ((itemCount > 0) && this.shoot && (this.timeSinceLastShoot > 0.5f)) {
+		this.timeSinceLastShoot += deltaTime;
+		if ((this.itemCount > 0) && this.shoot && (this.timeSinceLastShoot > 0.2f)) {
+			this.sound.play();
 			this.timeSinceLastShoot = 0;
 			Vector2 initPos = this.position;
 			Vector2 toApply = new Vector2();
 			initPos.x -= this.dimension.x / 2f;
 			initPos.y -= this.dimension.x / 2f;
 
-			float offset = 0.1f;
+			float offset = 0.0f;
 			switch (this.directionLooking) {
 				case N:
-					toApply.y = throwingSpeed;
+					toApply.y = this.throwingSpeed;
 					initPos.y += this.dimension.y + offset;
 					break;
 				case S:
-					toApply.y = -throwingSpeed;
+					toApply.y = -this.throwingSpeed;
 					initPos.y -= (this.dimension.y + offset);
 					break;
 				case E:
-					toApply.x = throwingSpeed;
+					toApply.x = this.throwingSpeed;
 					initPos.x += this.dimension.x + offset;
 					break;
 				case W:
-					toApply.x = -throwingSpeed;
+					toApply.x = -this.throwingSpeed;
 					initPos.x -= (this.dimension.x + offset);
 					break;
 				default:
@@ -246,6 +250,8 @@ public abstract class Player extends InteractiveObject {
 				bull.getB2Body().applyForceToCenter(toApply, true);
 				this.worldController.addTempGameObject(bull);
 				bull.itemIsThrownBy = this;
+				bull.collectable = false;
+				bull.isFlying = true;
 				this.worldController.redBullCount--;
 			} else
 				if (this.itemType == ItemType.THESIS) {
@@ -254,8 +260,10 @@ public abstract class Player extends InteractiveObject {
 					this.worldController.addTempGameObject(thesis);
 					thesis.itemIsThrownBy = this;
 					this.worldController.coinCount--;
+					thesis.collectable = false;
+					thesis.isFlying = true;
 				}
-			itemCount--;
+			this.itemCount--;
 			// System.out.println("Item Thrown: " + itemCount);
 		}
 	}
@@ -271,13 +279,13 @@ public abstract class Player extends InteractiveObject {
 	public boolean hitByItem(Item item) {
 		// System.out.println(this + " hit by " + item);
 		if ((item instanceof RedBull) && (this instanceof PlayerSleep)) {
-			health = health - 50;
+			this.health = this.health - 50;
 		}
 		/*TODO: else if(item instanceof Thesis && this instanceof PlayerWake) {
 			health = health - 20;
 		}*/
 
-		if (health <= 0) {
+		if (this.health <= 0) {
 			return true;
 			// this.getBody().setActive(false);
 			// this.b2World.destroyBody(getBody());
