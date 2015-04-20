@@ -1,4 +1,4 @@
-package at.gmaejam.ktn.mapbuilder;
+package at.gamejam.ktn.mapbuilder;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Vector;
 
-import at.gmaejam.ktn.mapbuilder.TileData.BorderStyle;
+import at.gamejam.ktn.mapbuilder.TileData.BorderStyle;
 
 public class TileParser {
 	private String			path;

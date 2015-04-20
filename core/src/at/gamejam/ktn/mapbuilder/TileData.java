@@ -1,4 +1,4 @@
-package at.gmaejam.ktn.mapbuilder;
+package at.gamejam.ktn.mapbuilder;
 
 public class TileData {
 	public enum BorderStyle {BOX, NONE};

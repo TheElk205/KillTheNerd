@@ -6,10 +6,10 @@ import java.util.List;
 import at.gamejam.ktn.game.entites.EnergyBar;
 import at.gamejam.ktn.game.entites.NPC;
 import at.gamejam.ktn.game.entities.GameObject;
-import at.gmaejam.ktn.mapbuilder.MapParser;
-import at.gmaejam.ktn.mapbuilder.Tile;
-import at.gmaejam.ktn.mapbuilder.TileData;
-import at.gmaejam.ktn.mapbuilder.TileParser;
+import at.gamejam.ktn.mapbuilder.MapParser;
+import at.gamejam.ktn.mapbuilder.Tile;
+import at.gamejam.ktn.mapbuilder.TileData;
+import at.gamejam.ktn.mapbuilder.TileParser;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -21,11 +21,11 @@ public class GeneratedLevel {
 	private final World			b2world;
 
 	// TODO make absolute
-	private String				pathConfig	= "D://tiles.txt";
-	private String				pathMap		= "D://map1.png";
+	private final String		pathConfig	= "D://tiles.txt";
+	private final String		pathMap		= "D://map1.png";
 
-	private TileParser			tileParser;
-	private MapParser			mapParser;
+	private final TileParser	tileParser;
+	private final MapParser		mapParser;
 
 	int							sleepingcount	= 0, awakecount = 0;
 
@@ -51,12 +51,21 @@ public class GeneratedLevel {
 		// -5--> 5
 		// 30 tiles
 		// Tile floor = new Tile(new Vector2(0, 0), this.b2world, new TileData("floor.png"));
-		for (double y = -5.0, stepy = 19; y < 4.9; y += 0.5, stepy--) {
-			for (double x = -7.5, step = 0; x < 7.5; x += 0.5, step++) {
-				Tile t = new Tile(new Vector2((float) x, (float) y), this.b2world, this.mapParser.getTileData()[(int) step][(int) stepy]);
-				if (t.getTiledata().getName().startsWith("table") || t.getTiledata().getName().equalsIgnoreCase("chair.png")) {
-					Tile tf = new Tile(new Vector2((float) x, (float) y), this.b2world, new TileData("floor.png"));
-					this.gameObjects.add(tf);
+		// TODO what if map.png is greater than this?
+		final TileData[][] tDataArray = this.mapParser.getTileData();
+		final int height = this.mapParser.getMapImageHeight();
+		final int width = this.mapParser.getMapImageWidth();
+		for (float y = -5.0f, stepy = height - 1; y < (height / 4); y += 0.5, stepy--) {
+			final float limit = (width / 4f);
+			for (float x = -7.5f, stepX = 0; x < limit; x += 0.5, stepX++) { // 7.5
+				final Vector2 position = new Vector2(x, y);
+				final TileData tData = tDataArray[(int) stepX][(int) stepy];
+				final Tile t = new Tile(position, this.b2world, tData);
+				if ((t != null) && (t.getTiledata() != null)) {
+					if (t.getTiledata().getName().startsWith("table") || t.getTiledata().getName().equalsIgnoreCase("chair.png")) {
+						final Tile tf = new Tile(new Vector2(x, y), this.b2world, new TileData("floor.png"));
+						this.gameObjects.add(tf);
+					}
 				}
 				this.gameObjects.add(t);
 			}
@@ -64,32 +73,32 @@ public class GeneratedLevel {
 	}
 
 	public void addNPCs() {
-		NPC npc1 = new NPC(new Vector2(1, -5), this.b2world, 50);
-		EnergyBar energy1 = new EnergyBar(npc1);
+		final NPC npc1 = new NPC(new Vector2(1, -5), this.b2world, 50);
+		final EnergyBar energy1 = new EnergyBar(npc1);
 
 		this.gameObjects.add(npc1);
 		this.gameObjects.add(energy1);
 
-		NPC npc2 = new NPC(new Vector2(1, 0), this.b2world, 50);
-		EnergyBar energy2 = new EnergyBar(npc2);
+		final NPC npc2 = new NPC(new Vector2(1, 0), this.b2world, 50);
+		final EnergyBar energy2 = new EnergyBar(npc2);
 
 		this.gameObjects.add(npc2);
 		this.gameObjects.add(energy2);
 
-		NPC npc3 = new NPC(new Vector2(-4, -3), this.b2world, 50);
-		EnergyBar energy3 = new EnergyBar(npc3);
+		final NPC npc3 = new NPC(new Vector2(-4, -3), this.b2world, 50);
+		final EnergyBar energy3 = new EnergyBar(npc3);
 
 		this.gameObjects.add(npc3);
 		this.gameObjects.add(energy3);
 
-		NPC npc4 = new NPC(new Vector2(-2, 2), this.b2world, 50);
-		EnergyBar energy4 = new EnergyBar(npc4);
+		final NPC npc4 = new NPC(new Vector2(-2, 2), this.b2world, 50);
+		final EnergyBar energy4 = new EnergyBar(npc4);
 
 		this.gameObjects.add(npc4);
 		this.gameObjects.add(energy4);
 
-		NPC npc5 = new NPC(new Vector2(5, -1), this.b2world, 50);
-		EnergyBar energy5 = new EnergyBar(npc5);
+		final NPC npc5 = new NPC(new Vector2(5, -1), this.b2world, 50);
+		final EnergyBar energy5 = new EnergyBar(npc5);
 
 		this.gameObjects.add(npc5);
 		this.gameObjects.add(energy5);
@@ -115,7 +124,7 @@ public class GeneratedLevel {
 		return this.gameObjects;
 	}
 
-	public void addGameObject(GameObject object) {
+	public void addGameObject(final GameObject object) {
 		this.gameObjects.add(object);
 	}
 
@@ -125,7 +134,7 @@ public class GeneratedLevel {
 		for (final GameObject gameObject : this.gameObjects) {
 			gameObject.update(deltaTime);
 			if (gameObject instanceof NPC) {
-				NPC npc = (NPC) gameObject;
+				final NPC npc = (NPC) gameObject;
 				if (npc.getState() == 1) {
 					this.awakecount++;
 				}

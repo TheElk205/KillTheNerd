@@ -12,7 +12,6 @@ import at.gamejam.ktn.game.entites.RedBull;
 import at.gamejam.ktn.game.entites.Thesis;
 import at.gamejam.ktn.game.entities.GameObject;
 import at.gamejam.ktn.utils.CameraHelper;
-import at.gamejam.ktn.utils.Constants;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -47,16 +46,16 @@ public class WorldController {
 	}
 
 	public void init() {
-		this.ingameMusic = Gdx.audio.newSound(Gdx.files.internal(Constants.MUSIC2));
-		this.winMusic = Gdx.audio.newSound(Gdx.files.internal(Constants.VICTORY));
+		// this.ingameMusic = Gdx.audio.newSound(Gdx.files.internal(Constants.MUSIC2));
+		// this.winMusic = Gdx.audio.newSound(Gdx.files.internal(Constants.VICTORY));
 		this.cameraHelper = new CameraHelper();
 		// this.b2World = new World(new Vector2(0, -9.81f), true);
 		this.b2World = new World(new Vector2(0, 0), true); // no gravity
 
 		this.playerSleep = new PlayerSleep(new Vector2(-1.5f, -1.0f), this);
-		this.sleepBar = new DelayBar(playerSleep);
+		this.sleepBar = new DelayBar(this.playerSleep);
 		this.playerWake = new PlayerWake(new Vector2(1.5f, -1.0f), this);
-		this.wakeBar= new DelayBar(playerWake);
+		this.wakeBar = new DelayBar(this.playerWake);
 		// this.cameraHelper.setTarget(this.playerSleep.getB2Body());
 		this.cameraHelper.setTarget(new Vector2(this.playerSleep.position.x - this.playerWake.position.x, this.playerSleep.position.y - this.playerWake.position.y));
 		// Vector(x2-x1,y2-y1
@@ -84,8 +83,10 @@ public class WorldController {
 		midiPlayer.setVolume(0.5f);
 		midiPlayer.play();*/
 
-		this.ingameMusic.play();
-		this.ingameMusic.setVolume(1, 0.5f);
+		if (this.ingameMusic != null) {
+			this.ingameMusic.play();
+			this.ingameMusic.setVolume(1, 0.5f);
+		}
 	}
 
 	public void update(final float deltaTime) {
@@ -95,7 +96,7 @@ public class WorldController {
 		this.b2World.step(1 / 60f, 3, 8); // timeStep, velocityIteration, positionIteration
 
 		// remove objects after step!!
-		for (GameObject object : this.contactListener.getObjectsToRemove()) {
+		for (final GameObject object : this.contactListener.getObjectsToRemove()) {
 			object.setToRender(false);
 			final Body body = object.getB2Body();
 			this.b2World.destroyBody(body);
@@ -103,24 +104,24 @@ public class WorldController {
 		this.contactListener.getObjectsToRemove().clear();
 
 		// this.cameraHelper.update(deltaTime);
-		Vector2 vector = new Vector2();
+		final Vector2 vector = new Vector2();
 		vector.x = (this.playerWake.position.x + this.playerSleep.position.x) / 2;
 		vector.y = (this.playerWake.position.y + this.playerSleep.position.y) / 2;
 		this.cameraHelper.update(vector);
-		double temp1 = Math.pow((this.playerWake.position.x - this.playerSleep.position.x), 2);
-		double temp2 = Math.pow((this.playerWake.position.y - this.playerSleep.position.y), 2);
-		double distance = Math.sqrt(temp1 + temp2);
+		final double temp1 = Math.pow((this.playerWake.position.x - this.playerSleep.position.x), 2);
+		final double temp2 = Math.pow((this.playerWake.position.y - this.playerSleep.position.y), 2);
+		final double distance = Math.sqrt(temp1 + temp2);
 		// System.out.println(distance);
-		double factor = 0.2;
+		final double factor = 0.2;
 		/*if (distance < 5) {
 			factor = factor * (-1);
 		}*/
 		this.cameraHelper.setZoom((float) (distance * factor));
 		// System.out.println(distance);
 
-		for (GameObject o : this.level.getGameObjects()) {
+		for (final GameObject o : this.level.getGameObjects()) {
 			if (o instanceof Item) {
-				Item b = (Item) o;
+				final Item b = (Item) o;
 				if (b.isCollected() && !b.destroyed) {
 					this.b2World.destroyBody(b.getB2Body());
 					b.destroyed = true;
@@ -142,7 +143,7 @@ public class WorldController {
 		}*/
 		// this.testCoins();
 
-		for (Item item : Item.itemList) {
+		for (final Item item : Item.itemList) {
 			if (item.isFlying) {
 				item.flyingTime += deltaTime;
 			}
@@ -155,8 +156,8 @@ public class WorldController {
 		if (this.lastSpawn > 10) {
 			this.lastSpawn = 0;
 
-			Random rnd = new Random();
-			float i = rnd.nextFloat();
+			final Random rnd = new Random();
+			final float i = rnd.nextFloat();
 			this.addTempGameObject(new RedBull(new Vector2(2f + i, 2f), this.b2World, true));
 			this.addTempGameObject(new Thesis(new Vector2(2f + i, -2.5f), this.b2World, true));
 
@@ -170,14 +171,14 @@ public class WorldController {
 	 */
 	public void createDynamicObjects() {
 		// add objects after step!!
-		for (GameObject object : this.contactListener.getObjectsToAdd()) {
+		for (final GameObject object : this.contactListener.getObjectsToAdd()) {
 			object.setToRender(true);
 			this.level.addGameObject(object);
 			object.initPhysics();
 		}
 		this.contactListener.getObjectsToAdd().clear();
 		// add objects after step!!
-		for (GameObject object : this.objectsToAdd) {
+		for (final GameObject object : this.objectsToAdd) {
 			object.setToRender(true);
 			this.level.addGameObject(object);
 			// object.initPhysics();

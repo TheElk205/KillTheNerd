@@ -94,11 +94,11 @@ public class WorldRenderer implements Disposable {
 	public void drawScoreboard() {
 		this.score.update(0);
 		this.score.render(this.batch);
-		
+
 		if (this.score.won() != 0) {
 			this.worldController.getInputManager().setEnabled(false);
 			this.batch.draw(this.victory, 300, 300, 400, 150);
-			if (!this.winMusicAlreadyStarted) {
+			if (!this.winMusicAlreadyStarted && (this.worldController.winMusic != null)) {
 				this.worldController.ingameMusic.dispose();
 				this.worldController.winMusic.play();
 				this.winMusicAlreadyStarted = true;
