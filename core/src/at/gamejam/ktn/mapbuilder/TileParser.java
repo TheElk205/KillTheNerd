@@ -73,8 +73,7 @@ public class TileParser {
 				}
 			}
 		}
-
-		System.out.println("Added " + this.tileDataList.size() + " Tiles.");
+		// System.out.println("Added " + this.tileDataList.size() + " Tiles.");
 	}
 
 	/*private void printList() {

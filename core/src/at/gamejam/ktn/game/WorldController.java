@@ -42,8 +42,7 @@ public class WorldController {
 	}
 
 	public void init() {
-		this.ingameMusic = Gdx.audio.newSound(Gdx.files.internal(Constants.MUSIC2));
-		this.winMusic = Gdx.audio.newSound(Gdx.files.internal(Constants.VICTORY));
+
 		this.cameraHelper = new CameraHelper();
 		// this.b2World = new World(new Vector2(0, -9.81f), true);
 		this.b2World = new World(new Vector2(0, 0), true); // no gravity
@@ -68,11 +67,6 @@ public class WorldController {
 		midiPlayer.setLooping(true);
 		midiPlayer.setVolume(0.5f);
 		midiPlayer.play();*/
-
-		if (this.ingameMusic != null) {
-			this.ingameMusic.play();
-			this.ingameMusic.setVolume(1, 0.5f);
-		}
 	}
 
 	public void update(final float deltaTime) {
@@ -204,5 +198,15 @@ public class WorldController {
 
 	public InputManager getInputManager() {
 		return this.inputManager;
+	}
+
+	public boolean loadMusic() {
+		this.ingameMusic = Gdx.audio.newSound(Gdx.files.internal(Constants.MUSIC2));
+		this.winMusic = Gdx.audio.newSound(Gdx.files.internal(Constants.VICTORY));
+		if (this.ingameMusic != null) {
+			this.ingameMusic.play();
+			this.ingameMusic.setVolume(1, 0.5f);
+		}
+		return true;
 	}
 }

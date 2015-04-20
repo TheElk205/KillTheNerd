@@ -53,7 +53,7 @@ public class MapParser {
 				}
 			}
 		}
-		System.out.println(notFound + " tiles not be mapped (not used)");
+		// System.out.println(notFound + " tiles not mapped (not used)");
 		// System.out.println(this.tileParser.tileDataList.size() + " Tiles for reference");
 	}
 

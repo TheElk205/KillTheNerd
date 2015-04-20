@@ -15,40 +15,40 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Disposable;
 
 public class WorldRenderer implements Disposable {
-	private OrthographicCamera		camera;
-	private OrthographicCamera		cameraGUI;
-	private SpriteBatch				batch;
-	private final WorldController	worldController;
-	private Box2DDebugRenderer		debugRenderer;
-	private BitmapFont				font;
-	private TextureRegion			coinTexture;
-	private TextureRegion			redbullTexture;
-	private TextureRegion			victory;
-	public int						coinPosition			= 40;
-	public int						redBullPosition			= 40;
+	private final OrthographicCamera	camera;
+	private final OrthographicCamera	cameraGUI;
+	private final SpriteBatch			batch;
+	private final WorldController		worldController;
+	private Box2DDebugRenderer			debugRenderer;
+	private final BitmapFont			font;
+	private TextureRegion				coinTexture;
+	private TextureRegion				redbullTexture;
+	private TextureRegion				victory;
+	public int							coinPosition			= 40;
+	public int							redBullPosition			= 40;
 
-	private Scoreboard				score;
-	private boolean					winMusicAlreadyStarted	= false;
+	private Scoreboard					score;
+	private boolean						winMusicAlreadyStarted	= false;
 
 	public WorldRenderer(final WorldController worldController) {
 		this.worldController = worldController;
-		this.init();
-	}
-
-	private void init() {
-		this.debugRenderer = new Box2DDebugRenderer();
-		this.batch = new SpriteBatch();
 		this.camera = new OrthographicCamera(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
 		this.camera.position.set(0, 0, 0);
 		this.camera.update();
-
+		this.font = new BitmapFont(true); // default 15pt Arial
+		this.batch = new SpriteBatch();
 		// GUI camera
 		this.cameraGUI = new OrthographicCamera(Constants.VIEWPORT_GUI_WIDTH, Constants.VIEWPORT_GUI_HEIGHT);
 		this.cameraGUI.position.set(0, 0, 0);
 		this.cameraGUI.setToOrtho(true); // flip y-axis
 		this.cameraGUI.update();
 
-		this.font = new BitmapFont(true); // default 15pt Arial
+		this.init();
+	}
+
+	private void init() {
+		this.debugRenderer = new Box2DDebugRenderer();
+
 		this.coinTexture = Assets.getInstance(new AssetManager()).findRegion("book_green_small");
 		this.redbullTexture = Assets.getInstance(new AssetManager()).findRegion("single_cup_coffee");
 		this.victory = Assets.getInstance(new AssetManager()).findRegion("victory_basic");
@@ -56,25 +56,24 @@ public class WorldRenderer implements Disposable {
 
 		this.coinTexture.flip(false, true);
 		this.redbullTexture.flip(false, true);
-
 		this.score = new Scoreboard(this.worldController.getLevel());
 		this.score.setPosition(280, 10);
 	}
 
-	public void renderGUI(final SpriteBatch batch) {
-		batch.setProjectionMatrix(this.cameraGUI.combined);
-		batch.begin();
+	private void renderGUI() {
+		this.batch.setProjectionMatrix(this.cameraGUI.combined);
+		this.batch.begin();
 		final String mmss = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(this.worldController.timeElapsed) % TimeUnit.HOURS.toMinutes(1),
 				TimeUnit.MILLISECONDS.toSeconds(this.worldController.timeElapsed) % TimeUnit.MINUTES.toSeconds(1));
-		this.font.draw(batch, mmss, 10, 10);
+		this.font.draw(this.batch, mmss, 10, 10);
 
-		this.font.draw(batch, Integer.toString(this.worldController.playerSleep.getItemCount()), 35, 40);
-		this.font.draw(batch, Integer.toString(this.worldController.playerWake.getItemCount()), 980, 40);
+		this.font.draw(this.batch, Integer.toString(this.worldController.playerSleep.getItemCount()), 35, 40);
+		this.font.draw(this.batch, Integer.toString(this.worldController.playerWake.getItemCount()), 980, 40);
 
 		this.drawMunition();
 		this.drawScoreboard();
 
-		batch.end();
+		this.batch.end();
 	}
 
 	public void drawMunition() {
@@ -116,7 +115,7 @@ public class WorldRenderer implements Disposable {
 		this.worldController.sleepBar.render(this.batch);
 		this.worldController.wakeBar.render(this.batch);
 		this.batch.end();
-		this.renderGUI(this.batch);
+		this.renderGUI();
 		if (this.worldController.isDebug()) {
 			this.debugRenderer.render(this.worldController.getB2World(), this.camera.combined);
 		}
