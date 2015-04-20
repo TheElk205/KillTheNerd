@@ -120,34 +120,34 @@ public class MyContactListener implements ContactListener {
 				break;
 			case 4: // playerWake + any item
 				if (userDataA instanceof RedBull) {
-					System.out.println("wake takes RedBull");
-					wakeWithRedbull(userDataB, userDataA);
+					// System.out.println("wake takes RedBull");
+					MyContactListener.wakeWithRedbull(userDataB, userDataA);
 				} else
 					if (userDataB instanceof RedBull) {
-						System.out.println("wake takes RedBull");
-						wakeWithRedbull(userDataA, userDataB);
+						// System.out.println("wake takes RedBull");
+						MyContactListener.wakeWithRedbull(userDataA, userDataB);
 					} else
 						if (userDataA instanceof Thesis) {
-							wakeWithThesis(userDataB, userDataA);
+							this.wakeWithThesis(userDataB, userDataA);
 						} else
 							if (userDataB instanceof Thesis) {
-								wakeWithThesis(userDataA, userDataB);
+								this.wakeWithThesis(userDataA, userDataB);
 							}
 				break;
 			case 5: // playerSleep + any item
 				if (userDataA instanceof RedBull) {
-					sleepWithRedbull(userDataB, userDataA);
+					this.sleepWithRedbull(userDataB, userDataA);
 				} else
 					if (userDataB instanceof RedBull) {
-						sleepWithRedbull(userDataA, userDataB);
+						this.sleepWithRedbull(userDataA, userDataB);
 					} else
 						if (userDataB instanceof Thesis) {
-							System.out.println("sleep takes thesis");
-							sleepWithThesis(userDataA, userDataB);
+							// System.out.println("sleep takes thesis");
+							MyContactListener.sleepWithThesis(userDataA, userDataB);
 						} else
 							if (userDataA instanceof Thesis) {
-								System.out.println("sleep takes thesis");
-								sleepWithThesis(userDataB, userDataA);
+								// System.out.println("sleep takes thesis");
+								MyContactListener.sleepWithThesis(userDataB, userDataA);
 							}
 				break;
 			case 6:
@@ -156,18 +156,18 @@ public class MyContactListener implements ContactListener {
 			case 7: // Set Player wake
 
 				if (userDataA instanceof NPC) {
-					NPC npc = (NPC) userDataA;
-					Player player = (Player) userDataB;
+					final NPC npc = (NPC) userDataA;
+					final Player player = (Player) userDataB;
 					npc.addPlayer(player);
 				} else
 					if (userDataB instanceof NPC) {
-						NPC npc = (NPC) userDataB;
-						Player player = (Player) userDataA;
+						final NPC npc = (NPC) userDataB;
+						final Player player = (Player) userDataA;
 						npc.addPlayer(player);
 					}
 				break;
 			default:
-				System.out.println("default hit - A: " + userDataA + " B: " + userDataB);
+				// System.out.println("default hit - A: " + userDataA + " B: " + userDataB);
 				if (userDataA instanceof Item) {
 					// ((Item) userDataA).getB2Body().applyForceToCenter(new Vector2(), true);
 					((Item) userDataA).isFlying = false;
@@ -185,43 +185,50 @@ public class MyContactListener implements ContactListener {
 
 	}
 
-	private void wakeWithThesis(Object playerWake, Object userDataB) {
-		// TODO nothing to do , ZzZzZ 5sec aussetzen
+	private void wakeWithThesis(final Object playerWake, final Object userDataB) {
+		// System.out.println("PlayerSleep hits PlayerWake with Thesis - its not effective ; D");
 		final PlayerWake player = (PlayerWake) (playerWake);
 		final Thesis thesis = (Thesis) userDataB;
 		if ((thesis.itemIsThrownBy instanceof PlayerSleep) && thesis.isFlying) {
-			if (player.hitByItem(thesis)) {
+			if (player.hitByItem(thesis)) { // does nothing cause players cannot die
 				player.setToRender(false);
 				this.objectsToRemove.add(player);
 			}
-			player.setHandicap(thesis.itemIsThrownBy.dealHandicap());
+			if (player.isHitAbleAgain()) {
+				player.setHandicap(thesis.getDmg());
+				player.setHitAbleAgain(false);
+			}
 			thesis.setToRender(false);
 			this.objectsToRemove.add(thesis);
 		}
 	}
 
-	public void sleepWithRedbull(final Object userDataB, final Object userDataA) {
-		final Item item = (Item) (userDataA);
+	private void sleepWithRedbull(final Object userDataB, final Object userDataA) {
+		// System.out.println("PlayerWake hits PlayerSleep with RedBull - its not effective ; D");
+		final RedBull redBull = (RedBull) (userDataA);
 		final PlayerSleep player = (PlayerSleep) userDataB;
-		if ((item.itemIsThrownBy instanceof PlayerWake) && item.isFlying) {
-			if (player.hitByItem(item)) {
+		if ((redBull.itemIsThrownBy instanceof PlayerWake) && redBull.isFlying) {
+			if (player.hitByItem(redBull)) { // does nothing cause players cannot die
 				player.setToRender(false);
 				this.objectsToRemove.add(player);
 			}
-			player.setHandicap(item.itemIsThrownBy.dealHandicap());
-			item.setToRender(false);
-			this.objectsToRemove.add(item);
+			if (player.isHitAbleAgain()) {
+				player.setHandicap(redBull.getDmg());
+				player.setHitAbleAgain(false);
+			}
+			redBull.setToRender(false);
+			this.objectsToRemove.add(redBull);
 		}
 	}
 
-	private void sleepWithThesis(Object userDataA, Object userDataB) {
+	private static void sleepWithThesis(final Object userDataA, final Object userDataB) {
 		final Item item = (Item) userDataB;
 		final PlayerSleep player = (PlayerSleep) userDataA;
 		// this.wContr.coinCount++;
 		item.grabbedBy(player);
 	}
 
-	private void wakeWithRedbull(Object userDataA, Object userDataB) {
+	private static void wakeWithRedbull(final Object userDataA, final Object userDataB) {
 		final Item item = (Item) userDataB;
 		final PlayerWake player = (PlayerWake) userDataA;
 		// this.wContr.redBullCount++;
@@ -258,15 +265,18 @@ public class MyContactListener implements ContactListener {
 		switch (collisionType) {
 			case 7:
 				if (userDataA instanceof NPC) {
-					NPC npc = (NPC) userDataA;
-					Player player = (Player) userDataB;
+					final NPC npc = (NPC) userDataA;
+					final Player player = (Player) userDataB;
 					npc.removePlayer(player);
 				} else
 					if (userDataB instanceof NPC) {
-						NPC npc = (NPC) userDataB;
-						Player player = (Player) userDataA;
+						final NPC npc = (NPC) userDataB;
+						final Player player = (Player) userDataA;
 						npc.removePlayer(player);
 					}
+				break;
+			default:
+				break;
 		}
 	}
 

@@ -16,9 +16,9 @@ public class MapParser {
 	private int					mapImageWidth;
 	private int					mapImageHeight;
 
-	public MapParser(final String path, final TileParser tileParser) {
+	public MapParser(final String path, final String pathConfig) {
+		this.tileParser = new TileParser(pathConfig);
 		this.path = path;
-		this.tileParser = tileParser;
 		try {
 			this.buffImage = ImageIO.read(new File(this.path));
 		} catch (final IOException e) {
@@ -37,7 +37,7 @@ public class MapParser {
 			for (int x = 0; x < this.tiles.length; x++) {
 				color = new Color(this.buffImage.getRGB(x, y));
 				// System.out.println(color);
-				for (final TileData td : this.tileParser.tileDataList) {
+				for (final TileData td : this.tileParser.getTileDataList()) {
 					found = false;
 					if ((td.getRed() == color.getRed()) && (td.getGreen() == color.getGreen()) && (td.getBlue() == color.getBlue())) {
 						// System.out.println("found");
@@ -53,8 +53,8 @@ public class MapParser {
 				}
 			}
 		}
-		System.out.println(notFound + " Could not be mapped");
-		System.out.println(this.tileParser.tileDataList.size() + " Tiles for reference");
+		System.out.println(notFound + " tiles not be mapped (not used)");
+		// System.out.println(this.tileParser.tileDataList.size() + " Tiles for reference");
 	}
 
 	public TileData[][] getTileData() {

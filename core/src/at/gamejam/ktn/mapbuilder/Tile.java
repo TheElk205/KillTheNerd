@@ -17,16 +17,17 @@ public class Tile extends GameObject {
 	private final World			b2World;
 	private Body				b2Body;
 	private final TileData		tileData;
+	private String				tileName	= null;
 
 	public Tile(final Vector2 position, final World b2World, final TileData tiledata) {
 		this.position = position;
 		this.b2World = b2World;
 		this.tileData = tiledata;
-		String tilename = null;
 		if (tiledata != null) {
 			final int fileNameIndex = tiledata.getName().indexOf("."); // ohne .png endung
-			tilename = tiledata.getName().substring(0, fileNameIndex);
-			this.texture = this.assets.findRegion(tilename);
+			this.tileName = tiledata.getName();
+			this.tileName = tiledata.getName().substring(0, fileNameIndex);
+			this.texture = this.assets.findRegion(this.tileName);
 		} else {
 			this.texture = this.assets.findRegion("errorTile");
 		}
@@ -47,7 +48,7 @@ public class Tile extends GameObject {
 		if (this.tileData != null) {
 			switch (this.tileData.getBorderStyle()) {
 				case BOX:
-					this.createBoxBorder(this.b2Body);
+					this.createBoxBorder();
 					break;
 				default:
 					break;
@@ -55,7 +56,7 @@ public class Tile extends GameObject {
 		}
 	}
 
-	private void createBoxBorder(final Body b2Body) {
+	private void createBoxBorder() {
 		final PolygonShape poly = new PolygonShape();
 		poly.setAsBox(this.dimension.x / 4f, this.dimension.y / 4f);
 
@@ -73,7 +74,12 @@ public class Tile extends GameObject {
 
 	@Override
 	public void render(final SpriteBatch batch) {
-		batch.draw(this.texture, this.position.x, this.position.y, this.dimension.x, this.dimension.y);
+		try {
+			batch.draw(this.texture, this.position.x, this.position.y, this.dimension.x, this.dimension.y);
+		} catch (final Exception e) {
+			System.out.println("cant render tile: " + this.tileName);
+			System.exit(0);
+		}
 	}
 
 	public TileData getTiledata() {

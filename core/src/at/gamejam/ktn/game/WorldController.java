@@ -12,6 +12,7 @@ import at.gamejam.ktn.game.entites.RedBull;
 import at.gamejam.ktn.game.entites.Thesis;
 import at.gamejam.ktn.game.entities.GameObject;
 import at.gamejam.ktn.utils.CameraHelper;
+import at.gamejam.ktn.utils.Constants;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -28,16 +29,11 @@ public class WorldController {
 	public PlayerWake				playerWake;
 	public DelayBar					wakeBar;
 	public long						timeElapsed;
-	// private int coinCount = Constants.START_ITEM_COUNT;
-	// private int redBullCount = Constants.START_ITEM_COUNT;
 	private World					b2World;
 	private GeneratedLevel			level;
 	private float					lastSpawn		= 0;
 	private final boolean			debug			= false;
-	// private boolean reset;
-
 	private InputManager			inputManager;
-
 	private final List<GameObject>	objectsToAdd	= new ArrayList<GameObject>();
 	private MyContactListener		contactListener;
 
@@ -46,15 +42,17 @@ public class WorldController {
 	}
 
 	public void init() {
-		// this.ingameMusic = Gdx.audio.newSound(Gdx.files.internal(Constants.MUSIC2));
-		// this.winMusic = Gdx.audio.newSound(Gdx.files.internal(Constants.VICTORY));
+		this.ingameMusic = Gdx.audio.newSound(Gdx.files.internal(Constants.MUSIC2));
+		this.winMusic = Gdx.audio.newSound(Gdx.files.internal(Constants.VICTORY));
 		this.cameraHelper = new CameraHelper();
 		// this.b2World = new World(new Vector2(0, -9.81f), true);
 		this.b2World = new World(new Vector2(0, 0), true); // no gravity
 
 		this.playerSleep = new PlayerSleep(new Vector2(-1.5f, -1.0f), this);
+		this.playerSleep.setName("PlayerSleep");
 		this.sleepBar = new DelayBar(this.playerSleep);
 		this.playerWake = new PlayerWake(new Vector2(1.5f, -1.0f), this);
+		this.playerWake.setName("PlayerWake");
 		this.wakeBar = new DelayBar(this.playerWake);
 		// this.cameraHelper.setTarget(this.playerSleep.getB2Body());
 		this.cameraHelper.setTarget(new Vector2(this.playerSleep.position.x - this.playerWake.position.x, this.playerSleep.position.y - this.playerWake.position.y));
@@ -66,18 +64,6 @@ public class WorldController {
 		this.b2World.setContactListener(this.contactListener);
 		this.inputManager = new InputManager(this.playerWake, this.playerSleep, this.cameraHelper);
 		Gdx.input.setInputProcessor(this.inputManager);
-		// Gdx.audio.newSound(Gdx.files.internal(Constants.MUSIC)).play();
-		// try {
-		// Sequencer sequencer = MidiSystem.getSequencer();
-		//
-		// //sequencer.setSequence(MidiSystem.getSequence(new FileInputStream(new File(Constants.MUSIC))));
-		//
-		// //sequencer.open();
-		// //sequencer.start();
-		// } catch (InvalidMidiDataException | IOException | MidiUnavailableException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
 		/*midiPlayer.open(Constants.MUSIC);
 		midiPlayer.setLooping(true);
 		midiPlayer.setVolume(0.5f);

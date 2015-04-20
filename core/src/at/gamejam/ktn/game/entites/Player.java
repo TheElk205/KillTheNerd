@@ -22,42 +22,31 @@ public abstract class Player extends InteractiveObject {
 	protected Vector<Item>		items;
 	protected int				maxItems			= 15;
 	private int					itemCount			= Constants.START_ITEM_COUNT;
-
 	protected int				points				= 0;
-
+	private float				lastHitTime			= 0;
+	private boolean				hitAbleAgain		= true;
 	protected float				startSpeed			= 4f;
 	protected float				currentSpeed		= this.startSpeed;
-
 	protected float				throwingSpeed		= 100;
-
 	protected World				b2World;
 	protected WorldController	worldController;
-
 	protected Direction			directionMoving;
 	protected Direction			directionLooking;
-
 	protected String			name				= "Player";
 	private boolean				right;
 	private boolean				up;
 	private boolean				left;
 	private boolean				down;
 	private boolean				shoot;
-
 	protected int				health				= 100;
-
 	private float				timeSinceLastShoot	= 0;
-
 	protected ItemType			itemType			= ItemType.REDBULL;
-
 	protected float				factor				= 0.0f;
 	protected float				handicap			= 1f;							// 0: nix geht mehr, 1: alles Normal, >1: Besser
-	protected float				dealHandicap		= 0.5f;
-
+	protected float				dealHandicap		= 0.8f;
 	protected float				handicapSetAt		= 0.0f;
 	protected float				handicapDuration	= 5f;
-
 	protected float				time				= 0.0f;
-
 	protected Animation			aMoveUp, aMoveDown, aMoveLeft, aMoveRight;
 	protected TextureRegion		tRMoveUp[], tRMoveDown[], tRMoveLeft[], tRMoveRight[];
 	protected TextureRegion		tRStandUp, tRStandDown, tRStandLeft, tRStandRight;
@@ -68,66 +57,57 @@ public abstract class Player extends InteractiveObject {
 	}
 
 	protected void initAnimations() {
-		TextureRegion[][] tmpUp = getSinglePictures(tUp, 4);
-		this.tRMoveUp = getRegionMoving(tmpUp);
-		this.aMoveUp = getAnimation(tRMoveUp, 0.2f);
-		this.tRStandUp = tRMoveUp[0];
+		final TextureRegion[][] tmpUp = Player.getSinglePictures(this.tUp, 4);
+		this.tRMoveUp = Player.getRegionMoving(tmpUp);
+		this.aMoveUp = Player.getAnimation(this.tRMoveUp, 0.2f);
+		this.tRStandUp = this.tRMoveUp[0];
 
-		TextureRegion[][] tmpDown = getSinglePictures(tDown, 4);
-		this.tRMoveDown = getRegionMoving(tmpDown);
-		this.aMoveDown = getAnimation(tRMoveDown, 0.2f);
-		this.tRStandDown = tRMoveDown[0];
+		final TextureRegion[][] tmpDown = Player.getSinglePictures(this.tDown, 4);
+		this.tRMoveDown = Player.getRegionMoving(tmpDown);
+		this.aMoveDown = Player.getAnimation(this.tRMoveDown, 0.2f);
+		this.tRStandDown = this.tRMoveDown[0];
 
-		TextureRegion[][] tmpLeft = getSinglePictures(tLeft, 4);
-		this.tRMoveLeft = getRegionMoving(tmpLeft);
-		this.aMoveLeft = getAnimation(tRMoveLeft, 0.2f);
-		this.tRStandLeft = tRMoveLeft[0];
+		final TextureRegion[][] tmpLeft = Player.getSinglePictures(this.tLeft, 4);
+		this.tRMoveLeft = Player.getRegionMoving(tmpLeft);
+		this.aMoveLeft = Player.getAnimation(this.tRMoveLeft, 0.2f);
+		this.tRStandLeft = this.tRMoveLeft[0];
 
-		TextureRegion[][] tmpRight = getSinglePictures(tRight, 4);
-		this.tRMoveRight = getRegionMoving(tmpRight);
-		this.aMoveRight = getAnimation(tRMoveRight, 0.2f);
-		this.tRStandRight = tRMoveRight[0];
+		final TextureRegion[][] tmpRight = Player.getSinglePictures(this.tRight, 4);
+		this.tRMoveRight = Player.getRegionMoving(tmpRight);
+		this.aMoveRight = Player.getAnimation(this.tRMoveRight, 0.2f);
+		this.tRStandRight = this.tRMoveRight[0];
 
-		if (aMoveUp == null) {
+		if (this.aMoveUp == null) {
 			System.out.println("Fehler");
 		}
 	}
 
-	protected void setInitialPictures(TextureRegion tUp, TextureRegion tDown, TextureRegion tLeft, TextureRegion tRight) {
+	protected void setInitialPictures(final TextureRegion tUp, final TextureRegion tDown, final TextureRegion tLeft, final TextureRegion tRight) {
 		this.tUp = tUp;
 		this.tDown = tDown;
 		this.tLeft = tLeft;
 		this.tRight = tRight;
-		if ((tUp != null) && (tDown != null) && (tLeft != null) && (tRight != null)) {
-			System.out.println("Animationen richtig gesetzt");
-		}
-		initAnimations();
+		this.initAnimations();
 	}
 
-	protected TextureRegion[][] getSinglePictures(TextureRegion originalPicture, int numPictures) {
+	protected static TextureRegion[][] getSinglePictures(final TextureRegion originalPicture, final int numPictures) {
 		TextureRegion[][] tmp = null;
-		try {
-			if (originalPicture == null) {
-				System.out.println("is null");
-				return null;
-			}
-			tmp = originalPicture.split(originalPicture.getRegionWidth() / numPictures, originalPicture.getRegionHeight());
-		} catch (Exception e) {
-			int a;
-			System.out.println("sad");
+		if (originalPicture == null) {
+			return null;
 		}
+		tmp = originalPicture.split(originalPicture.getRegionWidth() / numPictures, originalPicture.getRegionHeight());
 		return tmp;
 	}
 
-	protected TextureRegion[] getRegionMoving(TextureRegion[][] pictures) {
-		TextureRegion[] tmp = new TextureRegion[pictures[0].length];
+	protected static TextureRegion[] getRegionMoving(final TextureRegion[][] pictures) {
+		final TextureRegion[] tmp = new TextureRegion[pictures[0].length];
 		for (int j = 0; j < pictures[0].length; j++) {
 			tmp[j] = pictures[0][j];
 		}
 		return tmp;
 	}
 
-	protected Animation getAnimation(TextureRegion[] pictures, float time) {
+	protected static Animation getAnimation(final TextureRegion[] pictures, final float time) {
 		return new Animation(time, pictures);
 	}
 
@@ -166,7 +146,7 @@ public abstract class Player extends InteractiveObject {
 		this.init(true, true);
 	}
 
-	protected void init(boolean animation, boolean initPhysics) {
+	protected void init(final boolean animation, final boolean initPhysics) {
 		this.items = new Vector<Item>();
 
 		this.dimension.set(0.75f, 0.75f);
@@ -231,14 +211,14 @@ public abstract class Player extends InteractiveObject {
 		}
 	}
 
-	private void getNear(final Object o) {
+	/*private void getNear(final Object o) {
 		if (o instanceof Item) {
 			((Item) o).grabbedBy(this);
 		} else
 			if (o instanceof Pupil) {
 				((Pupil) o).isNear(this);
 			}
-	}
+	}*/
 
 	public void setDirectionMoving(final Direction d) {
 		this.directionMoving = d;
@@ -276,19 +256,19 @@ public abstract class Player extends InteractiveObject {
 				if (this.directionMoving != Direction.STAY) {
 					switch (this.directionLooking) {
 						case S:
-							batch.draw(this.aMoveDown.getKeyFrame(time, true), this.position.x - (this.dimension.x / 2), this.position.y - (this.dimension.y / 2), this.origin.x, this.origin.y,
+							batch.draw(this.aMoveDown.getKeyFrame(this.time, true), this.position.x - (this.dimension.x / 2), this.position.y - (this.dimension.y / 2), this.origin.x, this.origin.y,
 									this.dimension.x, this.dimension.y, this.scale.x, this.scale.y, this.rotation);
 							break;
 						case N:
-							batch.draw(this.aMoveUp.getKeyFrame(time, true), this.position.x - (this.dimension.x / 2), this.position.y - (this.dimension.y / 2), this.origin.x, this.origin.y,
+							batch.draw(this.aMoveUp.getKeyFrame(this.time, true), this.position.x - (this.dimension.x / 2), this.position.y - (this.dimension.y / 2), this.origin.x, this.origin.y,
 									this.dimension.x, this.dimension.y, this.scale.x, this.scale.y, this.rotation);
 							break;
 						case E:
-							batch.draw(this.aMoveRight.getKeyFrame(time, true), this.position.x - (this.dimension.x / 2), this.position.y - (this.dimension.y / 2), this.origin.x, this.origin.y,
+							batch.draw(this.aMoveRight.getKeyFrame(this.time, true), this.position.x - (this.dimension.x / 2), this.position.y - (this.dimension.y / 2), this.origin.x, this.origin.y,
 									this.dimension.x, this.dimension.y, this.scale.x, this.scale.y, this.rotation);
 							break;
 						case W:
-							batch.draw(this.aMoveLeft.getKeyFrame(time, true), this.position.x - (this.dimension.x / 2), this.position.y - (this.dimension.y / 2), this.origin.x, this.origin.y,
+							batch.draw(this.aMoveLeft.getKeyFrame(this.time, true), this.position.x - (this.dimension.x / 2), this.position.y - (this.dimension.y / 2), this.origin.x, this.origin.y,
 									this.dimension.x, this.dimension.y, this.scale.x, this.scale.y, this.rotation);
 							break;
 						default:
@@ -307,10 +287,28 @@ public abstract class Player extends InteractiveObject {
 		this.throwItem(deltaTime);
 		this.position = this.b2Body.getPosition();
 		this.rotation = this.b2Body.getAngle() * MathUtils.radiansToDegrees;
-
+		this.checkCanBeHitAgain(deltaTime);
 		if ((this.time - this.handicapSetAt) > this.handicapDuration) {
 			this.resetHandycap();
 		}
+	}
+
+	private void checkCanBeHitAgain(final float deltaTime) {
+		this.lastHitTime += deltaTime;
+		if ((this.lastHitTime > (this.handicapDuration + 2)) && !this.hitAbleAgain) {
+			this.lastHitTime = 0f;
+			this.hitAbleAgain = true;
+			// System.out.println(this.name + " is hit able again");
+		}
+		return;
+	}
+
+	public void setHitAbleAgain(final boolean b) {
+		this.hitAbleAgain = b;
+	}
+
+	public boolean isHitAbleAgain() {
+		return this.hitAbleAgain;
 	}
 
 	public void move() {
@@ -374,39 +372,40 @@ public abstract class Player extends InteractiveObject {
 		this.directionMoving = Direction.STAY;
 	}
 
-	public void throwItem(float deltaTime) {
-		this.timeSinceLastShoot += deltaTime;
+	private void throwItem(final float deltaTime) {
+		this.timeSinceLastShoot += deltaTime; // TODO: check if overflow
 		if ((this.itemCount > 0) && this.shoot && (this.timeSinceLastShoot > 0.2f)) {
 			this.sound.play();
 			this.timeSinceLastShoot = 0;
-			Vector2 initPos = this.position;
-			Vector2 toApply = new Vector2();
+			final Vector2 initPos = this.position;
+			final Vector2 toApply = new Vector2();
 			initPos.x = this.position.x;
 			initPos.y = this.position.y;
 
-			float offset = 0.001f;
+			final float offset = 0f;
 			switch (this.directionLooking) {
 				case N:
 					toApply.y = this.throwingSpeed;
-					initPos.y = (this.dimension.y / 2) + offset;
-					break;
-				case S:
-					toApply.y = -this.throwingSpeed;
-					initPos.y -= ((this.dimension.y / 2) + offset);
+					initPos.y += offset; // dont add because image is not in middle? (this.dimension.y / 2) +
 					break;
 				case E:
 					toApply.x = this.throwingSpeed;
-					initPos.x += (this.dimension.x / 2) + offset;
+					initPos.x += offset; // dont add because image is not in middle? (this.dimension.x / 2) +
+					break;
+				case S:
+					toApply.y = -this.throwingSpeed;
+					initPos.y -= (this.dimension.y / 2) - offset;
 					break;
 				case W:
 					toApply.x = -this.throwingSpeed;
-					initPos.x -= ((this.dimension.x / 2) + offset);
+					initPos.x -= (this.dimension.x / 2) - offset;
 					break;
 				default:
 					break;
 			}
+			// System.out.println("throw spawn position: " + initPos);
 			if (this.itemType == ItemType.REDBULL) {
-				RedBull bull = new RedBull(initPos, this.b2World, true);
+				final RedBull bull = new RedBull(initPos, this.b2World, true);
 				bull.getB2Body().applyForceToCenter(toApply, true);
 				this.worldController.addTempGameObject(bull);
 				bull.itemIsThrownBy = this;
@@ -416,7 +415,7 @@ public abstract class Player extends InteractiveObject {
 				bull.isFlying = true;
 			} else
 				if (this.itemType == ItemType.THESIS) {
-					Thesis thesis = new Thesis(initPos, this.b2World, true);
+					final Thesis thesis = new Thesis(initPos, this.b2World, true);
 					thesis.getB2Body().applyForceToCenter(toApply, true);
 					this.worldController.addTempGameObject(thesis);
 					thesis.itemIsThrownBy = this;
@@ -438,7 +437,7 @@ public abstract class Player extends InteractiveObject {
 	 * @param item
 	 * @return returns true if player "dead"
 	 */
-	public boolean hitByItem(Item item) {
+	public boolean hitByItem(final Item item) {
 		// System.out.println(this + " hit by " + item);
 		if ((item instanceof RedBull) && (this instanceof PlayerSleep)) {
 			// this.health = this.health - 50;
@@ -469,25 +468,25 @@ public abstract class Player extends InteractiveObject {
 
 	public void setRight(final boolean b) {
 		this.right = b;
-		setLooking();
+		this.setLooking();
 		this.setDirectionMoving(Player.Direction.E);
 	}
 
 	public void setUp(final boolean b) {
 		this.up = b;
-		setLooking();
+		this.setLooking();
 		this.setDirectionMoving(Player.Direction.N);
 	}
 
 	public void setLeft(final boolean b) {
 		this.left = b;
-		setLooking();
+		this.setLooking();
 		this.setDirectionMoving(Player.Direction.W);
 	}
 
 	public void setDown(final boolean b) {
 		this.down = b;
-		setLooking();
+		this.setLooking();
 		this.setDirectionMoving(Player.Direction.S);
 	}
 
@@ -522,7 +521,7 @@ public abstract class Player extends InteractiveObject {
 		return this.down;
 	}
 
-	public void setShoot(boolean b) {
+	public void setShoot(final boolean b) {
 		this.shoot = b;
 	}
 
@@ -531,20 +530,20 @@ public abstract class Player extends InteractiveObject {
 	}
 
 	public float getFactor() {
-		return this.factor * handicap;
+		return this.factor * this.handicap;
 	}
 
-	public void setHandicap(float handicap) {
+	protected float getHandicap() {
+		return this.handicap;
+	}
+
+	public void setHandicap(final float handicap) {
 		this.handicap = Math.abs(handicap);
 		this.handicapSetAt = this.time;
 	}
 
 	public void resetHandycap() {
 		this.handicap = 1;
-	}
-
-	public float dealHandicap() {
-		return this.dealHandicap;
 	}
 
 	private void incrItemCount() {
@@ -564,9 +563,5 @@ public abstract class Player extends InteractiveObject {
 
 	public float getHandicapduration() {
 		return this.handicapDuration;
-	}
-
-	public float getHandicap() {
-		return this.handicap;
 	}
 }

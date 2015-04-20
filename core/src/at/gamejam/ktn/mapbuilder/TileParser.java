@@ -10,22 +10,24 @@ import java.util.Vector;
 import at.gamejam.ktn.mapbuilder.TileData.BorderStyle;
 
 public class TileParser {
-	private String			path;
+	private final String			path;
 
-	public Vector<TileData>	tileDataList;
+	private final Vector<TileData>	tileDataList;
 
-	public TileParser(String path) {
+	public TileParser(final String path) {
 		this.path = path;
 		this.tileDataList = new Vector<TileData>();
+		this.readTileData();
 	}
 
-	public void readTileData() {
-		File file = new File(this.path);
+	private void readTileData() {
+		final File file = new File(this.path);
 		boolean properties = false;
 		boolean toFinalize = false;
+		BufferedReader br = null;
 		try {
 			TileData tile = null;
-			BufferedReader br = new BufferedReader(new FileReader(file));
+			br = new BufferedReader(new FileReader(file));
 			for (String line; (line = br.readLine()) != null;) {
 				if (line.startsWith(":")) {
 					// System.out.println("HU");
@@ -38,45 +40,53 @@ public class TileParser {
 					toFinalize = true;
 				} else
 					if (properties) {
-						String prop = line.substring(0, line.indexOf(":"));
+						final String prop = line.substring(0, line.indexOf(":"));
 						String data = line.substring(line.indexOf(":") + 1);
 						data = data.trim();
 						// System.out.println(prop + "-->" + data);
 						switch (prop) {
 							case "edgetype":
-								setEdgetype(tile, data);
+								TileParser.setEdgetype(tile, data);
 								break;
 							case "edgeOffset":
-								setBoxOffsets(tile, data);
+								TileParser.setBoxOffsets(tile, data);
 								break;
 							case "color":
-								setBoxColor(tile, data);
+								TileParser.setBoxColor(tile, data);
+								break;
+							default:
 								break;
 						}
 					}
 			}
 			if (toFinalize) {
-				System.out.println("Add");
 				this.tileDataList.add(tile);
 			}
-			// line is not visible here.
-		} catch (IOException e) {
-
+		} catch (final IOException e) {
+			// do nothing
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (final IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 		System.out.println("Added " + this.tileDataList.size() + " Tiles.");
 	}
 
-	public void printList() {
+	/*private void printList() {
 		System.out.println("Length: " + this.tileDataList.size());
-		for (TileData t : this.tileDataList) {
+		for (final TileData t : this.tileDataList) {
 			System.out.println(t.getName() + ":");
 			System.out.println(t.getOffsetNorth() + "," + t.getOffsetEast() + "," + t.getOffsetSouth() + "," + t.getOffsetWest());
 			System.out.println(t.getRed() + "," + t.getGreen() + "," + t.getBlue());
 		}
-	}
+	}*/
 
-	public void setEdgetype(TileData tileData, String data) {
+	private static void setEdgetype(final TileData tileData, final String data) {
 		switch (data) {
 			case "box":
 				tileData.setBorderStyle(BorderStyle.BOX);
@@ -86,8 +96,8 @@ public class TileParser {
 		}
 	}
 
-	public void setBoxOffsets(TileData tileData, String data) {
-		String[] parts = data.trim().split(",");
+	private static void setBoxOffsets(final TileData tileData, final String data) {
+		final String[] parts = data.trim().split(",");
 		System.out.println(Arrays.toString(parts));
 		tileData.setOffsetNorth(Integer.parseInt(parts[0]));
 		tileData.setOffsetEast(Integer.parseInt(parts[1]));
@@ -95,10 +105,17 @@ public class TileParser {
 		tileData.setOffsetWest(Integer.parseInt(parts[3]));
 	}
 
-	public void setBoxColor(TileData tileData, String data) {
-		String[] parts = data.trim().split(",");
+	private static void setBoxColor(final TileData tileData, final String data) {
+		final String[] parts = data.trim().split(",");
 		tileData.setRed(Integer.parseInt(parts[0]));
 		tileData.setGreen(Integer.parseInt(parts[1]));
 		tileData.setBlue(Integer.parseInt(parts[2]));
+	}
+
+	/**
+	 * @return the tileDataList
+	 */
+	protected Vector<TileData> getTileDataList() {
+		return this.tileDataList;
 	}
 }

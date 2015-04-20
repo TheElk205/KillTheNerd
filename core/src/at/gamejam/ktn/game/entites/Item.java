@@ -16,17 +16,12 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
 public abstract class Item extends InteractiveObject {
-	private Sound				grabSound		= Gdx.audio.newSound(Gdx.files.internal(Constants.GRAB_SOUND));
-	// not animated
-	// protected TextureRegion texture;
-
-	// all
+	private static final Sound	GRAB_SOUND		= Gdx.audio.newSound(Gdx.files.internal(Constants.GRAB_SOUND));
 	public boolean				collected		= false;
-	// private Sound sound;
 	public boolean				collectable		= true;
 	private Player				grabbedBy;
 	public Player				itemIsThrownBy	= null;
-
+	private final float			dmg				= 0.05f;
 	public boolean				destroyed		= false;
 	public static List<Item>	itemList		= new ArrayList<Item>();
 	public float				flyingTime		= 0;
@@ -34,14 +29,14 @@ public abstract class Item extends InteractiveObject {
 
 	public Item(final Vector2 position, final World b2World) {
 		this.position = position;
-		itemList.add(this);
+		Item.itemList.add(this);
 		// this.dimension = new Vector2(0.25f, 0.2f);
 		this.dimension = new Vector2(0.15f, 0.15f);
 		// this.sound = Gdx.audio.newSound(Gdx.files.internal(Constants.THROW_SOUND));
 		this.b2World = b2World;
 	}
 
-	protected void init(final boolean animated, boolean initPhysics) {
+	protected void init(final boolean animated, final boolean initPhysics) {
 		this.animated = animated;
 		this.collected = false;
 		if (this.animated) {
@@ -134,7 +129,7 @@ public abstract class Item extends InteractiveObject {
 			// player.incrItemCount();
 			this.grabbedBy = player;
 			if (this.grabbedBy.addItem(this)) {
-				this.grabSound.play();
+				Item.GRAB_SOUND.play();
 				this.collected = true;
 				this.destroyed = false;
 			} else {
@@ -144,4 +139,7 @@ public abstract class Item extends InteractiveObject {
 		}
 	}
 
+	public float getDmg() {
+		return this.dmg;
+	}
 }

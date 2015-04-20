@@ -24,9 +24,9 @@ public class Assets implements Disposable {
 
 	public void init(final AssetManager assetManager) {
 		this.assetManager = assetManager;
-		assetManager.load("images/assets.atlas", TextureAtlas.class);
+		assetManager.load(Constants.ATLAS_FOLDER + Constants.ATLAS_NAME + ".atlas", TextureAtlas.class);
 		assetManager.finishLoading();
-		this.atlas = assetManager.get("images/assets.atlas");
+		this.atlas = assetManager.get(Constants.ATLAS_FOLDER + Constants.ATLAS_NAME + ".atlas");
 		for (final Texture t : this.atlas.getTextures()) {
 			t.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear); // linear filter for smoothing pixels
 		}

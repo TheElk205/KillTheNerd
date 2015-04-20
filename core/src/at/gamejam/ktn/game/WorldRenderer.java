@@ -112,7 +112,7 @@ public class WorldRenderer implements Disposable {
 		this.batch.begin();
 		this.worldController.getLevel().render(this.batch);
 		this.worldController.playerSleep.render(this.batch);
-		this.worldController.playerWake.render(this.batch); // TODO make global list.. forgot player wake..
+		this.worldController.playerWake.render(this.batch); // TODO make global list.. for all players, for level for bars...
 		this.worldController.sleepBar.render(this.batch);
 		this.worldController.wakeBar.render(this.batch);
 		this.batch.end();

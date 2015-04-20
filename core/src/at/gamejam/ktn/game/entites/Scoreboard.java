@@ -20,7 +20,7 @@ public class Scoreboard extends InteractiveObject {
 
 	private int				posX			= 0, posY = 0;
 
-	public Scoreboard(GeneratedLevel level) {
+	public Scoreboard(final GeneratedLevel level) {
 		this.level = level;
 		this.dimension = new Vector2(500f, 20);
 		this.loadAssets();
@@ -29,16 +29,16 @@ public class Scoreboard extends InteractiveObject {
 
 	@Override
 	public void render(final SpriteBatch batch) {
-		float length = this.dimension.x;
-		float sleeping = (float) this.sleepingCount / (float) this.npcCount;
-		float awake = (float) this.awakeCount / (float) this.npcCount;
+		final float length = this.dimension.x;
+		final float sleeping = (float) this.sleepingCount / (float) this.npcCount;
+		final float awake = (float) this.awakeCount / (float) this.npcCount;
 
-		float pos1 = length * sleeping;
-		float pos2 = length - (length * awake);
+		final float pos1 = length * sleeping;
+		final float pos2 = length - (length * awake);
 
 		// System.out.println("Pos1: " +pos1 + " Sleeping: " + sleepingCount);
 		// System.out.println("Pos2: " + pos2 + " awake: " + awakeCount);
-		float diff = pos2 - pos1;
+		final float diff = pos2 - pos1;
 
 		batch.draw(this.red, this.posX, this.posY, pos1, this.dimension.y);
 		batch.draw(this.yellow, this.posX + pos1, this.posY, diff, this.dimension.y);
@@ -52,29 +52,29 @@ public class Scoreboard extends InteractiveObject {
 	}
 
 	@Override
-	public void update(float deltaTime) {
-		this.setSleepingCount(this.level.getSleepingcount());
-		this.setAwakeCount(this.level.getAwakecoutn());
+	public void update(final float deltaTime) {
+		this.setSleepingCount(this.level.getSleepingCount());
+		this.setAwakeCount(this.level.getAwakeCount());
 
 	}
 
-	public void setSleepingCount(int c) {
+	public void setSleepingCount(final int c) {
 		this.sleepingCount = c;
 	}
 
-	public void setAwakeCount(int c) {
+	public void setAwakeCount(final int c) {
 		this.awakeCount = c;
 	}
 
-	public void setPosX(int posX) {
+	public void setPosX(final int posX) {
 		this.posX = posX;
 	}
 
-	public void setPosY(int posY) {
+	public void setPosY(final int posY) {
 		this.posY = posY;
 	}
 
-	public void setPosition(int x, int y) {
+	public void setPosition(final int x, final int y) {
 		this.posX = x;
 		this.posY = y;
 	}

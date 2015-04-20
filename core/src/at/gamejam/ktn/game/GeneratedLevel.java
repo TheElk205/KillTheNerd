@@ -9,49 +9,31 @@ import at.gamejam.ktn.game.entities.GameObject;
 import at.gamejam.ktn.mapbuilder.MapParser;
 import at.gamejam.ktn.mapbuilder.Tile;
 import at.gamejam.ktn.mapbuilder.TileData;
-import at.gamejam.ktn.mapbuilder.TileParser;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
+// TODO: should implement something because to render and to update
 public class GeneratedLevel {
-	private List<GameObject>	gameObjects;
-
-	private final World			b2world;
-
-	// TODO make absolute
-	private final String		pathConfig	= "D://tiles.txt";
-	private final String		pathMap		= "D://map1.png";
-
-	private final TileParser	tileParser;
-	private final MapParser		mapParser;
-
-	int							sleepingcount	= 0, awakecount = 0;
-
-	int							npcCount		= 2;
+	private final List<GameObject>	gameObjects;
+	private final World				b2world;
+	private final String			pathConfig	= "D://map1.txt";	// TODO make absolute
+	private final String			pathMap		= "D://map1.png";
+	private final MapParser			mapParser;
+	private int						sleepingcount	= 0, awakecount = 0;
+	private int						npcCount		= 2;
 
 	public GeneratedLevel(final World b2World) {
 		this.b2world = b2World;
-		this.tileParser = new TileParser(this.pathConfig);
-		this.tileParser.readTileData();
-		this.mapParser = new MapParser(this.pathMap, this.tileParser);
+		this.mapParser = new MapParser(this.pathMap, this.pathConfig);
 		this.mapParser.parseMap();
 		this.gameObjects = new ArrayList<GameObject>();
 		this.addTilesToMap();
 		this.addNPCs();
 	}
 
-	public void init() {
-		this.gameObjects = new ArrayList<GameObject>();
-
-	}
-
-	public void addTilesToMap() {
-		// -5--> 5
-		// 30 tiles
-		// Tile floor = new Tile(new Vector2(0, 0), this.b2world, new TileData("floor.png"));
-		// TODO what if map.png is greater than this?
+	private void addTilesToMap() {
 		final TileData[][] tDataArray = this.mapParser.getTileData();
 		final int height = this.mapParser.getMapImageHeight();
 		final int width = this.mapParser.getMapImageWidth();
@@ -72,7 +54,7 @@ public class GeneratedLevel {
 		}
 	}
 
-	public void addNPCs() {
+	private void addNPCs() {
 		final NPC npc1 = new NPC(new Vector2(1, -5), this.b2world, 50);
 		final EnergyBar energy1 = new EnergyBar(npc1);
 
@@ -120,15 +102,30 @@ public class GeneratedLevel {
 
 	}
 
-	public List<GameObject> getGameObjects() {
+	/**
+	 * called in WorldController
+	 *
+	 * @return
+	 */
+	protected List<GameObject> getGameObjects() {
 		return this.gameObjects;
 	}
 
-	public void addGameObject(final GameObject object) {
+	/**
+	 * called in WorldController
+	 *
+	 * @param object
+	 */
+	protected void addGameObject(final GameObject object) {
 		this.gameObjects.add(object);
 	}
 
-	public void update(final float deltaTime) {
+	/**
+	 * called in WorldController
+	 *
+	 * @param deltaTime
+	 */
+	protected void update(final float deltaTime) {
 		this.sleepingcount = 0;
 		this.awakecount = 0;
 		for (final GameObject gameObject : this.gameObjects) {
@@ -146,20 +143,30 @@ public class GeneratedLevel {
 
 	}
 
-	public void render(final SpriteBatch batch) {
+	/**
+	 * Called in WorldRenderer
+	 *
+	 * @param batch
+	 */
+	protected void render(final SpriteBatch batch) {
 		for (final GameObject gameObject : this.gameObjects) {
 			gameObject.render(batch);
 		}
 	}
 
-	public int getSleepingcount() {
+	public int getSleepingCount() {
 		return this.sleepingcount;
 	}
 
-	public int getAwakecoutn() {
+	public int getAwakeCount() {
 		return this.awakecount;
 	}
 
+	/**
+	 * Called in Scoreboard
+	 *
+	 * @return
+	 */
 	public int getNpcCount() {
 		return this.npcCount;
 	}
