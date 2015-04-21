@@ -1,0 +1,96 @@
+:black.png:
+edgetype: none
+edgeoffset: 0,0,0,0
+color: 0,0,0
+:floor.png:
+edgetype: none
+edgeoffset: 0,0,0,0
+color: 255,0,0
+:border_top.png:
+edgetype: none
+edgeoffset: 0,0,0,0
+color: 255,216,0
+:wall_top.png:
+edgetype: box
+edgeoffset: 0,0,0,0
+color: 255,106,0
+:wall_left.png:
+edgetype: box
+edgeoffset: 0,0,0,0
+color: 182,255,0
+:wall_bottom.png:
+edgetype: box
+edgeoffset: 0,0,0,0
+color: 76,255,0
+:wall_right.png:
+edgetype: box
+edgeoffset: 0,0,0,0
+color: 0,255,33
+:corner_bottom_left.png:
+edgetype: box
+edgeoffset: 0,0,0,0
+color: 255,0,110
+:corner_bottom_right.png:
+edgetype: box
+edgeoffset: 0,0,0,0
+color: 255,0,220
+:wall_right_top.png:
+edgetype: box
+edgeoffset: 0,0,0,0
+color: 178,0,255
+:wall_left_top.png:
+edgetype: box
+edgeoffset: 0,0,0,0
+color: 72,0,255
+:corner_top_left.png:
+edgetype: box
+edgeoffset: 0,0,0,0
+color: 0,255,144
+:corner_top_right.png:
+edgetype: box
+edgeoffset: 0,0,0,0
+color: 0,148,255
+:chair.png:
+edgetype: box
+edgeoffset: 0,0,0,0
+color: 128,128,128
+:corner_front_left.png:
+edgetype: box
+edgeoffset: 0,0,0,0
+color: 255,250,0
+:corner_front_right.png:
+edgetype: box
+edgeoffset: 0,0,0,0
+color: 255,204,255
+:corner_back_left.png:
+edgetype: box
+edgeoffset: 0,0,0,0
+color: 255,240,142
+:corner_back_right.png:
+edgetype: box
+edgeoffset: 0,0,0,0
+color: 255,232,226
+:table_bottom_left.png:
+edgetype: box
+edgeoffset: 0,0,0,0
+color: 255,255,255
+:table_bottom_middle.png:
+edgetype: box
+edgeoffset: 0,0,0,0
+color: 240,240,240
+:table_bottom_right.png:
+edgetype: box
+edgeoffset: 0,0,0,0
+color: 225,225,225
+:table_top_right.png:
+edgetype: box
+edgeoffset: 0,0,0,0
+color: 210,210,210
+:table_top_middle.png:
+edgetype: box
+edgeoffset: 0,0,0,0
+color: 195,195,195
+:table_top_left.png:
+edgetype: box
+edgeoffset: 0,0,0,0
+color: 180,180,180
