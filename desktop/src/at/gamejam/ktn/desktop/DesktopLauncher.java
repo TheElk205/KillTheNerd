@@ -11,7 +11,7 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker;
  * @author Herkt Kevin
  */
 public class DesktopLauncher {
-	private final static boolean	REBUILD_ALTLAS	= false;
+	private final static boolean	REBUILD_ALTLAS	= true;
 
 	/**
 	 * @param arg
