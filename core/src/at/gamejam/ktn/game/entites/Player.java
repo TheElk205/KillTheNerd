@@ -1,5 +1,6 @@
 package at.gamejam.ktn.game.entites;
 
+import java.io.File;
 import java.util.Vector;
 
 import at.gamejam.ktn.game.WorldController;
@@ -7,6 +8,7 @@ import at.gamejam.ktn.utils.Constants;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -142,7 +144,9 @@ public abstract class Player extends InteractiveObject {
 		this.worldController = worldcontroller;
 		this.b2World = this.worldController.getB2World();
 		this.position = position;
-		this.sound = Gdx.audio.newSound(Gdx.files.internal(Constants.THROW_SOUND));
+		FileHandle handle = Gdx.files.internal(Constants.THROW_SOUND);
+		System.out.println("Path to sound: " + handle.file().getAbsolutePath());
+		this.sound = Gdx.audio.newSound(handle);
 		this.init(true, true);
 	}
 

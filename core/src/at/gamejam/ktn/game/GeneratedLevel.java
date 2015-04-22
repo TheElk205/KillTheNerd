@@ -9,6 +9,7 @@ import at.gamejam.ktn.game.entities.GameObject;
 import at.gamejam.ktn.mapbuilder.MapParser;
 import at.gamejam.ktn.mapbuilder.Tile;
 import at.gamejam.ktn.mapbuilder.TileData;
+import at.gamejam.ktn.utils.Constants;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -20,16 +21,16 @@ import com.badlogic.gdx.physics.box2d.World;
 public class GeneratedLevel {
 	private final List<GameObject>	gameObjects;
 	private final World				b2world;
-	private String			pathConfig	= "D://map1.txt";	// TODO make absolute
-	private String			pathMap		= "D://map1.png";
+	private String					pathConfig	= Constants.GENERATEDMAP_CONFIG;	// TODO make absolute
+	private String					pathMap		= Constants.GENERATEDMAP_MAP;
 	private final MapParser			mapParser;
 	private int						sleepingcount	= 0, awakecount = 0;
 	private int						npcCount		= 2;
 
 	public GeneratedLevel(final World b2World) {
-		FileHandle handle = Gdx.files.internal("../core/assets/map1.png");
+		FileHandle handle = Gdx.files.internal(Constants.GENERATEDMAP_MAP);
 		this.pathMap = handle.file().getAbsolutePath();
-		handle = Gdx.files.internal("../core/assets/map1.txt");
+		handle = Gdx.files.internal(Constants.GENERATEDMAP_CONFIG);
 		this.pathConfig = handle.file().getAbsolutePath();
 		this.b2world = b2World;
 		this.mapParser = new MapParser(this.pathMap, this.pathConfig);
