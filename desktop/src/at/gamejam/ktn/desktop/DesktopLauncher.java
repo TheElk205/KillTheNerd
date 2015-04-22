@@ -25,7 +25,7 @@ public class DesktopLauncher {
 			settings.maxHeight = 1024;
 			settings.debug = false;
 			settings.duplicatePadding = true;
-			TexturePacker.process(settings, "assets_raw", Constants.ATLAS_FOLDER, Constants.ATLAS_NAME);
+			TexturePacker.process(settings, Constants.ASSETS_RAW, Constants.ATLAS_FOLDER, Constants.ATLAS_NAME);
 		}
 		final LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 

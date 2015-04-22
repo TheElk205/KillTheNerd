@@ -8,6 +8,7 @@ public class Constants {
 	public static final String	VICTORY				= "../core/assets/Scumocide-Calamity Trigger_Game.mp3";//"Desktop/KillTheNerd/core/assets/Scumocide-Calamity Trigger_Game.mp3";
 	public static final String  GENERATEDMAP_MAP 	= "../core/assets/map1.png";//"Desktop/KillTheNerd/core/assets/map1.png";
 	public static final String  GENERATEDMAP_CONFIG = "../core/assets/map1.txt";//"Desktop/KillTheNerd/core/assets/map1.txt";
+	public static final String  ASSETS_RAW			= "assets_raw";
 	public static final int		START_ITEM_COUNT	= 10;
 	public static final float	VIEWPORT_WIDTH		= 6.0f;
 	public static final float	VIEWPORT_HEIGHT		= 6.0f;
