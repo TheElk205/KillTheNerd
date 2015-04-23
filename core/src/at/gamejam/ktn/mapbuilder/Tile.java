@@ -13,23 +13,37 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class Tile extends GameObject {
-	private final TextureRegion	texture;
-	private final World			b2World;
-	private Body				b2Body;
-	private final TileData		tileData;
-	private String				tileName	= null;
+	private TextureRegion	texture		= null;
+	private final World		b2World;
+	private Body			b2Body;
+	private final TileData	tileData;
+	private String			tileName	= null;
 
 	public Tile(final Vector2 position, final World b2World, final TileData tiledata) {
 		this.position = position;
 		this.b2World = b2World;
 		this.tileData = tiledata;
 		if (tiledata != null) {
-			final int fileNameIndex = tiledata.getName().indexOf("."); // ohne .png endung
 			this.tileName = tiledata.getName();
+			final int fileNameIndex = this.tileName.indexOf("."); // ohne .png Endung
 			this.tileName = tiledata.getName().substring(0, fileNameIndex);
-			this.texture = this.assets.findRegion(this.tileName);
+			if (GameObject.textureList.contains(this.tileName)) {
+				for (int i = 0; i < GameObject.textureList.size(); i++) {
+					if (GameObject.textureNameList.get(i).equalsIgnoreCase(this.tileName)) {
+						this.texture = GameObject.textureList.get(i);
+						break;
+					}
+				}
+
+			} else {
+				this.texture = GameObject.assets.findRegion(this.tileName);
+				GameObject.textureList.add(this.texture);
+			}
+			if (!GameObject.textureNameList.contains(this.tileName)) {
+				GameObject.textureNameList.add(this.tileName);
+			}
 		} else {
-			this.texture = this.assets.findRegion("errorTile");
+			this.texture = GameObject.assets.findRegion("errorTile");
 		}
 
 		this.initPhysics();

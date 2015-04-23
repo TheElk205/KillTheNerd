@@ -22,7 +22,7 @@ public abstract class Item extends InteractiveObject {
 	private Player				grabbedBy;
 	public Player				itemIsThrownBy	= null;
 	private final float			dmg				= 0.05f;
-	public boolean				destroyed		= false;
+	// public boolean destroyed = false;
 	public static List<Item>	itemList		= new ArrayList<Item>();
 	public float				flyingTime		= 0;
 	public boolean				isFlying		= false;
@@ -122,24 +122,31 @@ public abstract class Item extends InteractiveObject {
 	}
 
 	// interactions
-	public void grabbedBy(final Player player) {
-		if (this.collectable && !this.collected) { // TODO: !this.collected prevent taking twice bug!?
-
+	public boolean grabbedBy(final Player player) {
+		if (this.collectable && !this.collected && !this.isFlying) { // TODO: !this.collected prevent taking twice bug!?
 			// System.out.println("Item grabbed by: " + player);
 			// player.incrItemCount();
 			this.grabbedBy = player;
 			if (this.grabbedBy.addItem(this)) {
 				Item.GRAB_SOUND.play();
 				this.collected = true;
-				this.destroyed = false;
-			} else {
-				this.grabbedBy = null;
+				// this.destroyed = false;
+				this.toDelete = true;
+				return true;
 			}
-			// this.disablePhysics();
+			this.grabbedBy = null;
+			this.collected = false;
+			this.toDelete = false;
+			return false;
 		}
+		return false;
 	}
 
 	public float getDmg() {
 		return this.dmg;
+	}
+
+	public void toDelete(final boolean b) {
+		this.toDelete = b;
 	}
 }

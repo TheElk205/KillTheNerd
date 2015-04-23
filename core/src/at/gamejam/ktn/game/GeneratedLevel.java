@@ -44,10 +44,16 @@ public class GeneratedLevel {
 				final TileData tData = tDataArray[(int) stepX][(int) stepy];
 				final Tile t = new Tile(position, this.b2world, tData);
 				if ((t != null) && (t.getTiledata() != null)) {
-					if (t.getTiledata().getName().startsWith("table") || t.getTiledata().getName().equalsIgnoreCase("chair.png")) {
+					final String tileName = t.getTiledata().getName();
+
+					if (tileName.startsWith("table") || tileName.equalsIgnoreCase("chair.png")) {
 						final Tile tf = new Tile(new Vector2(x, y), this.b2world, new TileData("floor.png"));
 						this.gameObjects.add(tf);
 					}
+					/*if (!tileName.startsWith("table") && !tileName.equalsIgnoreCase("chair.png") && tileName.equalsIgnoreCase("black.png")) {
+						i++;
+						System.out.println(i + " position: " + position + " name: " + tileName);
+					}*/
 				}
 				this.gameObjects.add(t);
 			}

@@ -2,7 +2,10 @@ package at.gamejam.ktn.game;
 
 import java.util.concurrent.TimeUnit;
 
+import at.gamejam.ktn.game.entites.RedBull;
 import at.gamejam.ktn.game.entites.Scoreboard;
+import at.gamejam.ktn.game.entites.Thesis;
+import at.gamejam.ktn.game.entities.GameObject;
 import at.gamejam.ktn.utils.Assets;
 import at.gamejam.ktn.utils.Constants;
 
@@ -66,6 +69,12 @@ public class WorldRenderer implements Disposable {
 		final String mmss = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(this.worldController.timeElapsed) % TimeUnit.HOURS.toMinutes(1),
 				TimeUnit.MILLISECONDS.toSeconds(this.worldController.timeElapsed) % TimeUnit.MINUTES.toSeconds(1));
 		this.font.draw(this.batch, mmss, 10, 10);
+
+		if (this.worldController.isDebug()) {
+			this.font.draw(this.batch, Integer.toString(GameObject.totalObjects.size()), Constants.VIEWPORT_GUI_WIDTH / 2, 40);
+			this.font.draw(this.batch, Integer.toString(RedBull.itemCount), Constants.VIEWPORT_GUI_WIDTH / 2, 60);
+			this.font.draw(this.batch, Integer.toString(Thesis.itemCount), Constants.VIEWPORT_GUI_WIDTH / 2, 80);
+		}
 
 		this.font.draw(this.batch, Integer.toString(this.worldController.playerSleep.getItemCount()), 35, 40);
 		this.font.draw(this.batch, Integer.toString(this.worldController.playerWake.getItemCount()), 980, 40);

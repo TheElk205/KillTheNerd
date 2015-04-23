@@ -17,7 +17,6 @@ import at.gamejam.ktn.utils.Constants;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class WorldController {
@@ -32,7 +31,7 @@ public class WorldController {
 	private World					b2World;
 	private GeneratedLevel			level;
 	private float					lastSpawn		= 0;
-	private final boolean			debug			= false;
+	private final boolean			debug			= true;
 	private InputManager			inputManager;
 	private final List<GameObject>	objectsToAdd	= new ArrayList<GameObject>();
 	private MyContactListener		contactListener;
@@ -70,18 +69,26 @@ public class WorldController {
 	}
 
 	public void update(final float deltaTime) {
-		// Add Items
+		// remove objects before or after step!!
+		if (this.contactListener.getObjectsToRemove().size() > 0) {
+			for (final GameObject object : this.contactListener.getObjectsToRemove()) {
+				if (object.toDelete) {
+					this.b2World.destroyBody(object.getB2Body());
+					object.setToRender(false);
+					GameObject.totalObjects.remove(object);
+					if (object instanceof Thesis) {
+						Thesis.itemCount--;
+					}
+					if (object instanceof RedBull) {
+						RedBull.itemCount--;
+					}
+				}
+			}
+			this.contactListener.getObjectsToRemove().clear();
+		}
 
 		this.timeElapsed += deltaTime * 1000;
 		this.b2World.step(1 / 60f, 3, 8); // timeStep, velocityIteration, positionIteration
-
-		// remove objects after step!!
-		for (final GameObject object : this.contactListener.getObjectsToRemove()) {
-			object.setToRender(false);
-			final Body body = object.getB2Body();
-			this.b2World.destroyBody(body);
-		}
-		this.contactListener.getObjectsToRemove().clear();
 
 		// this.cameraHelper.update(deltaTime);
 		final Vector2 vector = new Vector2();
@@ -99,15 +106,16 @@ public class WorldController {
 		this.cameraHelper.setZoom((float) (distance * factor));
 		// System.out.println(distance);
 
-		for (final GameObject o : this.level.getGameObjects()) {
+		/*for (final GameObject o : this.level.getGameObjects()) {
 			if (o instanceof Item) {
 				final Item b = (Item) o;
 				if (b.isCollected() && !b.destroyed) {
 					this.b2World.destroyBody(b.getB2Body());
 					b.destroyed = true;
+					// b.toDelete = true;
 				}
 			}
-		}
+		}*/
 
 		this.createDynamicObjects();
 
@@ -127,22 +135,33 @@ public class WorldController {
 			if (item.isFlying) {
 				item.flyingTime += deltaTime;
 			}
-			if (item.flyingTime > 0.5) {
+			if (item.flyingTime > 0.8) {
 				item.collectable = true;
 			}
 		}
 
+		boolean spawn = false;
 		this.lastSpawn = this.lastSpawn + deltaTime;
 		if (this.lastSpawn > 10) {
-			this.lastSpawn = 0;
-
 			final Random rnd = new Random();
 			final float i = rnd.nextFloat();
-			this.addTempGameObject(new RedBull(new Vector2(2f + i, 2f), this.b2World, true));
-			this.addTempGameObject(new Thesis(new Vector2(2f + i, -2.5f), this.b2World, true));
-
-			this.addTempGameObject(new RedBull(new Vector2(-1.5f, 1f + i), this.b2World, true));
-			this.addTempGameObject(new Thesis(new Vector2(-2f, -1.5f + i), this.b2World, true));
+			if (RedBull.itemCount < 10) {
+				spawn = true;
+				this.addTempGameObject(new RedBull(new Vector2(2f + i, 2f), this.b2World, true));
+				this.addTempGameObject(new RedBull(new Vector2(-1.5f, 1f + i), this.b2World, true));
+			}
+		}
+		if (this.lastSpawn > 10) {
+			final Random rnd = new Random();
+			final float i = rnd.nextFloat();
+			if (Thesis.itemCount < 10) {
+				spawn = true;
+				this.addTempGameObject(new Thesis(new Vector2(2f + i, -2.5f), this.b2World, true));
+				this.addTempGameObject(new Thesis(new Vector2(-2f, -1.5f + i), this.b2World, true));
+			}
+		}
+		if (spawn) {
+			this.lastSpawn = 0;
 		}
 	}
 

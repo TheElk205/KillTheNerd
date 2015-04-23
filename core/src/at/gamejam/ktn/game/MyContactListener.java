@@ -40,6 +40,7 @@ public class MyContactListener implements ContactListener {
 
 		final Object userDataB = fB.getBody().getUserData();
 		final Object userDataA = fA.getBody().getUserData();
+		// System.out.println(userDataA + " collides with " + userDataB);
 
 		/*if (userDataA instanceof Item) {TODO: hold an item list in controller to set collectable again?
 			((Item) userDataA).collectable = true;
@@ -63,25 +64,25 @@ public class MyContactListener implements ContactListener {
 		int collisionType = 0;
 		if (((userDataB instanceof Player) && (userDataA instanceof Spikes)) || ((userDataA instanceof Player) && (userDataB instanceof Spikes))) {
 			collisionType = 1;
-		}
-		if (((userDataB instanceof Player) && (userDataA instanceof ThrowableObject)) || ((userDataA instanceof Player) && (userDataB instanceof ThrowableObject))) {
-			collisionType = 2;
-		}
-		if ((userDataB instanceof Player) && (userDataA instanceof Player)) {
-			collisionType = 3;
-		}
-		if (((userDataB instanceof PlayerWake) && (userDataA instanceof Item)) || ((userDataA instanceof Item) && (userDataB instanceof PlayerWake))) {
-			collisionType = 4;
-		}
-		if (((userDataB instanceof PlayerSleep) && (userDataA instanceof Item)) || ((userDataA instanceof Item) && (userDataB instanceof PlayerSleep))) {
-			collisionType = 5;
-		}
-		if (((userDataB instanceof Thesis) && (userDataA instanceof RedBull)) || ((userDataA instanceof Thesis) && (userDataB instanceof RedBull))) {
-			collisionType = 6;
-		}
-		if (((userDataB instanceof Player) && (userDataA instanceof NPC)) || ((userDataB instanceof NPC) && (userDataA instanceof Player))) {
-			collisionType = 7;
-		}
+		} else
+			if (((userDataB instanceof Player) && (userDataA instanceof ThrowableObject)) || ((userDataA instanceof Player) && (userDataB instanceof ThrowableObject))) {
+				collisionType = 2;
+			} else
+				if ((userDataB instanceof Player) && (userDataA instanceof Player)) {
+					collisionType = 3;
+				} else
+					if (((userDataB instanceof PlayerWake) && (userDataA instanceof Item)) || ((userDataA instanceof Item) && (userDataB instanceof PlayerWake))) {
+						collisionType = 4;
+					} else
+						if (((userDataB instanceof PlayerSleep) && (userDataA instanceof Item)) || ((userDataA instanceof Item) && (userDataB instanceof PlayerSleep))) {
+							collisionType = 5;
+						} else
+							if (((userDataB instanceof Thesis) && (userDataA instanceof RedBull)) || ((userDataA instanceof Thesis) && (userDataB instanceof RedBull))) {
+								collisionType = 6;
+							} else
+								if (((userDataB instanceof Player) && (userDataA instanceof NPC)) || ((userDataB instanceof NPC) && (userDataA instanceof Player))) {
+									collisionType = 7;
+								}
 
 		/*if (!(playerWithSpikes || playerWithThrowable || player1WithPlayer2 || playerWithItem)) {
 			return; // no collision at all
@@ -92,12 +93,11 @@ public class MyContactListener implements ContactListener {
 				RedBull newItem = null;
 				// WorldController.this.reset = true;
 				final Vector2 itemPosition = new Vector2(2, 2);
-				System.out.println("beginContact Player with Spikes");
+				// System.out.println("beginContact Player with Spikes");
 				if (userDataA instanceof Spikes) {
 					System.out.println("userDataA is Spikes");
 					// final Vector2 itemPosition = ((Spikes) userDataA).position;
 
-					System.out.println("spikePosition: " + itemPosition + "playerPosition: " + ((Player) userDataB).position);
 					newItem = new RedBull(itemPosition, this.wContr.getB2World(), false);
 					this.objectsToAdd.add(newItem);
 				} else
@@ -113,19 +113,19 @@ public class MyContactListener implements ContactListener {
 
 				break;
 			case 2:
-				System.out.println("beginContact Player with TrowableObject");
+				// System.out.println("beginContact Player with TrowableObject");
 				break;
 			case 3:
-				System.out.println("beginContact Player1 with Player2");
+				// System.out.println("beginContact Player1 with Player2");
 				break;
 			case 4: // playerWake + any item
 				if (userDataA instanceof RedBull) {
 					// System.out.println("wake takes RedBull");
-					MyContactListener.wakeWithRedbull(userDataB, userDataA);
+					this.wakeWithRedbull(userDataB, userDataA);
 				} else
 					if (userDataB instanceof RedBull) {
 						// System.out.println("wake takes RedBull");
-						MyContactListener.wakeWithRedbull(userDataA, userDataB);
+						this.wakeWithRedbull(userDataA, userDataB);
 					} else
 						if (userDataA instanceof Thesis) {
 							this.wakeWithThesis(userDataB, userDataA);
@@ -143,11 +143,11 @@ public class MyContactListener implements ContactListener {
 					} else
 						if (userDataB instanceof Thesis) {
 							// System.out.println("sleep takes thesis");
-							MyContactListener.sleepWithThesis(userDataA, userDataB);
+							this.sleepWithThesis(userDataA, userDataB);
 						} else
 							if (userDataA instanceof Thesis) {
 								// System.out.println("sleep takes thesis");
-								MyContactListener.sleepWithThesis(userDataB, userDataA);
+								this.sleepWithThesis(userDataB, userDataA);
 							}
 				break;
 			case 6:
@@ -193,6 +193,7 @@ public class MyContactListener implements ContactListener {
 			if (player.hitByItem(thesis)) { // does nothing cause players cannot die
 				player.setToRender(false);
 				this.objectsToRemove.add(player);
+				thesis.toDelete = true;
 			}
 			if (player.isHitAbleAgain()) {
 				player.setHandicap(thesis.getDmg());
@@ -200,6 +201,7 @@ public class MyContactListener implements ContactListener {
 			}
 			thesis.setToRender(false);
 			this.objectsToRemove.add(thesis);
+			thesis.toDelete = true;
 		}
 	}
 
@@ -211,6 +213,7 @@ public class MyContactListener implements ContactListener {
 			if (player.hitByItem(redBull)) { // does nothing cause players cannot die
 				player.setToRender(false);
 				this.objectsToRemove.add(player);
+				redBull.toDelete = true;
 			}
 			if (player.isHitAbleAgain()) {
 				player.setHandicap(redBull.getDmg());
@@ -218,21 +221,29 @@ public class MyContactListener implements ContactListener {
 			}
 			redBull.setToRender(false);
 			this.objectsToRemove.add(redBull);
+			redBull.toDelete = true;
 		}
 	}
 
-	private static void sleepWithThesis(final Object userDataA, final Object userDataB) {
-		final Item item = (Item) userDataB;
+	private void sleepWithThesis(final Object userDataA, final Object userDataB) {
+		final Item thesis = (Thesis) userDataB;
 		final PlayerSleep player = (PlayerSleep) userDataA;
-		// this.wContr.coinCount++;
-		item.grabbedBy(player);
+		if (thesis.grabbedBy(player)) {
+			thesis.setToRender(false);
+			this.objectsToRemove.add(thesis);
+			thesis.toDelete = true;
+		}
 	}
 
-	private static void wakeWithRedbull(final Object userDataA, final Object userDataB) {
-		final Item item = (Item) userDataB;
+	private void wakeWithRedbull(final Object userDataA, final Object userDataB) {
+		final RedBull redBull = (RedBull) userDataB;
 		final PlayerWake player = (PlayerWake) userDataA;
-		// this.wContr.redBullCount++;
-		item.grabbedBy(player);
+		if (redBull.grabbedBy(player)) {
+			redBull.setToRender(false);
+			this.objectsToRemove.add(redBull);
+			redBull.toDelete = true;
+		}
+
 	}
 
 	@Override
@@ -243,7 +254,7 @@ public class MyContactListener implements ContactListener {
 		final Object userDataB = fB.getBody().getUserData();
 		final Object userDataA = fA.getBody().getUserData();
 		int collisionType = 0;
-		if (((userDataB instanceof Player) && (userDataA instanceof Spikes)) || ((userDataA instanceof Player) && (userDataB instanceof Spikes))) {
+		/*if (((userDataB instanceof Player) && (userDataA instanceof Spikes)) || ((userDataA instanceof Player) && (userDataB instanceof Spikes))) {
 			collisionType = 1;
 		}
 		if (((userDataB instanceof Player) && (userDataA instanceof ThrowableObject)) || ((userDataA instanceof Player) && (userDataB instanceof ThrowableObject))) {
@@ -257,7 +268,7 @@ public class MyContactListener implements ContactListener {
 		}
 		if (((userDataB instanceof PlayerSleep) && (userDataA instanceof Item)) || ((userDataA instanceof Item) && (userDataB instanceof PlayerSleep))) {
 			collisionType = 5;
-		}
+		}*/
 
 		if (((userDataB instanceof Player) && (userDataA instanceof NPC)) || ((userDataB instanceof NPC) && (userDataA instanceof Player))) {
 			collisionType = 7;

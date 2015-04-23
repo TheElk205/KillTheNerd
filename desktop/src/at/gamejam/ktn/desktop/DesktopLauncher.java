@@ -31,7 +31,7 @@ public class DesktopLauncher {
 
 		config.fullscreen = false;
 		config.backgroundFPS = 1;
-		config.title = "Nerd Wars - Version_0.1_2015.04.20 - Created by Herkt Kevin, Ferdinand Köppen and Philip Polczer";
+		config.title = "Nerd Wars - Version_0.1_2015.04.20 - Created by Herkt Kevin, Ferdinand Koeppen and Philip Polczer";
 		config.height = Constants.VIEWPORT_GUI_HEIGHT;
 		config.width = Constants.VIEWPORT_GUI_WIDTH;
 		final LwjglApplication lwjglApplication = new LwjglApplication(new JumpAndRoll(), config);

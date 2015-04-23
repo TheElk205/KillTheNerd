@@ -23,6 +23,7 @@ public class MapParser {
 			this.buffImage = ImageIO.read(new File(this.path));
 		} catch (final IOException e) {
 			System.err.println("Error while opening " + this.path);
+			// TODO handle
 		}
 		this.tiles = new TileData[this.buffImage.getWidth()][this.buffImage.getHeight()];
 	}

@@ -23,7 +23,7 @@ public class InputManager extends InputAdapter {
 
 	@Override
 	public boolean keyDown(final int keycode) {
-		if (!enabled) {
+		if (!this.enabled) {
 			return false;
 		}
 		switch (keycode) {
@@ -35,7 +35,7 @@ public class InputManager extends InputAdapter {
 				this.cameraHelper.addZoom(0.2f);
 				break;
 
-				// Running, Player Sleep
+				// Running, Player Wake
 			case Input.Keys.LEFT:
 				this.playerWake.setLeft(true);
 				break;
@@ -48,7 +48,7 @@ public class InputManager extends InputAdapter {
 			case Input.Keys.DOWN:
 				this.playerWake.setDown(true);
 				break;
-			// running Player Wake
+			// running Player Sleep
 			case Input.Keys.A:
 				this.playerSleep.setLeft(true);
 				break;
@@ -86,7 +86,7 @@ public class InputManager extends InputAdapter {
 	@Override
 	public boolean keyUp(final int keycode) {
 		switch (keycode) {
-			// Running Player Wake
+		// Running Player Wake
 			case Input.Keys.LEFT:
 				this.playerWake.setLeft(false);
 				break;
@@ -103,7 +103,6 @@ public class InputManager extends InputAdapter {
 			case Input.Keys.CONTROL_RIGHT:
 				this.playerWake.setShoot(false);
 				break;
-
 				// running Player Wake
 			case Input.Keys.A:
 				this.playerSleep.setLeft(false);
@@ -134,48 +133,10 @@ public class InputManager extends InputAdapter {
 		if (!this.playerSleep.getDown() && !this.playerSleep.getUp() && !this.playerSleep.getLeft() && !this.playerSleep.getRight()) {
 			this.playerSleep.stop();
 		}
-		/*switch (keycode) {
-			case Input.Keys.LEFT:
-			case Input.Keys.RIGHT:
-			case Input.Keys.UP:
-			case Input.Keys.DOWN:
-				this.player.stop();
-				break;
-			default:
-				this.player.stop();
-				break;
-		}*/
 		return false;
 	}
 
-	/*@Override
-	public boolean touchDown(final int screenX, final int screenY, final int pointer, final int button) {
-		if (screenY < (Gdx.graphics.getHeight() / 4)) {
-			this.reset();
-		}
-		if (screenX < (Gdx.graphics.getWidth() / 3)) {
-			// this.player.setLeft(true);
-		} else
-			if (screenX > ((Gdx.graphics.getWidth() / 3) * 2)) {
-				// this.player.setRight(true);
-			} else {
-				// this.player.jump();
-			}
-		return true;
-	}
-
-	@Override
-	public boolean touchUp(final int screenX, final int screenY, final int pointer, final int button) {
-		if (screenX < (Gdx.graphics.getWidth() / 3)) {
-			// this.player.setLeft(false);
-		} else
-			if (screenX > ((Gdx.graphics.getWidth() / 3) * 2)) {
-				// this.player.setRight(false);
-			}
-		return true;
-	}*/
-
-	public void setEnabled(boolean enabled) {
+	public void setEnabled(final boolean enabled) {
 		this.enabled = enabled;
 	}
 }

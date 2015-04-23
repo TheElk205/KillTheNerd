@@ -30,8 +30,9 @@ public abstract class Player extends InteractiveObject {
 	protected float				throwingSpeed		= 100;
 	protected World				b2World;
 	protected WorldController	worldController;
-	protected Direction			directionMoving;
+	private Direction			directionMoving;
 	protected Direction			directionLooking;
+	private Direction			newestDirection;
 	protected String			name				= "Player";
 	private boolean				right;
 	private boolean				up;
@@ -211,16 +212,7 @@ public abstract class Player extends InteractiveObject {
 		}
 	}
 
-	/*private void getNear(final Object o) {
-		if (o instanceof Item) {
-			((Item) o).grabbedBy(this);
-		} else
-			if (o instanceof Pupil) {
-				((Pupil) o).isNear(this);
-			}
-	}*/
-
-	public void setDirectionMoving(final Direction d) {
+	private void setDirectionMoving(final Direction d) {
 		this.directionMoving = d;
 		// if (d != Direction.STAY) {
 		// this.directionLooking = d;
@@ -313,6 +305,7 @@ public abstract class Player extends InteractiveObject {
 
 	public void move() {
 		final Vector2 toApply = new Vector2();
+		final Vector2 lin = new Vector2();
 		/*switch (this.directionMoving) {
 			case N:
 				toApply.y = this.currentSpeed;
@@ -330,19 +323,39 @@ public abstract class Player extends InteractiveObject {
 				break;
 		}*/
 
-		if (this.up) {
+		// if ((this.up && (this.newestDirection == Direction.N)) || (this.up && !this.left && !this.right)
+		if (this.up) { // N
+			lin.y = Math.round((this.currentSpeed / 1.5)) * this.handicap;
 			toApply.y = this.currentSpeed * this.handicap;
+		} else {
+			if (this.down) { // S
+				lin.y = -Math.round((this.currentSpeed / 1.5)) * this.handicap;
+				toApply.y = -(this.currentSpeed * this.handicap);
+			} else {
+				lin.y = 0;
+				// this.b2Body.setLinearVelocity(this.b2Body.getLinearVelocity().x, 0);
+				toApply.y = 0;
+			}
 		}
-		if (this.down) {
-			toApply.y = -(this.currentSpeed * this.handicap);
-		}
-		if (this.right) {
+
+		if (this.right) { // E
+			lin.x = Math.round((this.currentSpeed / 1.5)) * this.handicap;
 			toApply.x = this.currentSpeed * this.handicap;
+		} else {
+			if (this.left) { // W
+				lin.x = -Math.round((this.currentSpeed / 1.5)) * this.handicap;
+				// this.b2Body.setLinearVelocity(0, this.b2Body.getLinearVelocity().y);
+				toApply.x = -this.currentSpeed * this.handicap;
+			} else {
+				lin.x = 0;
+				// this.b2Body.setLinearVelocity(0, this.b2Body.getLinearVelocity().y);
+				toApply.x = 0;
+			}
 		}
-		if (this.left) {
-			toApply.x = -this.currentSpeed * this.handicap;
-		}
+		// if ((this.right && (this.newestDirection == Direction.E)) || (this.right && !this.up && !this.down)) {
+
 		// System.out.println("currentSpeed: " + this.currentSpeed);
+		this.b2Body.setLinearVelocity(lin);
 		this.b2Body.applyForceToCenter(toApply, true);
 	}
 
@@ -382,34 +395,37 @@ public abstract class Player extends InteractiveObject {
 			initPos.x = this.position.x;
 			initPos.y = this.position.y;
 
-			final float offset = 0f;
 			switch (this.directionLooking) {
 				case N:
 					toApply.y = this.throwingSpeed;
-					initPos.y += offset; // dont add because image is not in middle? (this.dimension.y / 2) +
+					initPos.y += 0.2f; // dont add because image is not in middle? (this.dimension.y / 2) +
+					initPos.x -= 0.05f;
 					break;
 				case E:
 					toApply.x = this.throwingSpeed;
-					initPos.x += offset; // dont add because image is not in middle? (this.dimension.x / 2) +
+					initPos.x += 0.2f; // dont add because image is not in middle? (this.dimension.x / 2) +
+					initPos.y -= 0.1f;
 					break;
 				case S:
 					toApply.y = -this.throwingSpeed;
-					initPos.y -= (this.dimension.y / 2) - offset;
+					initPos.y -= (this.dimension.y / 2);
+					initPos.x -= 0.05f;
 					break;
 				case W:
 					toApply.x = -this.throwingSpeed;
-					initPos.x -= (this.dimension.x / 2) - offset;
+					initPos.x -= (this.dimension.x / 2);
+					initPos.y -= 0.1f;
 					break;
 				default:
 					break;
 			}
-			// System.out.println("throw spawn position: " + initPos);
+			// System.out.println("throw spawn position: " + initPos + " playerPosition: " + this.position);
 			if (this.itemType == ItemType.REDBULL) {
 				final RedBull bull = new RedBull(initPos, this.b2World, true);
 				bull.getB2Body().applyForceToCenter(toApply, true);
 				this.worldController.addTempGameObject(bull);
 				bull.itemIsThrownBy = this;
-				// this.worldController.redBullCount--;
+				bull.collected = false;
 				this.decrItemCount();
 				bull.collectable = false;
 				bull.isFlying = true;
@@ -419,7 +435,7 @@ public abstract class Player extends InteractiveObject {
 					thesis.getB2Body().applyForceToCenter(toApply, true);
 					this.worldController.addTempGameObject(thesis);
 					thesis.itemIsThrownBy = this;
-					// this.worldController.coinCount--;
+					thesis.collected = false;
 					this.decrItemCount();
 					thesis.collectable = false;
 					thesis.isFlying = true;
@@ -462,45 +478,70 @@ public abstract class Player extends InteractiveObject {
 		return this.name;
 	}
 
-	public String toStrign() {
+	@Override
+	public String toString() {
 		return this.name;
 	}
 
 	public void setRight(final boolean b) {
+		// if (!this.right) {
 		this.right = b;
+		if (b) {
+			this.newestDirection = Direction.E;
+		}
 		this.setLooking();
 		this.setDirectionMoving(Player.Direction.E);
+
+		// }
 	}
 
 	public void setUp(final boolean b) {
+		// if (!this.up) {
 		this.up = b;
+		if (b) {
+			this.newestDirection = Direction.N;
+		}
 		this.setLooking();
 		this.setDirectionMoving(Player.Direction.N);
+
+		// }
 	}
 
 	public void setLeft(final boolean b) {
+		// if (!this.left) {
 		this.left = b;
+		if (b) {
+			this.newestDirection = Direction.W;
+		}
 		this.setLooking();
 		this.setDirectionMoving(Player.Direction.W);
+
+		// }
 	}
 
 	public void setDown(final boolean b) {
+		// if (!this.down) {
 		this.down = b;
+		if (b) {
+			this.newestDirection = Direction.S;
+		}
 		this.setLooking();
 		this.setDirectionMoving(Player.Direction.S);
+
+		// }
 	}
 
-	public void setLooking() {
-		if (this.up) {
+	private void setLooking() {
+		if ((this.up && (this.newestDirection == Direction.N)) || (this.up && !this.left && !this.right)) {
 			this.directionLooking = Direction.N;
 		}
-		if (this.down) {
+		if ((this.down && (this.newestDirection == Direction.S)) || (this.down && !this.left && !this.right)) {
 			this.directionLooking = Direction.S;
 		}
-		if (this.left) {
+		if ((this.left && (this.newestDirection == Direction.W)) || (this.left && !this.up && !this.down)) {
 			this.directionLooking = Direction.W;
 		}
-		if (this.right) {
+		if ((this.right && (this.newestDirection == Direction.E)) || (this.right && !this.up && !this.down)) {
 			this.directionLooking = Direction.E;
 		}
 	}

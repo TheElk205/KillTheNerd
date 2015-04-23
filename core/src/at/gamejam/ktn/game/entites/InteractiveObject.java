@@ -28,7 +28,7 @@ public abstract class InteractiveObject extends GameObject {
 		TextureRegion[][] tmp = null;
 		try {
 			tmp = this.texture.split(this.texture.getRegionWidth() / this.numPictures, this.texture.getRegionHeight());
-		} catch (Exception e) {
+		} catch (final Exception e) {
 
 		}
 		this.textureRegion = new TextureRegion[this.numPictures];
@@ -37,7 +37,7 @@ public abstract class InteractiveObject extends GameObject {
 			this.textureRegion[index++] = tmp[0][j];
 		}
 		this.startTime = 0;
-		this.animation = new Animation(frameDuration, this.textureRegion);
+		this.animation = new Animation(this.frameDuration, this.textureRegion);
 	}
 
 	@Override
