@@ -3,7 +3,8 @@ package at.gamejam.ktn.client;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import at.gamejam.ktn.KTN_Game;
+
+import at.gamejam.ktn.JumpAndRoll;
 
 public class HtmlLauncher extends GwtApplication {
 
@@ -14,6 +15,6 @@ public class HtmlLauncher extends GwtApplication {
 
         @Override
         public ApplicationListener getApplicationListener () {
-                return new KTN_Game();
+                return new JumpAndRoll();
         }
 }
