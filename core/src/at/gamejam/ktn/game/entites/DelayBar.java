@@ -1,5 +1,7 @@
 package at.gamejam.ktn.game.entites;
 
+import at.gamejam.ktn.game.entities.GameObject;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -53,8 +55,8 @@ public class DelayBar extends InteractiveObject {
 	}
 
 	private void loadAssets() {
-		this.green = this.assets.findRegion("green_pixels");
-		this.red = this.assets.findRegion("red_pixels");
+		this.green = GameObject.assets.findRegion("green_pixels");
+		this.red = GameObject.assets.findRegion("red_pixels");
 	}
 
 }

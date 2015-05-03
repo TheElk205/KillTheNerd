@@ -74,6 +74,7 @@ public abstract class Item extends InteractiveObject {
 			// System.out.println(this.dimension.x);
 			polygonShape.setAsBox(this.dimension.x / 2f, this.dimension.y / 2f);
 			final FixtureDef fixtureDef = new FixtureDef();
+			fixtureDef.isSensor = false;
 			fixtureDef.density = 5f;
 			fixtureDef.friction = 0f;
 			fixtureDef.restitution = 0;

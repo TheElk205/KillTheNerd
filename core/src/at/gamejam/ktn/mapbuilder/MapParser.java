@@ -34,8 +34,8 @@ public class MapParser {
 		Color color;
 		this.setMapImageWidth(this.buffImage.getWidth());
 		this.setMapImageHeight(this.buffImage.getHeight());
-		for (int y = 0; y < this.tiles[0].length; y++) {
-			for (int x = 0; x < this.tiles.length; x++) {
+		for (int y = 0; y < this.mapImageHeight; y++) { //
+			for (int x = 0; x < this.mapImageWidth; x++) { // this.tiles.length;
 				color = new Color(this.buffImage.getRGB(x, y));
 				// System.out.println(color);
 				for (final TileData td : this.tileParser.getTileDataList()) {

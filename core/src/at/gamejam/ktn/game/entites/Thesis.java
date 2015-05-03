@@ -22,4 +22,8 @@ public class Thesis extends Item {
 		this.texture = GameObject.assets.findRegion("book_green");
 	}
 
+	@Override
+	public String toString() {
+		return "Book";
+	}
 }

@@ -23,4 +23,8 @@ public class RedBull extends Item {
 		this.texture = GameObject.assets.findRegion("cup_coffee");
 	}
 
+	@Override
+	public String toString() {
+		return "Coffee";
+	}
 }

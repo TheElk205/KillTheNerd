@@ -40,7 +40,7 @@ public class MyContactListener implements ContactListener {
 
 		final Object userDataB = fB.getBody().getUserData();
 		final Object userDataA = fA.getBody().getUserData();
-		// System.out.println(userDataA + " collides with " + userDataB);
+		// System.out.println("--" + userDataA + " collides with " + userDataB);
 
 		/*if (userDataA instanceof Item) {TODO: hold an item list in controller to set collectable again?
 			((Item) userDataA).collectable = true;
@@ -151,7 +151,7 @@ public class MyContactListener implements ContactListener {
 							}
 				break;
 			case 6:
-				// ((Item)userDataA).getB2Body()
+				MyContactListener.itemWithItem(userDataA, userDataB);
 				break;
 			case 7: // Set Player wake
 
@@ -168,21 +168,46 @@ public class MyContactListener implements ContactListener {
 				break;
 			default:
 				// System.out.println("default hit - A: " + userDataA + " B: " + userDataB);
-				if (userDataA instanceof Item) {
-					// ((Item) userDataA).getB2Body().applyForceToCenter(new Vector2(), true);
-					((Item) userDataA).isFlying = false;
-					((Item) userDataA).collectable = true;
-					((Item) userDataA).collected = false;
-				}
-				if (userDataB instanceof Item) {
-					// ((Item) userDataB).getB2Body().applyForceToCenter(new Vector2(), true);
-					((Item) userDataB).isFlying = false;
-					((Item) userDataB).collectable = true;
-					((Item) userDataB).collected = false;
-				}
+				MyContactListener.itemWithSensor(fB, userDataA);
+				MyContactListener.itemWithSensor(fA, userDataB);
 				break;
 		}
 
+	}
+
+	private static void itemWithSensor(final Fixture fixture, final Object userData) {
+		if ((userData instanceof Item) && !fixture.isSensor()) {
+			((Item) userData).isFlying = false;
+			((Item) userData).collectable = true;
+			((Item) userData).collected = false;
+			if (fixture.isSensor()) {
+				System.out.println(userData + " with sensor " + fixture.getBody().getUserData());
+			} else {
+				System.out.println(userData + " with non-sensor " + fixture.getBody().getUserData());
+			}
+		} else {
+
+		}
+	}
+
+	// TODO: problem mit abstuerzen wenn man sich zugleich trifft?
+
+	/**
+	 * TODO: vl in das object item verschieben. methode setCollectable();
+	 *
+	 * @param userDataA
+	 * @param userDataB
+	 */
+	private static void itemWithItem(final Object userDataA, final Object userDataB) {
+		if ((userDataA instanceof Item) && (userDataB instanceof Item)) {
+			System.out.println("Item hits Item");
+			((Item) userDataA).isFlying = false;
+			((Item) userDataA).collectable = true;
+			((Item) userDataA).collected = false;
+			((Item) userDataB).isFlying = false;
+			((Item) userDataB).collectable = true;
+			((Item) userDataB).collected = false;
+		}
 	}
 
 	private void wakeWithThesis(final Object playerWake, final Object userDataB) {

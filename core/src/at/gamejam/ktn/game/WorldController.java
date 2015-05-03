@@ -17,9 +17,11 @@ import at.gamejam.ktn.utils.Constants;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class WorldController {
+	private static final boolean	spawnEnabled	= false;
 	public Sound					ingameMusic;
 	public Sound					winMusic;
 	public CameraHelper				cameraHelper;
@@ -31,10 +33,12 @@ public class WorldController {
 	private World					b2World;
 	private GeneratedLevel			level;
 	private float					lastSpawn		= 0;
-	private final boolean			debug			= true;
+	private final boolean			debug			= false;
 	private InputManager			inputManager;
 	private final List<GameObject>	objectsToAdd	= new ArrayList<GameObject>();
 	private MyContactListener		contactListener;
+	private final float				printTime		= 0;
+	private double					distance;
 
 	public WorldController() {
 		this.init();
@@ -91,32 +95,9 @@ public class WorldController {
 		this.b2World.step(1 / 60f, 3, 8); // timeStep, velocityIteration, positionIteration
 
 		// this.cameraHelper.update(deltaTime);
-		final Vector2 vector = new Vector2();
-		vector.x = (this.playerWake.position.x + this.playerSleep.position.x) / 2;
-		vector.y = (this.playerWake.position.y + this.playerSleep.position.y) / 2;
+		final Vector2 vector = this.calcPlayerDistance();
 		this.cameraHelper.update(vector);
-		final double temp1 = Math.pow((this.playerWake.position.x - this.playerSleep.position.x), 2);
-		final double temp2 = Math.pow((this.playerWake.position.y - this.playerSleep.position.y), 2);
-		final double distance = Math.sqrt(temp1 + temp2);
-		// System.out.println(distance);
-		final double factor = 0.2;
-		/*if (distance < 5) {
-			factor = factor * (-1);
-		}*/
-		this.cameraHelper.setZoom((float) (distance * factor));
-		// System.out.println(distance);
-
-		/*for (final GameObject o : this.level.getGameObjects()) {
-			if (o instanceof Item) {
-				final Item b = (Item) o;
-				if (b.isCollected() && !b.destroyed) {
-					this.b2World.destroyBody(b.getB2Body());
-					b.destroyed = true;
-					// b.toDelete = true;
-				}
-			}
-		}*/
-
+		this.cameraHelper.setZoom((float) (this.distance * 0.2f));
 		this.createDynamicObjects();
 
 		this.playerSleep.update(deltaTime);
@@ -124,12 +105,54 @@ public class WorldController {
 		this.sleepBar.update(deltaTime);
 		this.wakeBar.update(deltaTime);
 		this.level.update(deltaTime);
-		/*if (this.player.getBody().getPosition().y < -3) {
-			this.reset = true;
-		}	if (this.reset) {
-			this.reset();
+
+		// check max player distance for camera
+		/*this.printTime += deltaTime;
+		if (this.printTime > 1) {
+			this.printTime = 0;
+			System.out.println(this.playerWake.position);
 		}*/
-		// this.testCoins();
+
+		// verhindert dass sich die Spieler zuweit voneinander entfernen
+		final double maxDistance = 14f;
+		if (this.distance > maxDistance) {
+			final Body wakeBody = this.playerWake.b2Body;
+			final Body sleepBody = this.playerSleep.b2Body;
+
+			float wakeX = wakeBody.getPosition().x;
+			float sleepX = sleepBody.getPosition().x;
+			final float wakeY = wakeBody.getPosition().y;
+			final float sleepY = sleepBody.getPosition().y;
+			final float offset = 0.08f;
+			if (wakeX > sleepX) {
+				wakeX = wakeX - offset;
+				sleepX = sleepX + offset;
+			} else {
+				wakeX = wakeX + offset;
+				sleepX = sleepX - offset;
+			}
+
+			/*if (wakeY > sleepY) {
+				wakeY = wakeY - offset;
+				sleepY = sleepY + offset;
+			} else {
+				wakeY = wakeY + offset;
+				sleepY = sleepY - offset;
+			}*/
+			wakeBody.setTransform(new Vector2(wakeX, wakeY), wakeBody.getAngle());
+			sleepBody.setTransform(new Vector2(sleepX, sleepY), wakeBody.getAngle());
+		}
+
+		/*this.b2Body.setLinearVelocity(lin);
+		this.b2Body.applyForceToCenter(toApply, true);
+
+		this.position.x = this.position.x - 1;
+		this.position.y = this.position.y + 3;
+		if (this.calcPossibleXPlayerDistance() >= maxDistance) {
+			this.position.x = this.position.x + 1;
+			this.position.y = this.position.y - 3;
+		}*/
+		// this.b2Body.setLinearVelocity(new Vector2(-lin.x * 3, -lin.y * 3));
 
 		for (final Item item : Item.itemList) {
 			if (item.isFlying) {
@@ -140,29 +163,59 @@ public class WorldController {
 			}
 		}
 
-		boolean spawn = false;
-		this.lastSpawn = this.lastSpawn + deltaTime;
-		if (this.lastSpawn > 10) {
-			final Random rnd = new Random();
-			final float i = rnd.nextFloat();
-			if (RedBull.itemCount < 10) {
-				spawn = true;
-				this.addTempGameObject(new RedBull(new Vector2(2f + i, 2f), this.b2World, true));
-				this.addTempGameObject(new RedBull(new Vector2(-1.5f, 1f + i), this.b2World, true));
+		if (WorldController.spawnEnabled) {
+			boolean spawn = false;
+			this.lastSpawn = this.lastSpawn + deltaTime;
+			if (this.lastSpawn > 10) {
+				final Random rnd = new Random();
+				final float i = rnd.nextFloat();
+				if (RedBull.itemCount < 10) {
+					spawn = true;
+					this.addTempGameObject(new RedBull(new Vector2(2f + i, 2f), this.b2World, true));
+					this.addTempGameObject(new RedBull(new Vector2(-1.5f, 1f + i), this.b2World, true));
+				}
+			}
+			if (this.lastSpawn > 10) {
+				final Random rnd = new Random();
+				final float i = rnd.nextFloat();
+				if (Thesis.itemCount < 10) {
+					spawn = true;
+					this.addTempGameObject(new Thesis(new Vector2(2f + i, -2.5f), this.b2World, true));
+					this.addTempGameObject(new Thesis(new Vector2(-2f, -1.5f + i), this.b2World, true));
+				}
+			}
+			if (spawn) {
+				this.lastSpawn = 0;
 			}
 		}
-		if (this.lastSpawn > 10) {
-			final Random rnd = new Random();
-			final float i = rnd.nextFloat();
-			if (Thesis.itemCount < 10) {
-				spawn = true;
-				this.addTempGameObject(new Thesis(new Vector2(2f + i, -2.5f), this.b2World, true));
-				this.addTempGameObject(new Thesis(new Vector2(-2f, -1.5f + i), this.b2World, true));
-			}
+	}
+
+	public Vector2 calcPlayerDistance() {
+		final Vector2 vector = new Vector2();
+		vector.x = (this.playerWake.position.x + this.playerSleep.position.x) / 2;
+		vector.y = (this.playerWake.position.y + this.playerSleep.position.y) / 2;
+		final double temp1 = Math.pow((this.playerWake.position.x - this.playerSleep.position.x), 2);
+		final double temp2 = Math.pow((this.playerWake.position.y - this.playerSleep.position.y), 2);
+		this.distance = Math.sqrt(temp1 + temp2);
+		return vector;
+	}
+
+	public double calcPossibleXPlayerDistance() {
+		final Vector2 vector = new Vector2();
+		int xOffset = 2;
+		int yOffset = 2;
+		if (this.playerWake.position.x < this.playerSleep.position.x) {
+			xOffset = -2;
 		}
-		if (spawn) {
-			this.lastSpawn = 0;
+		if (this.playerWake.position.y < this.playerSleep.position.y) {
+			yOffset = -2;
 		}
+
+		vector.x = (this.playerWake.position.x + xOffset + this.playerSleep.position.x) / 2;
+		vector.y = (this.playerWake.position.y + yOffset + this.playerSleep.position.y) / 2;
+		final double temp1 = Math.pow(((this.playerWake.position.x + xOffset) - this.playerSleep.position.x), 2);
+		final double temp2 = Math.pow(((this.playerWake.position.y + yOffset) - this.playerSleep.position.y), 2);
+		return Math.sqrt(temp1 + temp2);
 	}
 
 	/**
@@ -186,13 +239,13 @@ public class WorldController {
 	}
 
 	/*private void reset() {
-	this.reset = false;
-	this.playerSleep.getBody().setTransform(new Vector2(0.5f, 1.5f), 0);
-	this.playerSleep.getBody().setLinearVelocity(new Vector2(0, 0));
-	this.playerSleep.getBody().setAngularVelocity(0);
-	this.timeElapsed = 0;
-	this.coinCount = 0;
-	}*/
+		this.reset = false;
+		this.playerSleep.getBody().setTransform(new Vector2(0.5f, 1.5f), 0);
+		this.playerSleep.getBody().setLinearVelocity(new Vector2(0, 0));
+		this.playerSleep.getBody().setAngularVelocity(0);
+		this.timeElapsed = 0;
+		this.coinCount = 0;
+		}*/
 
 	public void addTempGameObject(final GameObject object) {
 		this.objectsToAdd.add(object);
@@ -212,8 +265,8 @@ public class WorldController {
 	}
 
 	/*protected void addAbstractItem(final GameObject object) {
-	this.level.addGameObject(object);
-	}*/
+		this.level.addGameObject(object);
+		}*/
 
 	public InputManager getInputManager() {
 		return this.inputManager;

@@ -99,4 +99,9 @@ public class Tile extends GameObject {
 	public TileData getTiledata() {
 		return this.tileData;
 	}
+
+	@Override
+	public String toString() {
+		return "Tile (" + this.tileName + ")";
+	}
 }

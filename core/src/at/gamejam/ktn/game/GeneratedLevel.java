@@ -44,9 +44,11 @@ public class GeneratedLevel {
 		final TileData[][] tDataArray = this.mapParser.getTileData();
 		final int height = this.mapParser.getMapImageHeight();
 		final int width = this.mapParser.getMapImageWidth();
-		for (float y = -5.0f, stepy = height - 1; y < (height / 4); y += 0.5, stepy--) {
-			final float limit = (width / 4f);
-			for (float x = -7.5f, stepX = 0; x < limit; x += 0.5, stepX++) { // 7.5
+		final int heigthLimit = (int) Math.ceil(height / 4f);
+		for (float y = -5.0f, stepy = height - 1; y < heigthLimit; y += 0.5, stepy--) {
+			final int widthLimit = (int) Math.ceil(width / 4f) + 1; // TODO: +1 is just a bugfix, ansonsten wird nicht ganze map nach rechts
+			// gezeichnet
+			for (float x = -7.5f, stepX = 0; x < widthLimit; x += 0.5, stepX++) { // 7.5
 				final Vector2 position = new Vector2(x, y);
 				final TileData tData = tDataArray[(int) stepX][(int) stepy];
 				final Tile t = new Tile(position, this.b2world, tData);
@@ -70,48 +72,35 @@ public class GeneratedLevel {
 	private void addNPCs() {
 		final NPC npc1 = new NPC(new Vector2(1, -5), this.b2world, 50);
 		final EnergyBar energy1 = new EnergyBar(npc1);
-
 		this.gameObjects.add(npc1);
 		this.gameObjects.add(energy1);
 
 		final NPC npc2 = new NPC(new Vector2(1, 0), this.b2world, 50);
 		final EnergyBar energy2 = new EnergyBar(npc2);
-
 		this.gameObjects.add(npc2);
 		this.gameObjects.add(energy2);
 
 		final NPC npc3 = new NPC(new Vector2(-4, -3), this.b2world, 50);
 		final EnergyBar energy3 = new EnergyBar(npc3);
-
 		this.gameObjects.add(npc3);
 		this.gameObjects.add(energy3);
 
 		final NPC npc4 = new NPC(new Vector2(-2, 2), this.b2world, 50);
 		final EnergyBar energy4 = new EnergyBar(npc4);
-
 		this.gameObjects.add(npc4);
 		this.gameObjects.add(energy4);
 
 		final NPC npc5 = new NPC(new Vector2(5, -1), this.b2world, 50);
 		final EnergyBar energy5 = new EnergyBar(npc5);
-
 		this.gameObjects.add(npc5);
 		this.gameObjects.add(energy5);
 
-		// this.gameObjects.add(new NPC(new Vector2(3, 0), this.b2world, 50));
-		// this.gameObjects.add(new NPC(new Vector2(1, -3), this.b2world, 50));
-		// this.gameObjects.add(new NPC(new Vector2(0, 2), this.b2world, 50));
-		// this.gameObjects.add(new NPC(new Vector2(2, 0), this.b2world, 50));
-		// this.gameObjects.add(new NPC(new Vector2(0, -4), this.b2world, 50));
-		// this.gameObjects.add(new NPC(new Vector2(-2, 1), this.b2world, 0));
-		// this.gameObjects.add(new NPC(new Vector2(3, 1), this.b2world, 0));
-		// this.gameObjects.add(new NPC(new Vector2(2, 1), this.b2world, 0));
-		// this.gameObjects.add(new NPC(new Vector2(1, 3), this.b2world, 0));
-		// this.gameObjects.add(new NPC(new Vector2(4, 2.6f), this.b2world, 100));
-		// this.gameObjects.add(new NPC(new Vector2(1, 3f), this.b2world, 100));
-		// this.gameObjects.add(new NPC(new Vector2(5, 1), this.b2world, 100));
-		// this.gameObjects.add(new NPC(new Vector2(2, 2), this.b2world, 100));
-		this.npcCount = 5;
+		final NPC npc6 = new NPC(new Vector2(9, -3), this.b2world, 50);
+		final EnergyBar energy6 = new EnergyBar(npc6);
+		this.gameObjects.add(npc6);
+		this.gameObjects.add(energy6);
+
+		this.npcCount = 6;
 
 	}
 

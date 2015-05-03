@@ -15,7 +15,7 @@ public abstract class GameObject {
 	public static ArrayList<TextureRegion>	textureList			= new ArrayList<TextureRegion>();
 	public static ArrayList<String>			textureNameList		= new ArrayList<String>();
 	public Vector2							position;
-	protected Body							b2Body;
+	public Body								b2Body;
 	public Vector2							dimension;
 	public Vector2							origin;
 	public Vector2							scale;

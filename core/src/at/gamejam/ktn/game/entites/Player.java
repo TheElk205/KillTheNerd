@@ -1,6 +1,5 @@
 package at.gamejam.ktn.game.entites;
 
-import java.io.File;
 import java.util.Vector;
 
 import at.gamejam.ktn.game.WorldController;
@@ -48,7 +47,7 @@ public abstract class Player extends InteractiveObject {
 	protected float				handicap			= 1f;							// 0: nix geht mehr, 1: alles Normal, >1: Besser
 	protected float				dealHandicap		= 0.8f;
 	protected float				handicapSetAt		= 0.0f;
-	protected float				handicapDuration	= 5f;
+	protected final float		handicapDuration	= 5f;
 	protected float				time				= 0.0f;
 	protected Animation			aMoveUp, aMoveDown, aMoveLeft, aMoveRight;
 	protected TextureRegion		tRMoveUp[], tRMoveDown[], tRMoveLeft[], tRMoveRight[];
@@ -79,10 +78,6 @@ public abstract class Player extends InteractiveObject {
 		this.tRMoveRight = Player.getRegionMoving(tmpRight);
 		this.aMoveRight = Player.getAnimation(this.tRMoveRight, 0.2f);
 		this.tRStandRight = this.tRMoveRight[0];
-
-		if (this.aMoveUp == null) {
-			System.out.println("Fehler");
-		}
 	}
 
 	protected void setInitialPictures(final TextureRegion tUp, final TextureRegion tDown, final TextureRegion tLeft, final TextureRegion tRight) {
@@ -145,8 +140,7 @@ public abstract class Player extends InteractiveObject {
 		this.worldController = worldcontroller;
 		this.b2World = this.worldController.getB2World();
 		this.position = position;
-		FileHandle handle = Gdx.files.internal(Constants.THROW_SOUND);
-		System.out.println("Path to sound: " + handle.file().getAbsolutePath());
+		final FileHandle handle = Gdx.files.internal(Constants.THROW_SOUND);
 		this.sound = Gdx.audio.newSound(handle);
 		this.init(true, true);
 	}
@@ -269,7 +263,6 @@ public abstract class Player extends InteractiveObject {
 							break;
 						default:
 							break;
-
 					}
 				}
 		}
@@ -290,13 +283,19 @@ public abstract class Player extends InteractiveObject {
 	}
 
 	private void checkCanBeHitAgain(final float deltaTime) {
+
 		this.lastHitTime += deltaTime;
-		if ((this.lastHitTime > (this.handicapDuration + 2)) && !this.hitAbleAgain) {
+		if (((this.time - this.handicapSetAt) > (this.handicapDuration + 2))) {
 			this.lastHitTime = 0f;
 			this.hitAbleAgain = true;
-			// System.out.println(this.name + " is hit able again");
+			/*if (this.getName().equalsIgnoreCase("playerWake")) {
+				System.out.println(this.name + " is hit able again");
+			}*/
 		}
-		return;
+
+		/*if (this.getName().equalsIgnoreCase("playerWake")) {
+			System.out.println((this.time - this.handicapSetAt) + " > " + (this.handicapDuration + 2));
+		}*/
 	}
 
 	public void setHitAbleAgain(final boolean b) {
@@ -310,22 +309,6 @@ public abstract class Player extends InteractiveObject {
 	public void move() {
 		final Vector2 toApply = new Vector2();
 		final Vector2 lin = new Vector2();
-		/*switch (this.directionMoving) {
-			case N:
-				toApply.y = this.currentSpeed;
-				break;
-			case S:
-				toApply.y = -this.currentSpeed;
-				break;
-			case E:
-				toApply.x = this.currentSpeed;
-				break;
-			case W:
-				toApply.x = -this.currentSpeed;
-				break;
-			default:
-				break;
-		}*/
 
 		// if ((this.up && (this.newestDirection == Direction.N)) || (this.up && !this.left && !this.right)
 		if (this.up) { // N
@@ -358,9 +341,20 @@ public abstract class Player extends InteractiveObject {
 		}
 		// if ((this.right && (this.newestDirection == Direction.E)) || (this.right && !this.up && !this.down)) {
 
-		// System.out.println("currentSpeed: " + this.currentSpeed);
+		// System.out.println("currentSpeed: " + this.currentSpeed + " distance: " + this.worldController.calcPlayerDistance());
+		// final double maxDistance = 8f;
+		// if (this.worldController.calcPossibleXPlayerDistance() <= maxDistance) {
 		this.b2Body.setLinearVelocity(lin);
 		this.b2Body.applyForceToCenter(toApply, true);
+		/*} else {
+			this.position.x = this.position.x - 1;
+			this.position.y = this.position.y + 3;
+			if (this.worldController.calcPossibleXPlayerDistance() >= maxDistance) {
+				this.position.x = this.position.x + 1;
+				this.position.y = this.position.y - 3;
+			}
+			// this.b2Body.setLinearVelocity(new Vector2(-lin.x * 3, -lin.y * 3));
+		}*/
 	}
 
 	public boolean addItem(final Item item) {

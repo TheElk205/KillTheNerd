@@ -9,11 +9,17 @@ import java.util.Vector;
 
 import at.gamejam.ktn.mapbuilder.TileData.BorderStyle;
 
+/**
+ * @author Ferdinand Koeppen
+ */
 public class TileParser {
 	private final String			path;
 
 	private final Vector<TileData>	tileDataList;
 
+	/**
+	 * @param path
+	 */
 	public TileParser(final String path) {
 		this.path = path;
 		this.tileDataList = new Vector<TileData>();

@@ -2,6 +2,8 @@ package at.gamejam.ktn.game.entites;
 
 import java.util.Random;
 
+import at.gamejam.ktn.game.entities.GameObject;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -119,7 +121,7 @@ public class NPC extends InteractiveObject {
 	}
 
 	public void loadAsset() {
-		this.texture = this.assets.findRegion("worker"); // worker
+		this.texture = GameObject.assets.findRegion("worker"); // worker
 	}
 
 	public void addFactor(final float factor) {
@@ -158,5 +160,10 @@ public class NPC extends InteractiveObject {
 		if (this.areNear[1] == player) {
 			this.areNear[1] = null;
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "NPC";
 	}
 }
