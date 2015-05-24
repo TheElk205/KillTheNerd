@@ -1,4 +1,4 @@
-package at.gamejam.ktn.game.entities;
+package at.game.visuals;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -6,11 +6,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 public class Coin extends GameObject {
-
 	private static final int	FRAME_COLS	= 8;
-	TextureRegion[]				animationFrames;
-	float						startTime	= 0;
-	boolean						collected	= false;
+	private TextureRegion[]		animationFrames;
+	private float				startTime	= 0;
+	private boolean				collected	= false;
 	private Animation			animation;
 
 	public Coin(final Vector2 position) {
@@ -21,7 +20,7 @@ public class Coin extends GameObject {
 	}
 
 	private void init() {
-		final TextureRegion t = this.assets.findRegion("coin_gold");
+		final TextureRegion t = GameObject.assets.findRegion("coin_gold");
 		final TextureRegion[][] tmp = t.split(t.getRegionWidth() / Coin.FRAME_COLS, t.getRegionHeight()); // #8
 		this.animationFrames = new TextureRegion[Coin.FRAME_COLS];
 		int index = 0;
@@ -41,7 +40,7 @@ public class Coin extends GameObject {
 
 	@Override
 	public void update(final float deltaTime) {
-		super.update(deltaTime);
+		// super.update(deltaTime);
 		this.startTime += deltaTime;
 	}
 
@@ -51,5 +50,10 @@ public class Coin extends GameObject {
 
 	public void setCollected(final boolean b) {
 		this.collected = b;
+	}
+
+	@Override
+	public void initPhysics() {
+		// nothing to init
 	}
 }

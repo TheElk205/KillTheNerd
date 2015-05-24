@@ -1,16 +1,23 @@
-package at.gamejam.ktn.game;
+package at.game;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
-import at.gamejam.ktn.game.entites.DelayBar;
+import at.game.visuals.GameObject;
+import at.game.visuals.hud.DelayBar;
 import at.gamejam.ktn.game.entites.Item;
 import at.gamejam.ktn.game.entites.PlayerSleep;
 import at.gamejam.ktn.game.entites.PlayerWake;
 import at.gamejam.ktn.game.entites.RedBull;
 import at.gamejam.ktn.game.entites.Thesis;
-import at.gamejam.ktn.game.entities.GameObject;
 import at.gamejam.ktn.utils.CameraHelper;
 import at.gamejam.ktn.utils.Constants;
 
@@ -21,7 +28,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class WorldController {
-	private static final boolean	spawnEnabled	= false;
+	private static final boolean	spawnEnabled	= true;
 	public Sound					ingameMusic;
 	public Sound					winMusic;
 	public CameraHelper				cameraHelper;
@@ -37,15 +44,19 @@ public class WorldController {
 	private InputManager			inputManager;
 	private final List<GameObject>	objectsToAdd	= new ArrayList<GameObject>();
 	private MyContactListener		contactListener;
-	private final float				printTime		= 0;
+	// private final float printTime = 0;
 	private double					distance;
+	// private final static Logger LOGGER = new Logger("WorldController-Logger", Logger.INFO);
+	private final static Logger		LOGGER			= Logger.getLogger(WorldController.class.getName());
 
 	public WorldController() {
 		this.init();
 	}
 
 	public void init() {
-
+		if (this.debug) {
+			WorldController.LOGGER.info("test info");
+		}
 		this.cameraHelper = new CameraHelper();
 		// this.b2World = new World(new Vector2(0, -9.81f), true);
 		this.b2World = new World(new Vector2(0, 0), true); // no gravity
@@ -70,12 +81,42 @@ public class WorldController {
 		midiPlayer.setLooping(true);
 		midiPlayer.setVolume(0.5f);
 		midiPlayer.play();*/
+		if (this.debug) {
+			WorldController.setUpLogger();
+		}
+	}
+
+	private static void setUpLogger() {
+		// LOGGER
+		// get the global logger to configure it
+		final Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+
+		// suppress the logging output to the console
+		final Logger rootLogger = Logger.getLogger("");
+		final Handler[] handlers = rootLogger.getHandlers();
+		if (handlers[0] instanceof ConsoleHandler) {
+			rootLogger.removeHandler(handlers[0]);
+		}
+		logger.setLevel(Level.INFO);
+		FileHandler fileTxt = null;
+		try {
+			fileTxt = new FileHandler("Logging.txt");
+		} catch (SecurityException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// create a TXT formatter
+		final SimpleFormatter formatterTxt = new SimpleFormatter();
+		fileTxt.setFormatter(formatterTxt);
+		WorldController.LOGGER.addHandler(fileTxt);
+		WorldController.LOGGER.info("test info 2");
 	}
 
 	public void update(final float deltaTime) {
 		// remove objects before or after step!!
-		if (this.contactListener.getObjectsToRemove().size() > 0) {
-			for (final GameObject object : this.contactListener.getObjectsToRemove()) {
+		final List<GameObject> removeList = this.contactListener.getObjectsToRemove();
+		if (removeList.size() > 0) {
+			for (final GameObject object : removeList) {
 				if (object.toDelete) {
 					this.b2World.destroyBody(object.getB2Body());
 					object.setToRender(false);
@@ -155,11 +196,11 @@ public class WorldController {
 		// this.b2Body.setLinearVelocity(new Vector2(-lin.x * 3, -lin.y * 3));
 
 		for (final Item item : Item.itemList) {
-			if (item.isFlying) {
+			if (item.isFlying()) {
 				item.flyingTime += deltaTime;
 			}
 			if (item.flyingTime > 0.8) {
-				item.collectable = true;
+				item.setCollectable(true);
 			}
 		}
 

@@ -1,18 +1,16 @@
-package at.gamejam.ktn;
-
-import at.gamejam.ktn.game.LoadRenderer;
-import at.gamejam.ktn.game.WorldController;
-import at.gamejam.ktn.game.WorldRenderer;
+package at.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 
-public class JumpAndRoll extends ApplicationAdapter {
+public class Game extends ApplicationAdapter {
 	private boolean			isLoading	= true;
 	private WorldController	worldController;
 	private WorldRenderer	worldRenderer;
+	/** used to simulate loading screen */
 	private LoadRenderer	loadRenderer;
+	/** used to simulate loading screen */
 	private int				count		= 0;
 
 	@Override

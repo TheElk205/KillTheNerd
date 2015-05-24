@@ -1,6 +1,6 @@
-package at.gamejam.ktn.mapbuilder;
+package at.game;
 
-import at.gamejam.ktn.game.entities.GameObject;
+import at.game.visuals.GameObject;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Tile extends GameObject {
 	private TextureRegion	texture		= null;
+	/** used to create bodies */
 	private final World		b2World;
 	private Body			b2Body;
 	private final TileData	tileData;
@@ -103,5 +104,10 @@ public class Tile extends GameObject {
 	@Override
 	public String toString() {
 		return "Tile (" + this.tileName + ")";
+	}
+
+	@Override
+	public void update(final float deltaTime) {
+		// a tile has nothing to update, maybe introduce states for tiles? -> animated tile with changeable state
 	}
 }

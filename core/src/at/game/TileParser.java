@@ -1,4 +1,4 @@
-package at.gamejam.ktn.mapbuilder;
+package at.game;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,14 +7,13 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Vector;
 
-import at.gamejam.ktn.mapbuilder.TileData.BorderStyle;
+import at.game.TileData.BorderStyle;
 
 /**
  * @author Ferdinand Koeppen
  */
 public class TileParser {
 	private final String			path;
-
 	private final Vector<TileData>	tileDataList;
 
 	/**

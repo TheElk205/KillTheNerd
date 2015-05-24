@@ -17,15 +17,15 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public abstract class Item extends InteractiveObject {
 	private static final Sound	GRAB_SOUND		= Gdx.audio.newSound(Gdx.files.internal(Constants.GRAB_SOUND));
-	public boolean				collected		= false;
-	public boolean				collectable		= true;
+	private boolean				collected		= false;
+	private boolean				collectable		= true;
 	private Player				grabbedBy;
 	public Player				itemIsThrownBy	= null;
 	private final float			dmg				= 0.05f;
 	// public boolean destroyed = false;
 	public static List<Item>	itemList		= new ArrayList<Item>();
 	public float				flyingTime		= 0;
-	public boolean				isFlying		= false;
+	private boolean				isFlying		= false;
 
 	public Item(final Vector2 position, final World b2World) {
 		this.position = position;
@@ -48,6 +48,18 @@ public abstract class Item extends InteractiveObject {
 		if (initPhysics) {
 			this.initPhysics();
 		}
+	}
+
+	public void setFlying() {
+		this.collected = false;
+		this.collectable = false;
+		this.isFlying = true;
+	}
+
+	public void reset() {
+		this.isFlying = false;
+		this.collectable = true;
+		this.collected = false;
 	}
 
 	/*protected void init(final boolean animated, final boolean physics) {
@@ -149,5 +161,17 @@ public abstract class Item extends InteractiveObject {
 
 	public void toDelete(final boolean b) {
 		this.toDelete = b;
+	}
+
+	public boolean isCollectable() {
+		return this.collectable;
+	}
+
+	public void setCollectable(final boolean b) {
+		this.collectable = b; // TODO sollte nicht veränderlich sein, und wenn flying anders gelöst werden
+	}
+
+	public boolean isFlying() {
+		return this.isFlying;
 	}
 }

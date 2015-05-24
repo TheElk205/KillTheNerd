@@ -4,7 +4,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
 
-import at.gamejam.ktn.JumpAndRoll;
+import at.game.Game;
 
 public class HtmlLauncher extends GwtApplication {
 
@@ -15,6 +15,6 @@ public class HtmlLauncher extends GwtApplication {
 
         @Override
         public ApplicationListener getApplicationListener () {
-                return new JumpAndRoll();
+                return new Game();
         }
 }

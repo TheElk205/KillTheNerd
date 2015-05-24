@@ -1,4 +1,4 @@
-package at.gamejam.ktn.game.entities;
+package at.game.visuals;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ public abstract class GameObject {
 	public Vector2							origin;
 	public Vector2							scale;
 	public float							rotation;
-	protected static Assets					assets;
+	public static Assets					assets;
 	protected boolean						toRender			= true;
 	protected boolean						physicsAlreadyInit	= false;
 	public static List<GameObject>			totalObjects		= new ArrayList<GameObject>();
@@ -45,11 +45,9 @@ public abstract class GameObject {
 
 	public abstract void render(SpriteBatch batch);
 
-	public void update(final float deltaTime) {
-	}
+	public abstract void update(final float deltaTime);
 
 	public void initPhysics() {
-
 	}
 
 	/**

@@ -2,7 +2,7 @@ package at.gamejam.ktn.game.entites;
 
 import java.util.Random;
 
-import at.gamejam.ktn.game.entities.GameObject;
+import at.game.visuals.GameObject;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -12,23 +12,20 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class NPC extends InteractiveObject {
-
+	private static int		count				= 0;
+	private final int		number;
 	private float			energy				= 50;
-	private float			factor				= 0.0f;
+	// private float factor = 0.0f;
 	private final float		energyTime			= 0.5f;
 	private double			timeSinceLasttick	= 0;
-
 	private int				state				= 0;	// -1 asleep, 1 awake
-
-	private final boolean	isNear				= true;
-
 	private final Player[]	areNear;
 
 	/**
-	 * @param startValue
-	 *            0 awake, 100 sleeps
+	 * @param position
+	 * @param b2World
 	 */
-	public NPC(final Vector2 position, final World b2World, final int startValue) {
+	public NPC(final Vector2 position, final World b2World) {
 		this.position = position;// super(position, b2World);
 		this.dimension = new Vector2(1.5f, 1.5f);
 		this.b2World = b2World;
@@ -51,7 +48,8 @@ public class NPC extends InteractiveObject {
 		this.areNear = new Player[2];
 		this.areNear[0] = null;
 		this.areNear[1] = null;
-
+		NPC.count++;
+		this.number = NPC.count;
 		this.initPhysics();
 	}
 
@@ -59,13 +57,22 @@ public class NPC extends InteractiveObject {
 	public void initPhysics() {
 		final BodyDef bodyDef = new BodyDef();
 		bodyDef.position.set(new Vector2(this.position.x + (this.dimension.x / 2f), this.position.y + (this.dimension.y / 2f)));
-		bodyDef.type = BodyDef.BodyType.DynamicBody;
+		bodyDef.type = BodyDef.BodyType.StaticBody;
 		this.b2Body = this.b2World.createBody(bodyDef);
 
-		final CircleShape circleShape = new CircleShape();
+		CircleShape circleShape = new CircleShape();
 		circleShape.setRadius(0.75f);
-		final FixtureDef fixtureDef = new FixtureDef();
+		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.isSensor = true;
+		fixtureDef.density = 0f;
+		fixtureDef.friction = 0f;
+		fixtureDef.restitution = 0;
+		fixtureDef.shape = circleShape;
+		this.b2Body.createFixture(fixtureDef);
+
+		circleShape = new CircleShape();
+		circleShape.setRadius(0.10f);
+		fixtureDef = new FixtureDef();
 		fixtureDef.density = 0f;
 		fixtureDef.friction = 0f;
 		fixtureDef.restitution = 0;
@@ -76,7 +83,6 @@ public class NPC extends InteractiveObject {
 
 	@Override
 	public void update(final float deltaTime) {
-		// TODO Auto-generated method stub
 		this.startTime += deltaTime;
 		this.timeSinceLasttick += deltaTime;
 		if (this.timeSinceLasttick > this.energyTime) {
@@ -124,14 +130,14 @@ public class NPC extends InteractiveObject {
 		this.texture = GameObject.assets.findRegion("worker"); // worker
 	}
 
-	public void addFactor(final float factor) {
+	/*public void addFactor(final float factor) {
 		this.factor += factor;
 		// System.out.println("New Factor" + factor);
 	}
 
 	public void resetFactor() {
 		this.factor = 0;
-	}
+	}*/
 
 	public float getEnergy() {
 		return this.energy;
@@ -164,6 +170,6 @@ public class NPC extends InteractiveObject {
 
 	@Override
 	public String toString() {
-		return "NPC";
+		return "NPC-" + this.number;
 	}
 }

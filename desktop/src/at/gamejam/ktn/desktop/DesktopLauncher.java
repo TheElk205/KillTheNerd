@@ -1,6 +1,6 @@
 package at.gamejam.ktn.desktop;
 
-import at.gamejam.ktn.JumpAndRoll;
+import at.game.Game;
 import at.gamejam.ktn.utils.Constants;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
@@ -30,10 +30,12 @@ public class DesktopLauncher {
 		final LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
 		config.fullscreen = false;
-		config.backgroundFPS = 1;
+		config.backgroundFPS = 10;
 		config.title = "Nerd Wars - Version_0.1_2015.05.01 - Created by Herkt Kevin, Ferdinand Koeppen and Philip Polczer";
 		config.height = Constants.VIEWPORT_GUI_HEIGHT;
 		config.width = Constants.VIEWPORT_GUI_WIDTH;
-		final LwjglApplication lwjglApplication = new LwjglApplication(new JumpAndRoll(), config);
+		config.foregroundFPS = 60;
+		// config.useGL30 = true;
+		final LwjglApplication lwjglApplication = new LwjglApplication(new Game(), config);
 	}
 }

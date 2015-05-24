@@ -1,8 +1,8 @@
-package at.gamejam.ktn.mapbuilder;
+package at.game;
 
 public class TileData {
 	public enum BorderStyle {
-		BOX, NONE
+		BOX, NONE, RIGHT_TOP, RIGHT_BOTTOM, LEFT_BOTTOM, LEFT_TOP
 	}
 
 	private String		name;

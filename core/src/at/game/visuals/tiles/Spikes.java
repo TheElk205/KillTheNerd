@@ -1,4 +1,6 @@
-package at.gamejam.ktn.game.entities;
+package at.game.visuals.tiles;
+
+import at.game.visuals.GameObject;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -24,7 +26,7 @@ public class Spikes extends GameObject {
 	}
 
 	private void init() {
-		this.texture = this.assets.findRegion("spikes");
+		this.texture = GameObject.assets.findRegion("spikes");
 		this.initPhysics();
 	}
 
@@ -45,5 +47,10 @@ public class Spikes extends GameObject {
 	@Override
 	public void render(final SpriteBatch batch) {
 		batch.draw(this.texture, this.position.x, this.position.y, this.dimension.x, this.dimension.y);
+	}
+
+	@Override
+	public void update(final float deltaTime) {
+		// TODO should extend a other class, because update is not needed
 	}
 }

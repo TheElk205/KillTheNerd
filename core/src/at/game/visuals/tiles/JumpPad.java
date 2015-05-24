@@ -1,4 +1,6 @@
-package at.gamejam.ktn.game.entities;
+package at.game.visuals.tiles;
+
+import at.game.visuals.GameObject;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -35,15 +37,14 @@ public class JumpPad extends GameObject {
 
 	private void init() {
 		this.triggered = false;
-		this.textureDown = this.assets.findRegion("springboardDown");
-		this.textureUp = this.assets.findRegion("springboardUp");
+		this.textureDown = GameObject.assets.findRegion("springboardDown");
+		this.textureUp = GameObject.assets.findRegion("springboardUp");
 		this.startTime = 0;
 		this.initPhysics();
 	}
 
 	@Override
 	public void update(final float deltaTime) {
-		super.update(deltaTime);
 		this.startTime += deltaTime;
 		if (this.startTime > JumpPad.UP_TIME) {
 			this.triggered = false;

@@ -2,7 +2,7 @@ package at.gamejam.ktn.game.entites;
 
 import java.util.Vector;
 
-import at.gamejam.ktn.game.WorldController;
+import at.game.WorldController;
 import at.gamejam.ktn.utils.Constants;
 
 import com.badlogic.gdx.Gdx;
@@ -360,8 +360,8 @@ public abstract class Player extends InteractiveObject {
 	public boolean addItem(final Item item) {
 		if (this.itemCount < this.maxItems) {
 			// this.items.add(item);
-			if (item.collectable) {
-				item.collectable = false;
+			if (item.isCollectable()) {
+				item.setCollectable(false);
 				this.incrItemCount();
 				// this.itemCount++;
 				// System.out.println("Got an Item! " + this.itemCount);
@@ -423,20 +423,16 @@ public abstract class Player extends InteractiveObject {
 				bull.getB2Body().applyForceToCenter(toApply, true);
 				this.worldController.addTempGameObject(bull);
 				bull.itemIsThrownBy = this;
-				bull.collected = false;
+				bull.setFlying();
 				this.decrItemCount();
-				bull.collectable = false;
-				bull.isFlying = true;
 			} else
 				if (this.itemType == ItemType.THESIS) {
 					final Thesis thesis = new Thesis(initPos, this.b2World, true);
 					thesis.getB2Body().applyForceToCenter(toApply, true);
 					this.worldController.addTempGameObject(thesis);
 					thesis.itemIsThrownBy = this;
-					thesis.collected = false;
+					thesis.setFlying();
 					this.decrItemCount();
-					thesis.collectable = false;
-					thesis.isFlying = true;
 				}
 
 			// System.out.println("Item Thrown: " + itemCount);
@@ -572,7 +568,7 @@ public abstract class Player extends InteractiveObject {
 		return this.factor * this.handicap;
 	}
 
-	protected float getHandicap() {
+	public float getHandicap() {
 		return this.handicap;
 	}
 

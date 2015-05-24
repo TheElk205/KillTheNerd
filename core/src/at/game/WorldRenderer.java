@@ -1,11 +1,11 @@
-package at.gamejam.ktn.game;
+package at.game;
 
 import java.util.concurrent.TimeUnit;
 
+import at.game.visuals.GameObject;
 import at.gamejam.ktn.game.entites.RedBull;
 import at.gamejam.ktn.game.entites.Scoreboard;
 import at.gamejam.ktn.game.entites.Thesis;
-import at.gamejam.ktn.game.entities.GameObject;
 import at.gamejam.ktn.utils.Assets;
 import at.gamejam.ktn.utils.Constants;
 
@@ -132,6 +132,7 @@ public class WorldRenderer implements Disposable {
 
 	public void resize(final int width, final int height) {
 		this.camera.viewportWidth = (Constants.VIEWPORT_HEIGHT / height) * width; // calculate aspect ratio
+		// this.camera.viewportHeight = (Constants.VIEWPORT_WIDTH / width) * height; // calculate aspect ratio
 		this.camera.update();
 	}
 

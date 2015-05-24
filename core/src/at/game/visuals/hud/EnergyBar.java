@@ -1,12 +1,13 @@
-package at.gamejam.ktn.game.entites;
+package at.game.visuals.hud;
 
-import at.gamejam.ktn.game.entities.GameObject;
+import at.game.visuals.GameObject;
+import at.gamejam.ktn.game.entites.NPC;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-public class EnergyBar extends InteractiveObject {
+public class EnergyBar extends AbstractHUDElement {
 
 	private float					value	= 50.0f;
 	private static TextureRegion	green;
@@ -23,7 +24,6 @@ public class EnergyBar extends InteractiveObject {
 
 	public EnergyBar(final NPC belongsTo) {
 		this.belongsTo = belongsTo;
-
 		this.dimension = new Vector2(0.1f, 0.1f);
 	}
 
@@ -53,14 +53,15 @@ public class EnergyBar extends InteractiveObject {
 	}
 
 	private static void loadAssets() {
+		// TODO: use assetManager here
 		EnergyBar.green = GameObject.assets.findRegion("green_pixels");
 		EnergyBar.red = GameObject.assets.findRegion("red_pixels");
 		EnergyBar.sleep = GameObject.assets.findRegion("sleep");
 		EnergyBar.sun = GameObject.assets.findRegion("sun");
 	}
 
-	public void editValue(final float fac) {
-		this.value += fac;
+	public void editValue(final float factor) {
+		this.value += factor;
 	}
 
 }

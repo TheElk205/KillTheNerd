@@ -1,4 +1,6 @@
-package at.gamejam.ktn.game.entities;
+package at.game.visuals;
+
+import at.game.visuals.tiles.DecoBlockType;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -8,9 +10,8 @@ import com.badlogic.gdx.math.Vector2;
  * Created by Lukas on 29.03.2015.
  */
 public class DecoBlock extends GameObject {
-
-	DecoBlockType			type;
-	private TextureRegion	textureHanging;
+	private final DecoBlockType	type;
+	private TextureRegion		textureHanging;
 
 	public DecoBlock(final Vector2 position, final DecoBlockType type) {
 		super();
@@ -23,24 +24,24 @@ public class DecoBlock extends GameObject {
 	private void init() {
 		switch (this.type) {
 			case Rock:
-				this.textureHanging = this.assets.findRegion("rock");
+				this.textureHanging = GameObject.assets.findRegion("rock");
 				break;
 			case Cactus:
-				this.textureHanging = this.assets.findRegion("cactus");
+				this.textureHanging = GameObject.assets.findRegion("cactus");
 				break;
 			case Cloud:
-				this.textureHanging = this.assets.findRegion("cloud1");
+				this.textureHanging = GameObject.assets.findRegion("cloud1");
 				this.dimension = new Vector2(1, 0.5f);
 				break;
 			case Bush:
-				this.textureHanging = this.assets.findRegion("bush");
+				this.textureHanging = GameObject.assets.findRegion("bush");
 				break;
 			case NPC:
-				this.textureHanging = this.assets.findRegion("worker");
+				this.textureHanging = GameObject.assets.findRegion("worker");
 				break;
 			case Plant:
 			default:
-				this.textureHanging = this.assets.findRegion("plant");
+				this.textureHanging = GameObject.assets.findRegion("plant");
 				break;
 		}
 	}
@@ -50,7 +51,13 @@ public class DecoBlock extends GameObject {
 		batch.draw(this.textureHanging, this.position.x, this.position.y, this.dimension.x, this.dimension.y);
 	}
 
-	public enum DecoBlockType {
-		Rock, Cactus, Cloud, Bush, Plant, NPC
+	@Override
+	public void update(final float deltaTime) {
+		// should extend other class, cause no update needed
+	}
+
+	@Override
+	public void initPhysics() {
+		// nothing to init
 	}
 }

@@ -1,6 +1,6 @@
 package at.gamejam.ktn.game.entites;
 
-import at.gamejam.ktn.game.WorldController;
+import at.game.WorldController;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;

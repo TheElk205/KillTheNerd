@@ -1,4 +1,6 @@
-package at.gamejam.ktn.game.entities;
+package at.game.visuals.tiles;
+
+import at.game.visuals.GameObject;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -33,22 +35,21 @@ public class BasicBlock extends GameObject {
 		this.flipped = flipped;
 		switch (type) {
 			case BlockDirt:
-				this.texture = this.assets.findRegion("grassCenter");
+				this.texture = GameObject.assets.findRegion("grassCenter");
 				// this.physics = false;
 				break;
 			case BlockGrass:
-				this.texture = this.assets.findRegion("grassMid");
+				this.texture = GameObject.assets.findRegion("grassMid");
 				break;
 			case BlockSlope:
-				this.texture = this.assets.findRegion("grassHillLeft");
+				this.texture = GameObject.assets.findRegion("grassHillLeft");
 				break;
 			case BlockSlopeStart:
-				this.texture = this.assets.findRegion("grassHillLeft2");
+				this.texture = GameObject.assets.findRegion("grassHillLeft2");
 				this.physics = false;
 				break;
 			case BlockBorder:
-				this.texture = this.assets.findRegion("grassCenter");
-
+				this.texture = GameObject.assets.findRegion("grassCenter");
 				break;
 			default:
 				throw new RuntimeException("no image defined for this block type");
@@ -103,7 +104,8 @@ public class BasicBlock extends GameObject {
 		batch.draw(this.texture, this.position.x, this.position.y, this.dimension.x, this.dimension.y);
 	}
 
-	public enum BasicBlockType {
-		BlockGrass, BlockDirt, BlockSlope, BlockSlopeStart, BlockBorder
+	@Override
+	public void update(final float deltaTime) {
+		// TODO should extend a other class, because update is not needed
 	}
 }

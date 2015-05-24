@@ -1,4 +1,4 @@
-package at.gamejam.ktn.game;
+package at.game;
 
 import at.gamejam.ktn.game.entites.PlayerSleep;
 import at.gamejam.ktn.game.entites.PlayerWake;

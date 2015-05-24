@@ -1,8 +1,10 @@
-package at.gamejam.ktn.game;
+package at.game;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import at.game.visuals.GameObject;
+import at.game.visuals.tiles.Spikes;
 import at.gamejam.ktn.game.entites.Item;
 import at.gamejam.ktn.game.entites.NPC;
 import at.gamejam.ktn.game.entites.Player;
@@ -11,8 +13,6 @@ import at.gamejam.ktn.game.entites.PlayerWake;
 import at.gamejam.ktn.game.entites.RedBull;
 import at.gamejam.ktn.game.entites.Thesis;
 import at.gamejam.ktn.game.entites.ThrowableObject;
-import at.gamejam.ktn.game.entities.GameObject;
-import at.gamejam.ktn.game.entities.Spikes;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -62,27 +62,27 @@ public class MyContactListener implements ContactListener {
 		final boolean player1WithPlayer2 = (userDataB instanceof Player) && (userDataA instanceof Player);
 		final boolean playerWithItem = ((userDataB instanceof Player) && (userDataA instanceof Item)) || ((userDataA instanceof Item) && (userDataB instanceof Player));*/
 		int collisionType = 0;
-		if (((userDataB instanceof Player) && (userDataA instanceof Spikes)) || ((userDataA instanceof Player) && (userDataB instanceof Spikes))) {
-			collisionType = 1;
+		// if (((userDataB instanceof Player) && (userDataA instanceof Spikes)) || ((userDataA instanceof Player) && (userDataB instanceof Spikes))) {
+		// collisionType = 1;
+		// } else
+		if (((userDataB instanceof Player) && (userDataA instanceof ThrowableObject)) || ((userDataA instanceof Player) && (userDataB instanceof ThrowableObject))) {
+			collisionType = 2;
 		} else
-			if (((userDataB instanceof Player) && (userDataA instanceof ThrowableObject)) || ((userDataA instanceof Player) && (userDataB instanceof ThrowableObject))) {
-				collisionType = 2;
+			if ((userDataB instanceof Player) && (userDataA instanceof Player)) {
+				collisionType = 3;
 			} else
-				if ((userDataB instanceof Player) && (userDataA instanceof Player)) {
-					collisionType = 3;
+				if (((userDataB instanceof PlayerWake) && (userDataA instanceof Item)) || ((userDataA instanceof Item) && (userDataB instanceof PlayerWake))) {
+					collisionType = 4;
 				} else
-					if (((userDataB instanceof PlayerWake) && (userDataA instanceof Item)) || ((userDataA instanceof Item) && (userDataB instanceof PlayerWake))) {
-						collisionType = 4;
+					if (((userDataB instanceof PlayerSleep) && (userDataA instanceof Item)) || ((userDataA instanceof Item) && (userDataB instanceof PlayerSleep))) {
+						collisionType = 5;
 					} else
-						if (((userDataB instanceof PlayerSleep) && (userDataA instanceof Item)) || ((userDataA instanceof Item) && (userDataB instanceof PlayerSleep))) {
-							collisionType = 5;
+						if (((userDataB instanceof Thesis) && (userDataA instanceof RedBull)) || ((userDataA instanceof Thesis) && (userDataB instanceof RedBull))) {
+							collisionType = 6;
 						} else
-							if (((userDataB instanceof Thesis) && (userDataA instanceof RedBull)) || ((userDataA instanceof Thesis) && (userDataB instanceof RedBull))) {
-								collisionType = 6;
-							} else
-								if (((userDataB instanceof Player) && (userDataA instanceof NPC)) || ((userDataB instanceof NPC) && (userDataA instanceof Player))) {
-									collisionType = 7;
-								}
+							if (((userDataB instanceof Player) && (userDataA instanceof NPC)) || ((userDataB instanceof NPC) && (userDataA instanceof Player))) {
+								collisionType = 7;
+							}
 
 		/*if (!(playerWithSpikes || playerWithThrowable || player1WithPlayer2 || playerWithItem)) {
 			return; // no collision at all
@@ -154,7 +154,7 @@ public class MyContactListener implements ContactListener {
 				MyContactListener.itemWithItem(userDataA, userDataB);
 				break;
 			case 7: // Set Player wake
-
+				// System.out.println(userDataA + " with " + userDataB); // TODO: helper class die nur printet wenn debug
 				if (userDataA instanceof NPC) {
 					final NPC npc = (NPC) userDataA;
 					final Player player = (Player) userDataB;
@@ -168,45 +168,33 @@ public class MyContactListener implements ContactListener {
 				break;
 			default:
 				// System.out.println("default hit - A: " + userDataA + " B: " + userDataB);
-				MyContactListener.itemWithSensor(fB, userDataA);
-				MyContactListener.itemWithSensor(fA, userDataB);
+				MyContactListener.itemWithNonSensor(fB, userDataA);
+				MyContactListener.itemWithNonSensor(fA, userDataB);
 				break;
 		}
 
 	}
 
-	private static void itemWithSensor(final Fixture fixture, final Object userData) {
+	private static void itemWithNonSensor(final Fixture fixture, final Object userData) {
 		if ((userData instanceof Item) && !fixture.isSensor()) {
-			((Item) userData).isFlying = false;
-			((Item) userData).collectable = true;
-			((Item) userData).collected = false;
-			if (fixture.isSensor()) {
-				System.out.println(userData + " with sensor " + fixture.getBody().getUserData());
-			} else {
-				System.out.println(userData + " with non-sensor " + fixture.getBody().getUserData());
-			}
-		} else {
-
+			((Item) userData).reset();
+			// System.out.println(userData + " with non-sensor " + fixture.getBody().getUserData());
 		}
 	}
-
-	// TODO: problem mit abstuerzen wenn man sich zugleich trifft?
 
 	/**
 	 * TODO: vl in das object item verschieben. methode setCollectable();
 	 *
 	 * @param userDataA
+	 *            object
 	 * @param userDataB
+	 *            object
 	 */
 	private static void itemWithItem(final Object userDataA, final Object userDataB) {
 		if ((userDataA instanceof Item) && (userDataB instanceof Item)) {
-			System.out.println("Item hits Item");
-			((Item) userDataA).isFlying = false;
-			((Item) userDataA).collectable = true;
-			((Item) userDataA).collected = false;
-			((Item) userDataB).isFlying = false;
-			((Item) userDataB).collectable = true;
-			((Item) userDataB).collected = false;
+			// System.out.println("Item hits Item");
+			((Item) userDataA).reset();
+			((Item) userDataB).reset();
 		}
 	}
 
@@ -214,7 +202,7 @@ public class MyContactListener implements ContactListener {
 		// System.out.println("PlayerSleep hits PlayerWake with Thesis - its not effective ; D");
 		final PlayerWake player = (PlayerWake) (playerWake);
 		final Thesis thesis = (Thesis) userDataB;
-		if ((thesis.itemIsThrownBy instanceof PlayerSleep) && thesis.isFlying) {
+		if ((thesis.itemIsThrownBy instanceof PlayerSleep) && thesis.isFlying()) {
 			if (player.hitByItem(thesis)) { // does nothing cause players cannot die
 				player.setToRender(false);
 				this.objectsToRemove.add(player);
@@ -234,7 +222,7 @@ public class MyContactListener implements ContactListener {
 		// System.out.println("PlayerWake hits PlayerSleep with RedBull - its not effective ; D");
 		final RedBull redBull = (RedBull) (userDataA);
 		final PlayerSleep player = (PlayerSleep) userDataB;
-		if ((redBull.itemIsThrownBy instanceof PlayerWake) && redBull.isFlying) {
+		if ((redBull.itemIsThrownBy instanceof PlayerWake) && redBull.isFlying()) {
 			if (player.hitByItem(redBull)) { // does nothing cause players cannot die
 				player.setToRender(false);
 				this.objectsToRemove.add(player);
@@ -330,14 +318,14 @@ public class MyContactListener implements ContactListener {
 	/**
 	 * @return the bodysToRemove
 	 */
-	protected List<GameObject> getObjectsToRemove() {
+	public List<GameObject> getObjectsToRemove() {
 		return this.objectsToRemove;
 	}
 
 	/**
 	 * @return the objectsToAdd
 	 */
-	protected List<GameObject> getObjectsToAdd() {
+	public List<GameObject> getObjectsToAdd() {
 		return this.objectsToAdd;
 	}
 

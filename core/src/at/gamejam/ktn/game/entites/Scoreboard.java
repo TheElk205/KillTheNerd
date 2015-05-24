@@ -1,6 +1,7 @@
 package at.gamejam.ktn.game.entites;
 
-import at.gamejam.ktn.game.GeneratedLevel;
+import at.game.GeneratedLevel;
+import at.game.visuals.GameObject;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -46,9 +47,9 @@ public class Scoreboard extends InteractiveObject {
 	}
 
 	private void loadAssets() {
-		this.green = this.assets.findRegion("green_pixels");
-		this.red = this.assets.findRegion("red_pixels");
-		this.yellow = this.assets.findRegion("yellow_pixels");
+		this.green = GameObject.assets.findRegion("green_pixels");
+		this.red = GameObject.assets.findRegion("red_pixels");
+		this.yellow = GameObject.assets.findRegion("yellow_pixels");
 	}
 
 	@Override
@@ -87,5 +88,10 @@ public class Scoreboard extends InteractiveObject {
 			return -1;
 		}
 		return 0;
+	}
+
+	@Override
+	public void initPhysics() {
+		// nothing to init for scoreboard
 	}
 }

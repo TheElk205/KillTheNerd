@@ -1,12 +1,13 @@
-package at.gamejam.ktn.game.entites;
+package at.game.visuals.hud;
 
-import at.gamejam.ktn.game.entities.GameObject;
+import at.game.visuals.GameObject;
+import at.gamejam.ktn.game.entites.Player;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-public class DelayBar extends InteractiveObject {
+public class DelayBar extends AbstractHUDElement {
 	private TextureRegion	green;
 	private TextureRegion	red;
 	private final Player	belongsTo;

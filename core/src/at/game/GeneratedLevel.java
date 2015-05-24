@@ -1,14 +1,11 @@
-package at.gamejam.ktn.game;
+package at.game;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import at.gamejam.ktn.game.entites.EnergyBar;
+import at.game.visuals.GameObject;
+import at.game.visuals.hud.EnergyBar;
 import at.gamejam.ktn.game.entites.NPC;
-import at.gamejam.ktn.game.entities.GameObject;
-import at.gamejam.ktn.mapbuilder.MapParser;
-import at.gamejam.ktn.mapbuilder.Tile;
-import at.gamejam.ktn.mapbuilder.TileData;
 import at.gamejam.ktn.utils.Constants;
 
 import com.badlogic.gdx.Gdx;
@@ -70,32 +67,32 @@ public class GeneratedLevel {
 	}
 
 	private void addNPCs() {
-		final NPC npc1 = new NPC(new Vector2(1, -5), this.b2world, 50);
+		final NPC npc1 = new NPC(new Vector2(1, -5), this.b2world);
 		final EnergyBar energy1 = new EnergyBar(npc1);
 		this.gameObjects.add(npc1);
 		this.gameObjects.add(energy1);
 
-		final NPC npc2 = new NPC(new Vector2(1, 0), this.b2world, 50);
+		final NPC npc2 = new NPC(new Vector2(1, 0), this.b2world);
 		final EnergyBar energy2 = new EnergyBar(npc2);
 		this.gameObjects.add(npc2);
 		this.gameObjects.add(energy2);
 
-		final NPC npc3 = new NPC(new Vector2(-4, -3), this.b2world, 50);
+		final NPC npc3 = new NPC(new Vector2(-4, -3), this.b2world);
 		final EnergyBar energy3 = new EnergyBar(npc3);
 		this.gameObjects.add(npc3);
 		this.gameObjects.add(energy3);
 
-		final NPC npc4 = new NPC(new Vector2(-2, 2), this.b2world, 50);
+		final NPC npc4 = new NPC(new Vector2(-2, 2), this.b2world);
 		final EnergyBar energy4 = new EnergyBar(npc4);
 		this.gameObjects.add(npc4);
 		this.gameObjects.add(energy4);
 
-		final NPC npc5 = new NPC(new Vector2(5, -1), this.b2world, 50);
+		final NPC npc5 = new NPC(new Vector2(5, -1), this.b2world);
 		final EnergyBar energy5 = new EnergyBar(npc5);
 		this.gameObjects.add(npc5);
 		this.gameObjects.add(energy5);
 
-		final NPC npc6 = new NPC(new Vector2(9, -3), this.b2world, 50);
+		final NPC npc6 = new NPC(new Vector2(9, -3), this.b2world);
 		final EnergyBar energy6 = new EnergyBar(npc6);
 		this.gameObjects.add(npc6);
 		this.gameObjects.add(energy6);
@@ -107,18 +104,9 @@ public class GeneratedLevel {
 	/**
 	 * called in WorldController
 	 *
-	 * @return
-	 */
-	protected List<GameObject> getGameObjects() {
-		return this.gameObjects;
-	}
-
-	/**
-	 * called in WorldController
-	 *
 	 * @param object
 	 */
-	protected void addGameObject(final GameObject object) {
+	public void addGameObject(final GameObject object) {
 		this.gameObjects.add(object);
 	}
 
@@ -127,7 +115,7 @@ public class GeneratedLevel {
 	 *
 	 * @param deltaTime
 	 */
-	protected void update(final float deltaTime) {
+	public void update(final float deltaTime) {
 		this.sleepingcount = 0;
 		this.awakecount = 0;
 		for (final GameObject gameObject : this.gameObjects) {
@@ -142,15 +130,14 @@ public class GeneratedLevel {
 				}
 			}
 		}
-
 	}
 
 	/**
-	 * Called in WorldRenderer
+	 * Called in WorldRenderer - renders the list of this class
 	 *
 	 * @param batch
 	 */
-	protected void render(final SpriteBatch batch) {
+	public void render(final SpriteBatch batch) {
 		for (final GameObject gameObject : this.gameObjects) {
 			gameObject.render(batch);
 		}
@@ -167,7 +154,7 @@ public class GeneratedLevel {
 	/**
 	 * Called in Scoreboard
 	 *
-	 * @return
+	 * @return npcCount
 	 */
 	public int getNpcCount() {
 		return this.npcCount;

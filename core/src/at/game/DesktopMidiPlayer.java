@@ -1,4 +1,4 @@
-package at.gamejam.ktn.game;
+package at.game;
 
 import java.io.BufferedInputStream;
 import java.io.File;

@@ -1,4 +1,4 @@
-package at.gamejam.ktn.mapbuilder;
+package at.game;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -10,7 +10,6 @@ import javax.imageio.ImageIO;
 public class MapParser {
 	private final TileParser	tileParser;
 	private final String		path;
-
 	private final TileData[][]	tiles;
 	private BufferedImage		buffImage;
 	private int					mapImageWidth;
