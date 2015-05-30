@@ -1,4 +1,4 @@
-package at.game;
+package at.game.visuals.tiles;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Vector;
 
-import at.game.TileData.BorderStyle;
+import at.game.enums.BorderStyle;
 
 /**
  * @author Ferdinand Koeppen

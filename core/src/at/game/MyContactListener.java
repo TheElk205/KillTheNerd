@@ -3,16 +3,13 @@ package at.game;
 import java.util.ArrayList;
 import java.util.List;
 
+import at.game.enums.ItemType;
+import at.game.enums.PlayerType;
 import at.game.visuals.GameObject;
-import at.game.visuals.tiles.Spikes;
-import at.gamejam.ktn.game.entites.Item;
-import at.gamejam.ktn.game.entites.NPC;
-import at.gamejam.ktn.game.entites.Player;
-import at.gamejam.ktn.game.entites.PlayerSleep;
-import at.gamejam.ktn.game.entites.PlayerWake;
-import at.gamejam.ktn.game.entites.RedBull;
-import at.gamejam.ktn.game.entites.Thesis;
-import at.gamejam.ktn.game.entites.ThrowableObject;
+import at.game.visuals.Item;
+import at.game.visuals.NPC;
+import at.game.visuals.Player;
+import at.game.visuals.ThrowableObject;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -22,15 +19,12 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
 public class MyContactListener implements ContactListener {
-	private final WorldController	wContr;
-
 	/** object contains a body */
 	private final List<GameObject>	objectsToRemove	= new ArrayList<GameObject>();
 	/** the physics of this object (body) are not init yet */
 	private final List<GameObject>	objectsToAdd	= new ArrayList<GameObject>();
 
-	public MyContactListener(final WorldController wContr) {
-		this.wContr = wContr;
+	protected MyContactListener() {
 	}
 
 	@Override
@@ -71,18 +65,20 @@ public class MyContactListener implements ContactListener {
 			if ((userDataB instanceof Player) && (userDataA instanceof Player)) {
 				collisionType = 3;
 			} else
-				if (((userDataB instanceof PlayerWake) && (userDataA instanceof Item)) || ((userDataA instanceof Item) && (userDataB instanceof PlayerWake))) {
-					collisionType = 4;
-				} else
-					if (((userDataB instanceof PlayerSleep) && (userDataA instanceof Item)) || ((userDataA instanceof Item) && (userDataB instanceof PlayerSleep))) {
+				if ((userDataB instanceof Player) && (userDataA instanceof Item)) {
+					final Player playerB = (Player) userDataB;
+					if (playerB.getPlayerType() == PlayerType.Sleep) {
 						collisionType = 5;
+					} else {
+						collisionType = 4; // any item collides with player wake
+					}
+				} else
+					if ((userDataB instanceof Item) && (userDataA instanceof Item)) {
+						collisionType = 6;
 					} else
-						if (((userDataB instanceof Thesis) && (userDataA instanceof RedBull)) || ((userDataA instanceof Thesis) && (userDataB instanceof RedBull))) {
-							collisionType = 6;
-						} else
-							if (((userDataB instanceof Player) && (userDataA instanceof NPC)) || ((userDataB instanceof NPC) && (userDataA instanceof Player))) {
-								collisionType = 7;
-							}
+						if (((userDataB instanceof Player) && (userDataA instanceof NPC)) || ((userDataB instanceof NPC) && (userDataA instanceof Player))) {
+							collisionType = 7;
+						}
 
 		/*if (!(playerWithSpikes || playerWithThrowable || player1WithPlayer2 || playerWithItem)) {
 			return; // no collision at all
@@ -90,26 +86,22 @@ public class MyContactListener implements ContactListener {
 
 		switch (collisionType) {
 			case 1:
-				RedBull newItem = null;
+				final Item newItem = null;
 				// WorldController.this.reset = true;
 				final Vector2 itemPosition = new Vector2(2, 2);
-				// System.out.println("beginContact Player with Spikes");
-				if (userDataA instanceof Spikes) {
+				/*if (userDataA instanceof Spikes) {
 					System.out.println("userDataA is Spikes");
-					// final Vector2 itemPosition = ((Spikes) userDataA).position;
-
-					newItem = new RedBull(itemPosition, this.wContr.getB2World(), false);
+					newItem = new Item(itemPosition, this.wContr.getB2World(), false, ItemType.Item1, "Item1");
 					this.objectsToAdd.add(newItem);
 				} else
 					if ((userDataB instanceof Spikes)) {
 						System.out.println("userDataB is Spikes");
 
-						// final Vector2 itemPosition = ((GameObject) userDataB).position;
-						newItem = new RedBull(itemPosition, this.wContr.getB2World(), false);
+						newItem = new Item(itemPosition, this.wContr.getB2World(), false, ItemType.Item2, "Item2");
 						this.objectsToAdd.add(newItem);
 					} else {
 						System.out.println("ERROR");
-					}
+					}*/
 
 				break;
 			case 2:
@@ -118,37 +110,45 @@ public class MyContactListener implements ContactListener {
 			case 3:
 				// System.out.println("beginContact Player1 with Player2");
 				break;
-			case 4: // playerWake + any item
-				if (userDataA instanceof RedBull) {
-					// System.out.println("wake takes RedBull");
-					this.wakeWithRedbull(userDataB, userDataA);
+			case 4:
+				if (userDataA instanceof Item) {
+					final Item itemA = (Item) userDataA;
+					final Player playerB = (Player) userDataB;
+					if (itemA.getItemType() == ItemType.Wake_Item) {
+						this.wakeWithRedbull(playerB, itemA);
+					} else {
+						this.wakeWithThesis(playerB, itemA);
+					}
 				} else
-					if (userDataB instanceof RedBull) {
-						// System.out.println("wake takes RedBull");
-						this.wakeWithRedbull(userDataA, userDataB);
-					} else
-						if (userDataA instanceof Thesis) {
-							this.wakeWithThesis(userDataB, userDataA);
-						} else
-							if (userDataB instanceof Thesis) {
-								this.wakeWithThesis(userDataA, userDataB);
-							}
+					if (userDataB instanceof Item) {
+						final Item itemB = (Item) userDataB;
+						final Player playerA = (Player) userDataA;
+						if (itemB.getItemType() == ItemType.Sleep_Item) {
+							this.wakeWithThesis(playerA, itemB);
+						} else {
+							this.wakeWithRedbull(playerA, itemB);
+						}
+					}
 				break;
-			case 5: // playerSleep + any item
-				if (userDataA instanceof RedBull) {
-					this.sleepWithRedbull(userDataB, userDataA);
+			case 5:
+				if (userDataA instanceof Item) {
+					final Item itemA = (Item) userDataA;
+					final Player playerB = (Player) userDataB;
+					if (itemA.getItemType() == ItemType.Wake_Item) {
+						this.sleepWithRedbull(playerB, itemA);
+					} else {
+						this.sleepWithThesis(playerB, itemA);
+					}
 				} else
-					if (userDataB instanceof RedBull) {
-						this.sleepWithRedbull(userDataA, userDataB);
-					} else
-						if (userDataB instanceof Thesis) {
-							// System.out.println("sleep takes thesis");
-							this.sleepWithThesis(userDataA, userDataB);
-						} else
-							if (userDataA instanceof Thesis) {
-								// System.out.println("sleep takes thesis");
-								this.sleepWithThesis(userDataB, userDataA);
-							}
+					if (userDataB instanceof Item) {
+						final Item itemB = (Item) userDataB;
+						final Player playerA = (Player) userDataA;
+						if (itemB.getItemType() == ItemType.Sleep_Item) {
+							this.sleepWithThesis(playerA, itemB);
+						} else {
+							this.sleepWithRedbull(playerA, itemB);
+						}
+					}
 				break;
 			case 6:
 				MyContactListener.itemWithItem(userDataA, userDataB);
@@ -198,63 +198,53 @@ public class MyContactListener implements ContactListener {
 		}
 	}
 
-	private void wakeWithThesis(final Object playerWake, final Object userDataB) {
-		// System.out.println("PlayerSleep hits PlayerWake with Thesis - its not effective ; D");
-		final PlayerWake player = (PlayerWake) (playerWake);
-		final Thesis thesis = (Thesis) userDataB;
-		if ((thesis.itemIsThrownBy instanceof PlayerSleep) && thesis.isFlying()) {
-			if (player.hitByItem(thesis)) { // does nothing cause players cannot die
+	private void wakeWithThesis(final Player player, final Item itemB) {
+		if ((itemB.getItemIsThrownBy().getPlayerType() == PlayerType.Sleep) && itemB.isFlying()) {
+			if (player.hitByItem(itemB)) { // does nothing cause players cannot die
 				player.setToRender(false);
 				this.objectsToRemove.add(player);
-				thesis.toDelete = true;
+				itemB.toDelete = true;
 			}
 			if (player.isHitAbleAgain()) {
-				player.setHandicap(thesis.getDmg());
+				player.setHandicap(itemB.getDmg());
 				player.setHitAbleAgain(false);
 			}
-			thesis.setToRender(false);
-			this.objectsToRemove.add(thesis);
-			thesis.toDelete = true;
+			itemB.setToRender(false);
+			this.objectsToRemove.add(itemB);
+			itemB.toDelete = true;
 		}
 	}
 
-	private void sleepWithRedbull(final Object userDataB, final Object userDataA) {
-		// System.out.println("PlayerWake hits PlayerSleep with RedBull - its not effective ; D");
-		final RedBull redBull = (RedBull) (userDataA);
-		final PlayerSleep player = (PlayerSleep) userDataB;
-		if ((redBull.itemIsThrownBy instanceof PlayerWake) && redBull.isFlying()) {
-			if (player.hitByItem(redBull)) { // does nothing cause players cannot die
-				player.setToRender(false);
-				this.objectsToRemove.add(player);
-				redBull.toDelete = true;
+	private void sleepWithRedbull(final Player playerA, final Item itemA) {
+		if ((itemA.getItemIsThrownBy().getPlayerType() == PlayerType.Wake) && itemA.isFlying()) {
+			if (playerA.hitByItem(itemA)) { // does nothing cause players cannot die
+				playerA.setToRender(false);
+				this.objectsToRemove.add(playerA);
+				itemA.toDelete = true;
 			}
-			if (player.isHitAbleAgain()) {
-				player.setHandicap(redBull.getDmg());
-				player.setHitAbleAgain(false);
+			if (playerA.isHitAbleAgain()) {
+				playerA.setHandicap(itemA.getDmg());
+				playerA.setHitAbleAgain(false);
 			}
-			redBull.setToRender(false);
-			this.objectsToRemove.add(redBull);
-			redBull.toDelete = true;
+			itemA.setToRender(false);
+			this.objectsToRemove.add(itemA);
+			itemA.toDelete = true;
 		}
 	}
 
-	private void sleepWithThesis(final Object userDataA, final Object userDataB) {
-		final Item thesis = (Thesis) userDataB;
-		final PlayerSleep player = (PlayerSleep) userDataA;
-		if (thesis.grabbedBy(player)) {
-			thesis.setToRender(false);
-			this.objectsToRemove.add(thesis);
-			thesis.toDelete = true;
+	private void sleepWithThesis(final Player playerA, final Item itemB) {
+		if (itemB.grabbedBy(playerA)) {
+			itemB.setToRender(false);
+			this.objectsToRemove.add(itemB);
+			itemB.toDelete = true;
 		}
 	}
 
-	private void wakeWithRedbull(final Object userDataA, final Object userDataB) {
-		final RedBull redBull = (RedBull) userDataB;
-		final PlayerWake player = (PlayerWake) userDataA;
-		if (redBull.grabbedBy(player)) {
-			redBull.setToRender(false);
-			this.objectsToRemove.add(redBull);
-			redBull.toDelete = true;
+	private void wakeWithRedbull(final Player playerA, final Item itemB) {
+		if (itemB.grabbedBy(playerA)) {
+			itemB.setToRender(false);
+			this.objectsToRemove.add(itemB);
+			itemB.toDelete = true;
 		}
 
 	}

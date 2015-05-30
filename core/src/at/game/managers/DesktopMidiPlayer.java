@@ -1,4 +1,4 @@
-package at.game;
+package at.game.managers;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -12,7 +12,7 @@ import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 
-import at.gamejam.ktn.utils.Constants;
+import at.game.utils.Constants;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;

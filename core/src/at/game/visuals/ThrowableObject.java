@@ -1,29 +1,22 @@
-package at.gamejam.ktn.game.entites;
+package at.game.visuals;
+
+import at.game.enums.ItemType;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
 
 public class ThrowableObject extends Item {
-
-	public ThrowableObject(Vector2 position, World b2World) {
-		super(position, b2World);
+	public ThrowableObject(final Vector2 position, final ItemType itemType, final String name) {
+		super(position, true, itemType, name);
 		// TODO Auto-generated constructor stub
 	}
 
-	private static final int	FRAME_COLS	= 8;
-	TextureRegion[]				animationFrames;
-	float						startTime	= 0;
-	boolean						collected	= false;
-	private Animation			animation;
-
-	/*public ThrowableObject(final Vector2 position) {
-		this.position = position;
-		this.dimension = new Vector2(0.25f, 0.2f);
-		// this.init();
-	}
+	TextureRegion[]		animationFrames;
+	float				startTime	= 0;
+	boolean				collected	= false;
+	private Animation	animation;
 
 	/*private void init() {
 		final TextureRegion t = this.assets.findRegion("coin_gold");
@@ -59,11 +52,4 @@ public class ThrowableObject extends Item {
 	public void setCollected(final boolean b) {
 		this.collected = b;
 	}
-
-	@Override
-	protected void loadAsset() {
-		// TODO Auto-generated method stub
-
-	}
-
 }

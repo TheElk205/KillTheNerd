@@ -1,9 +1,11 @@
-package at.gamejam.ktn.game.entites;
-
-import java.util.Vector;
+package at.game.visuals;
 
 import at.game.WorldController;
-import at.gamejam.ktn.utils.Constants;
+import at.game.enums.Direction;
+import at.game.enums.ItemType;
+import at.game.enums.PlayerType;
+import at.game.utils.Constants;
+import at.game.visuals.hud.DelayBar;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -16,25 +18,22 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.World;
 
-public abstract class Player extends InteractiveObject {
+public class Player extends InteractiveObject {
+	private final DelayBar		delayBar;											// could be changed to healthbar
 	private Sound				sound;
-	protected Vector<Item>		items;
-	protected int				maxItems			= 15;
+	// private Vector<Item> items;
+	private final int			maxItems			= 15;
 	private int					itemCount			= Constants.START_ITEM_COUNT;
-	protected int				points				= 0;
-	private float				lastHitTime			= 0;
+	private int					points				= 0;
 	private boolean				hitAbleAgain		= true;
-	protected float				startSpeed			= 4f;
-	protected float				currentSpeed		= this.startSpeed;
-	protected float				throwingSpeed		= 100;
-	protected World				b2World;
-	protected WorldController	worldController;
+	private final float			startSpeed			= 4f;
+	private final float			currentSpeed		= this.startSpeed;
+	private final float			throwingSpeed		= 100;
 	private Direction			directionMoving;
-	protected Direction			directionLooking;
+	private Direction			directionLooking;
 	private Direction			newestDirection;
-	protected String			name				= "Player";
+	private String				name				= "Player";
 	private boolean				right;
 	private boolean				up;
 	private boolean				left;
@@ -42,9 +41,9 @@ public abstract class Player extends InteractiveObject {
 	private boolean				shoot;
 	protected int				health				= 100;
 	private float				timeSinceLastShoot	= 0;
-	protected ItemType			itemType			= ItemType.REDBULL;
+	protected ItemType			itemType			= null;
 	protected float				factor				= 0.0f;
-	protected float				handicap			= 1f;							// 0: nix geht mehr, 1: alles Normal, >1: Besser
+	protected float				handicap			= 1f;							// 0: nichts geht mehr, 1: alles Normal, >1: Besser
 	protected float				dealHandicap		= 0.8f;
 	protected float				handicapSetAt		= 0.0f;
 	protected final float		handicapDuration	= 5f;
@@ -53,10 +52,7 @@ public abstract class Player extends InteractiveObject {
 	protected TextureRegion		tRMoveUp[], tRMoveDown[], tRMoveLeft[], tRMoveRight[];
 	protected TextureRegion		tRStandUp, tRStandDown, tRStandLeft, tRStandRight;
 	protected TextureRegion		tUp, tDown, tLeft, tRight;
-
-	public enum ItemType {
-		REDBULL, THESIS
-	}
+	private final PlayerType	playerType;
 
 	protected void initAnimations() {
 		final TextureRegion[][] tmpUp = Player.getSinglePictures(this.tUp, 4);
@@ -109,52 +105,50 @@ public abstract class Player extends InteractiveObject {
 		return new Animation(time, pictures);
 	}
 
-	// protected void createAnimations (TextureRegion originalPicture, int numPictures, TextureRegion standing, TextureRegion[] moving, Animation
-	// animation) {
-	// TextureRegion[][] tmp = null;
-	// try {
-	// if(originalPicture == null) {
-	// System.out.println("is null");
-	// return;
-	// }
-	// tmp = originalPicture.split(originalPicture.getRegionWidth() / numPictures, originalPicture.getRegionHeight());
-	// } catch (Exception e) {
-	// int a;
-	// System.out.println("sad");
-	// }
-	// moving = new TextureRegion[numPictures];
-	// int index = 0;
-	// for (int j = 0; j < numPictures; j++) {
-	// moving[index++] = tmp[0][j];
-	// }
-	//
-	// standing = tmp[0][0];
-	// if(standing == null) {
-	// System.out.println("Statische NICHT gesetzt");
-	// }
-	// this.animation = new Animation(0.2f, moving);
-	// System.out.println("Animation added");
-	// }
+	public Player(final Vector2 position, final ItemType itemType, final int factor, final PlayerType playerType) {
+		this.delayBar = new DelayBar(this);
+		this.playerType = playerType;
+		this.initConstructor(position);
+		this.itemType = itemType;
+		this.factor = factor;
+		String prefix = "";
+		switch (playerType) {
+			case Wake:
+				prefix = "george_";
+				break;
+			case Sleep:
+				prefix = "betty_";
+				break;
+			default:
+				break;
+		}
+		this.loadPictures(prefix);
+	}
 
-	protected void initConstructor(final Vector2 position, final WorldController worldcontroller) {
-		this.worldController = worldcontroller;
-		this.b2World = this.worldController.getB2World();
+	protected void initConstructor(final Vector2 position) {
 		this.position = position;
 		final FileHandle handle = Gdx.files.internal(Constants.THROW_SOUND);
 		this.sound = Gdx.audio.newSound(handle);
 		this.init(true, true);
 	}
 
+	private void loadPictures(final String prefix) {
+		TextureRegion up, down, left, right;
+		up = GameObject.assets.findRegion(prefix + "back");
+		down = GameObject.assets.findRegion(prefix + "front");
+		left = GameObject.assets.findRegion(prefix + "left");
+		right = GameObject.assets.findRegion(prefix + "right");
+		this.setInitialPictures(up, down, left, right);
+	}
+
 	protected void init(final boolean animation, final boolean initPhysics) {
-		this.items = new Vector<Item>();
+		// this.items = new Vector<Item>();
 
 		this.dimension.set(0.75f, 0.75f);
 		this.origin.x = 0;
 		this.origin.y = 0;
-		// this.texture = this.assets.findRegion("player");
 		this.directionMoving = Direction.STAY;
 		this.directionLooking = Direction.S;
-		this.loadAsset();
 		if (initPhysics) {
 			this.initPhysics();
 		}
@@ -171,7 +165,7 @@ public abstract class Player extends InteractiveObject {
 			bodyDef.position.set(this.position.x, this.position.y);
 
 			// create body in world
-			this.b2Body = this.b2World.createBody(bodyDef);
+			this.b2Body = WorldController.topDown_b2World.createBody(bodyDef);
 
 			// create shape
 			final CircleShape circleShape = new CircleShape();
@@ -191,12 +185,6 @@ public abstract class Player extends InteractiveObject {
 			circleShape.dispose(); // clean up!!
 			this.b2Body.setUserData(this);
 		}
-	}
-
-	protected abstract void loadAsset();
-
-	public enum Direction {
-		N, S, W, E, NE, SE, SW, NW, STAY
 	}
 
 	public void addPoint() {
@@ -219,6 +207,7 @@ public abstract class Player extends InteractiveObject {
 
 	@Override
 	public void render(final SpriteBatch batch) {
+		this.delayBar.render(batch);
 		if (this.toRender) {
 			if (this.directionMoving == Direction.STAY) {
 				switch (this.directionLooking) {
@@ -280,22 +269,13 @@ public abstract class Player extends InteractiveObject {
 		if ((this.time - this.handicapSetAt) > this.handicapDuration) {
 			this.resetHandycap();
 		}
+		this.delayBar.update(deltaTime);
 	}
 
 	private void checkCanBeHitAgain(final float deltaTime) {
-
-		this.lastHitTime += deltaTime;
 		if (((this.time - this.handicapSetAt) > (this.handicapDuration + 2))) {
-			this.lastHitTime = 0f;
 			this.hitAbleAgain = true;
-			/*if (this.getName().equalsIgnoreCase("playerWake")) {
-				System.out.println(this.name + " is hit able again");
-			}*/
 		}
-
-		/*if (this.getName().equalsIgnoreCase("playerWake")) {
-			System.out.println((this.time - this.handicapSetAt) + " > " + (this.handicapDuration + 2));
-		}*/
 	}
 
 	public void setHitAbleAgain(final boolean b) {
@@ -341,15 +321,14 @@ public abstract class Player extends InteractiveObject {
 		}
 		// if ((this.right && (this.newestDirection == Direction.E)) || (this.right && !this.up && !this.down)) {
 
-		// System.out.println("currentSpeed: " + this.currentSpeed + " distance: " + this.worldController.calcPlayerDistance());
 		// final double maxDistance = 8f;
-		// if (this.worldController.calcPossibleXPlayerDistance() <= maxDistance) {
+		// if (ldController.calcPossibleXPlayerDistance() <= maxDistance) {
 		this.b2Body.setLinearVelocity(lin);
 		this.b2Body.applyForceToCenter(toApply, true);
 		/*} else {
 			this.position.x = this.position.x - 1;
 			this.position.y = this.position.y + 3;
-			if (this.worldController.calcPossibleXPlayerDistance() >= maxDistance) {
+			if (ldController.calcPossibleXPlayerDistance() >= maxDistance) {
 				this.position.x = this.position.x + 1;
 				this.position.y = this.position.y - 3;
 			}
@@ -418,19 +397,19 @@ public abstract class Player extends InteractiveObject {
 					break;
 			}
 			// System.out.println("throw spawn position: " + initPos + " playerPosition: " + this.position);
-			if (this.itemType == ItemType.REDBULL) {
-				final RedBull bull = new RedBull(initPos, this.b2World, true);
+			if (this.itemType == ItemType.Wake_Item) {
+				final Item bull = new Item(initPos, true, ItemType.Wake_Item, "Wake_Item");
 				bull.getB2Body().applyForceToCenter(toApply, true);
-				this.worldController.addTempGameObject(bull);
-				bull.itemIsThrownBy = this;
+				WorldController.addTempGameObject(bull);
+				bull.setItemIsThrownBy(this);
 				bull.setFlying();
 				this.decrItemCount();
 			} else
-				if (this.itemType == ItemType.THESIS) {
-					final Thesis thesis = new Thesis(initPos, this.b2World, true);
+				if (this.itemType == ItemType.Sleep_Item) {
+					final Item thesis = new Item(initPos, true, ItemType.Sleep_Item, "Sleep_Item");
 					thesis.getB2Body().applyForceToCenter(toApply, true);
-					this.worldController.addTempGameObject(thesis);
-					thesis.itemIsThrownBy = this;
+					WorldController.addTempGameObject(thesis);
+					thesis.setItemIsThrownBy(this);
 					thesis.setFlying();
 					this.decrItemCount();
 				}
@@ -439,27 +418,23 @@ public abstract class Player extends InteractiveObject {
 		}
 	}
 
-	/*public Body getBody() {
-		return this.b2Body;
-	}*/
-
 	/**
 	 * @param item
 	 * @return returns true if player "dead"
 	 */
 	public boolean hitByItem(final Item item) {
 		// System.out.println(this + " hit by " + item);
-		if ((item instanceof RedBull) && (this instanceof PlayerSleep)) {
+		/*if ((item instanceof RedBull) && (this instanceof PlayerSleep)) {
 			// this.health = this.health - 50;
 		}
-		/*TODO: else if(item instanceof Thesis && this instanceof PlayerWake) {
+		TODO: switch cases, because different items have different dmg else if(item instanceof Thesis && this instanceof PlayerWake) {
 			health = health - 20;
 		}*/
 
 		if (this.health <= 0) {
 			return true;
 			// this.getBody().setActive(false);
-			// this.b2World.destroyBody(getBody());
+			// WorldController.destroyBody(getBody());
 		}
 		return false;
 	}
@@ -468,7 +443,7 @@ public abstract class Player extends InteractiveObject {
 		this.name = name;
 	}
 
-	public String getName() {
+	protected String getName() {
 		return this.name;
 	}
 
@@ -484,7 +459,7 @@ public abstract class Player extends InteractiveObject {
 			this.newestDirection = Direction.E;
 		}
 		this.setLooking();
-		this.setDirectionMoving(Player.Direction.E);
+		this.setDirectionMoving(Direction.E);
 
 		// }
 	}
@@ -496,7 +471,7 @@ public abstract class Player extends InteractiveObject {
 			this.newestDirection = Direction.N;
 		}
 		this.setLooking();
-		this.setDirectionMoving(Player.Direction.N);
+		this.setDirectionMoving(Direction.N);
 
 		// }
 	}
@@ -508,7 +483,7 @@ public abstract class Player extends InteractiveObject {
 			this.newestDirection = Direction.W;
 		}
 		this.setLooking();
-		this.setDirectionMoving(Player.Direction.W);
+		this.setDirectionMoving(Direction.W);
 
 		// }
 	}
@@ -520,7 +495,7 @@ public abstract class Player extends InteractiveObject {
 			this.newestDirection = Direction.S;
 		}
 		this.setLooking();
-		this.setDirectionMoving(Player.Direction.S);
+		this.setDirectionMoving(Direction.S);
 
 		// }
 	}
@@ -598,5 +573,9 @@ public abstract class Player extends InteractiveObject {
 
 	public float getHandicapduration() {
 		return this.handicapDuration;
+	}
+
+	public PlayerType getPlayerType() {
+		return this.playerType;
 	}
 }

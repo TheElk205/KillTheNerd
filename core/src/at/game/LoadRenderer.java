@@ -1,6 +1,6 @@
 package at.game;
 
-import at.gamejam.ktn.utils.Constants;
+import at.game.utils.Constants;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;

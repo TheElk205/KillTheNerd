@@ -1,7 +1,4 @@
-/**
- *
- */
-package at.game.visuals.tiles;
+package at.game.enums;
 
 /**
  * @author Herkt Kevin

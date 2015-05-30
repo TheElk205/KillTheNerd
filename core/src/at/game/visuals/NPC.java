@@ -1,15 +1,14 @@
-package at.gamejam.ktn.game.entites;
+package at.game.visuals;
 
 import java.util.Random;
 
-import at.game.visuals.GameObject;
+import at.game.WorldController;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.World;
 
 public class NPC extends InteractiveObject {
 	private static int		count				= 0;
@@ -23,12 +22,10 @@ public class NPC extends InteractiveObject {
 
 	/**
 	 * @param position
-	 * @param b2World
 	 */
-	public NPC(final Vector2 position, final World b2World) {
-		this.position = position;// super(position, b2World);
+	public NPC(final Vector2 position) {
+		this.position = position;
 		this.dimension = new Vector2(1.5f, 1.5f);
-		this.b2World = b2World;
 		this.numPictures = 5;
 
 		final Random rnd = new Random();
@@ -58,7 +55,7 @@ public class NPC extends InteractiveObject {
 		final BodyDef bodyDef = new BodyDef();
 		bodyDef.position.set(new Vector2(this.position.x + (this.dimension.x / 2f), this.position.y + (this.dimension.y / 2f)));
 		bodyDef.type = BodyDef.BodyType.StaticBody;
-		this.b2Body = this.b2World.createBody(bodyDef);
+		this.b2Body = WorldController.topDown_b2World.createBody(bodyDef);
 
 		CircleShape circleShape = new CircleShape();
 		circleShape.setRadius(0.75f);

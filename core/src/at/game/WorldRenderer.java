@@ -2,12 +2,10 @@ package at.game;
 
 import java.util.concurrent.TimeUnit;
 
+import at.game.managers.Assets;
+import at.game.utils.Constants;
 import at.game.visuals.GameObject;
-import at.gamejam.ktn.game.entites.RedBull;
-import at.gamejam.ktn.game.entites.Scoreboard;
-import at.gamejam.ktn.game.entites.Thesis;
-import at.gamejam.ktn.utils.Assets;
-import at.gamejam.ktn.utils.Constants;
+import at.game.visuals.hud.Scoreboard;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -21,20 +19,17 @@ public class WorldRenderer implements Disposable {
 	private final OrthographicCamera	camera;
 	private final OrthographicCamera	cameraGUI;
 	private final SpriteBatch			batch;
-	private final WorldController		worldController;
 	private Box2DDebugRenderer			debugRenderer;
 	private final BitmapFont			font;
 	private TextureRegion				coinTexture;
 	private TextureRegion				redbullTexture;
 	private TextureRegion				victory;
-	public int							coinPosition			= 40;
-	public int							redBullPosition			= 40;
-
+	private final int					bookPosition			= 40;
+	private final int					redBullPosition			= 40;
 	private Scoreboard					score;
 	private boolean						winMusicAlreadyStarted	= false;
 
-	public WorldRenderer(final WorldController worldController) {
-		this.worldController = worldController;
+	public WorldRenderer() {
 		this.camera = new OrthographicCamera(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
 		this.camera.position.set(0, 0, 0);
 		this.camera.update();
@@ -59,25 +54,25 @@ public class WorldRenderer implements Disposable {
 
 		this.coinTexture.flip(false, true);
 		this.redbullTexture.flip(false, true);
-		this.score = new Scoreboard(this.worldController.getLevel());
+		this.score = new Scoreboard(WorldController.getLevel());
 		this.score.setPosition(280, 10);
 	}
 
 	private void renderGUI() {
 		this.batch.setProjectionMatrix(this.cameraGUI.combined);
 		this.batch.begin();
-		final String mmss = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(this.worldController.timeElapsed) % TimeUnit.HOURS.toMinutes(1),
-				TimeUnit.MILLISECONDS.toSeconds(this.worldController.timeElapsed) % TimeUnit.MINUTES.toSeconds(1));
+		final String mmss = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(WorldController.getTimeElapsed()) % TimeUnit.HOURS.toMinutes(1),
+				TimeUnit.MILLISECONDS.toSeconds(WorldController.getTimeElapsed()) % TimeUnit.MINUTES.toSeconds(1));
 		this.font.draw(this.batch, mmss, 10, 10);
 
-		if (this.worldController.isDebug()) {
+		if (WorldController.isDebug()) {
 			this.font.draw(this.batch, Integer.toString(GameObject.totalObjects.size()), Constants.VIEWPORT_GUI_WIDTH / 2, 40);
-			this.font.draw(this.batch, Integer.toString(RedBull.itemCount), Constants.VIEWPORT_GUI_WIDTH / 2, 60);
-			this.font.draw(this.batch, Integer.toString(Thesis.itemCount), Constants.VIEWPORT_GUI_WIDTH / 2, 80);
+			// this.font.draw(this.batch, Integer.toString(RedBull.itemCount), Constants.VIEWPORT_GUI_WIDTH / 2, 60);
+			// this.font.draw(this.batch, Integer.toString(Thesis.itemCount), Constants.VIEWPORT_GUI_WIDTH / 2, 80);
 		}
 
-		this.font.draw(this.batch, Integer.toString(this.worldController.playerSleep.getItemCount()), 35, 40);
-		this.font.draw(this.batch, Integer.toString(this.worldController.playerWake.getItemCount()), 980, 40);
+		this.font.draw(this.batch, Integer.toString(WorldController.playerSleep.getItemCount()), 35, 40);
+		this.font.draw(this.batch, Integer.toString(WorldController.playerWake.getItemCount()), 980, 40);
 
 		this.drawMunition();
 		this.drawScoreboard();
@@ -85,52 +80,50 @@ public class WorldRenderer implements Disposable {
 		this.batch.end();
 	}
 
-	public void drawMunition() {
+	private void drawMunition() {
 		int offset = 0;
-		for (int i = 0; i < this.worldController.playerWake.getItemCount(); i++) {
+		for (int i = 0; i < WorldController.playerWake.getItemCount(); i++) {
 			this.batch.draw(this.redbullTexture, 1000, this.redBullPosition + offset, 30, 30);
 			offset += 30;
 		}
 
 		offset = 0;
-		for (int i = 0; i < this.worldController.playerSleep.getItemCount(); i++) {
-			this.batch.draw(this.coinTexture, 10, this.coinPosition + offset, 30, 30);
+		for (int i = 0; i < WorldController.playerSleep.getItemCount(); i++) {
+			this.batch.draw(this.coinTexture, 10, this.bookPosition + offset, 30, 30);
 			offset += 30;
 		}
 	}
 
-	public void drawScoreboard() {
+	private void drawScoreboard() {
 		this.score.update(0);
 		this.score.render(this.batch);
 
 		if (this.score.won() != 0) {
-			this.worldController.getInputManager().setEnabled(false);
+			WorldController.getInputManager().setEnabled(false);
 			this.batch.draw(this.victory, 300, 300, 400, 150);
-			if (!this.winMusicAlreadyStarted && (this.worldController.winMusic != null)) {
-				this.worldController.ingameMusic.dispose();
-				this.worldController.winMusic.play();
+			if (!this.winMusicAlreadyStarted && (Game.winMusic != null)) {
+				Game.ingameMusic.dispose();
+				Game.winMusic.play();
 				this.winMusicAlreadyStarted = true;
 			}
 		}
 	}
 
-	public void render() {
-		this.worldController.cameraHelper.applyTo(this.camera);
+	protected void render() {
+		WorldController.getCameraHelper().applyTo(this.camera);
 		this.batch.setProjectionMatrix(this.camera.combined);
 		this.batch.begin();
-		this.worldController.getLevel().render(this.batch);
-		this.worldController.playerSleep.render(this.batch);
-		this.worldController.playerWake.render(this.batch); // TODO make global list.. for all players, for level for bars...
-		this.worldController.sleepBar.render(this.batch);
-		this.worldController.wakeBar.render(this.batch);
+		WorldController.getLevel().render(this.batch);
+		WorldController.playerSleep.render(this.batch);
+		WorldController.playerWake.render(this.batch); // TODO make global list.. for all players, for level for bars...
 		this.batch.end();
 		this.renderGUI();
-		if (this.worldController.isDebug()) {
-			this.debugRenderer.render(this.worldController.getB2World(), this.camera.combined);
+		if (WorldController.isDebug()) {
+			this.debugRenderer.render(WorldController.getB2World(), this.camera.combined);
 		}
 	}
 
-	public void resize(final int width, final int height) {
+	protected void resize(final int width, final int height) {
 		this.camera.viewportWidth = (Constants.VIEWPORT_HEIGHT / height) * width; // calculate aspect ratio
 		// this.camera.viewportHeight = (Constants.VIEWPORT_WIDTH / width) * height; // calculate aspect ratio
 		this.camera.update();

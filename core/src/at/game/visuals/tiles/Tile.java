@@ -1,4 +1,4 @@
-package at.game;
+package at.game.visuals.tiles;
 
 import at.game.visuals.GameObject;
 

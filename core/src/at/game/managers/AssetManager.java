@@ -1,4 +1,4 @@
-package at.game;
+package at.game.managers;
 
 public class AssetManager {
 

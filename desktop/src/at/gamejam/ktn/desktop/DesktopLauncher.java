@@ -1,7 +1,7 @@
 package at.gamejam.ktn.desktop;
 
 import at.game.Game;
-import at.gamejam.ktn.utils.Constants;
+import at.game.utils.Constants;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;

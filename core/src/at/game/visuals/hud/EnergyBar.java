@@ -1,7 +1,7 @@
 package at.game.visuals.hud;
 
 import at.game.visuals.GameObject;
-import at.gamejam.ktn.game.entites.NPC;
+import at.game.visuals.NPC;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -62,6 +62,11 @@ public class EnergyBar extends AbstractHUDElement {
 
 	public void editValue(final float factor) {
 		this.value += factor;
+	}
+
+	@Override
+	public void initPhysics() {
+		// not needed
 	}
 
 }

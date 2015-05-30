@@ -20,8 +20,8 @@ public class Coin extends GameObject {
 	}
 
 	private void init() {
-		final TextureRegion t = GameObject.assets.findRegion("coin_gold");
-		final TextureRegion[][] tmp = t.split(t.getRegionWidth() / Coin.FRAME_COLS, t.getRegionHeight()); // #8
+		final TextureRegion textureRetion = GameObject.assets.findRegion("coin_gold");
+		final TextureRegion[][] tmp = textureRetion.split(textureRetion.getRegionWidth() / Coin.FRAME_COLS, textureRetion.getRegionHeight()); // #8
 		this.animationFrames = new TextureRegion[Coin.FRAME_COLS];
 		int index = 0;
 		for (int j = 0; j < Coin.FRAME_COLS; j++) {

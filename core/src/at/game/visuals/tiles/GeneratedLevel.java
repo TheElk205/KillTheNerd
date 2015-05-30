@@ -1,12 +1,12 @@
-package at.game;
+package at.game.visuals.tiles;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import at.game.utils.Constants;
 import at.game.visuals.GameObject;
+import at.game.visuals.NPC;
 import at.game.visuals.hud.EnergyBar;
-import at.gamejam.ktn.game.entites.NPC;
-import at.gamejam.ktn.utils.Constants;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -67,32 +67,32 @@ public class GeneratedLevel {
 	}
 
 	private void addNPCs() {
-		final NPC npc1 = new NPC(new Vector2(1, -5), this.b2world);
+		final NPC npc1 = new NPC(new Vector2(1, -5));
 		final EnergyBar energy1 = new EnergyBar(npc1);
 		this.gameObjects.add(npc1);
 		this.gameObjects.add(energy1);
 
-		final NPC npc2 = new NPC(new Vector2(1, 0), this.b2world);
+		final NPC npc2 = new NPC(new Vector2(1, 0));
 		final EnergyBar energy2 = new EnergyBar(npc2);
 		this.gameObjects.add(npc2);
 		this.gameObjects.add(energy2);
 
-		final NPC npc3 = new NPC(new Vector2(-4, -3), this.b2world);
+		final NPC npc3 = new NPC(new Vector2(-4, -3));
 		final EnergyBar energy3 = new EnergyBar(npc3);
 		this.gameObjects.add(npc3);
 		this.gameObjects.add(energy3);
 
-		final NPC npc4 = new NPC(new Vector2(-2, 2), this.b2world);
+		final NPC npc4 = new NPC(new Vector2(-2, 2));
 		final EnergyBar energy4 = new EnergyBar(npc4);
 		this.gameObjects.add(npc4);
 		this.gameObjects.add(energy4);
 
-		final NPC npc5 = new NPC(new Vector2(5, -1), this.b2world);
+		final NPC npc5 = new NPC(new Vector2(5, -1));
 		final EnergyBar energy5 = new EnergyBar(npc5);
 		this.gameObjects.add(npc5);
 		this.gameObjects.add(energy5);
 
-		final NPC npc6 = new NPC(new Vector2(9, -3), this.b2world);
+		final NPC npc6 = new NPC(new Vector2(9, -3));
 		final EnergyBar energy6 = new EnergyBar(npc6);
 		this.gameObjects.add(npc6);
 		this.gameObjects.add(energy6);

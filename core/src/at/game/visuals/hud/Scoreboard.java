@@ -1,25 +1,21 @@
-package at.gamejam.ktn.game.entites;
+package at.game.visuals.hud;
 
-import at.game.GeneratedLevel;
 import at.game.visuals.GameObject;
+import at.game.visuals.tiles.GeneratedLevel;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-public class Scoreboard extends InteractiveObject {
-	public GeneratedLevel	level;
-
-	private int				sleepingCount	= 0;
-	private int				awakeCount		= 0;
-
-	private TextureRegion	green;
-	private TextureRegion	red;
-	private TextureRegion	yellow;
-
-	private int				npcCount		= 0;
-
-	private int				posX			= 0, posY = 0;
+public class Scoreboard extends AbstractHUDElement {
+	private final GeneratedLevel	level;
+	private int						sleepingCount	= 0;
+	private int						awakeCount		= 0;
+	private TextureRegion			green;
+	private TextureRegion			red;
+	private TextureRegion			yellow;
+	private int						npcCount		= 0;
+	private int						posX			= 0, posY = 0;
 
 	public Scoreboard(final GeneratedLevel level) {
 		this.level = level;

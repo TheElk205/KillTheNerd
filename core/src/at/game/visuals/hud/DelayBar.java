@@ -1,7 +1,7 @@
 package at.game.visuals.hud;
 
 import at.game.visuals.GameObject;
-import at.gamejam.ktn.game.entites.Player;
+import at.game.visuals.Player;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -58,6 +58,11 @@ public class DelayBar extends AbstractHUDElement {
 	private void loadAssets() {
 		this.green = GameObject.assets.findRegion("green_pixels");
 		this.red = GameObject.assets.findRegion("red_pixels");
+	}
+
+	@Override
+	public void initPhysics() {
+		// TODO not needed
 	}
 
 }

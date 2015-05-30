@@ -11,77 +11,66 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+import at.game.enums.ItemType;
+import at.game.enums.PlayerType;
+import at.game.managers.InputManager;
+import at.game.utils.CameraHelper;
 import at.game.visuals.GameObject;
-import at.game.visuals.hud.DelayBar;
-import at.gamejam.ktn.game.entites.Item;
-import at.gamejam.ktn.game.entites.PlayerSleep;
-import at.gamejam.ktn.game.entites.PlayerWake;
-import at.gamejam.ktn.game.entites.RedBull;
-import at.gamejam.ktn.game.entites.Thesis;
-import at.gamejam.ktn.utils.CameraHelper;
-import at.gamejam.ktn.utils.Constants;
+import at.game.visuals.Item;
+import at.game.visuals.Player;
+import at.game.visuals.tiles.GeneratedLevel;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class WorldController {
-	private static final boolean	spawnEnabled	= true;
-	public Sound					ingameMusic;
-	public Sound					winMusic;
-	public CameraHelper				cameraHelper;
-	public PlayerSleep				playerSleep;
-	public DelayBar					sleepBar;
-	public PlayerWake				playerWake;
-	public DelayBar					wakeBar;
-	public long						timeElapsed;
-	private World					b2World;
-	private GeneratedLevel			level;
-	private float					lastSpawn		= 0;
-	private final boolean			debug			= false;
-	private InputManager			inputManager;
-	private final List<GameObject>	objectsToAdd	= new ArrayList<GameObject>();
-	private MyContactListener		contactListener;
-	// private final float printTime = 0;
-	private double					distance;
+	private static final boolean			spawnEnabled	= true;
+	private static CameraHelper				cameraHelper;
+	protected static Player					playerSleep;
+	protected static Player					playerWake;
+
+	private static long						timeElapsed;
+	public static World						topDown_b2World;
+	private static GeneratedLevel			level;
+	private static float					lastSpawn		= 0;
+	private static final boolean			debug			= false;
+	private static InputManager				inputManager;
+	private static final List<GameObject>	objectsToAdd	= new ArrayList<GameObject>();
+	private static MyContactListener		contactListener;
+	private static double					distance;
 	// private final static Logger LOGGER = new Logger("WorldController-Logger", Logger.INFO);
-	private final static Logger		LOGGER			= Logger.getLogger(WorldController.class.getName());
+	private final static Logger				LOGGER			= Logger.getLogger(WorldController.class.getName());
 
-	public WorldController() {
-		this.init();
-	}
-
-	public void init() {
-		if (this.debug) {
+	protected WorldController() {
+		if (WorldController.debug) {
 			WorldController.LOGGER.info("test info");
 		}
-		this.cameraHelper = new CameraHelper();
+		WorldController.cameraHelper = new CameraHelper();
 		// this.b2World = new World(new Vector2(0, -9.81f), true);
-		this.b2World = new World(new Vector2(0, 0), true); // no gravity
+		WorldController.topDown_b2World = new World(new Vector2(0, 0), true); // no gravity
 
-		this.playerSleep = new PlayerSleep(new Vector2(-1.5f, -1.0f), this);
-		this.playerSleep.setName("PlayerSleep");
-		this.sleepBar = new DelayBar(this.playerSleep);
-		this.playerWake = new PlayerWake(new Vector2(1.5f, -1.0f), this);
-		this.playerWake.setName("PlayerWake");
-		this.wakeBar = new DelayBar(this.playerWake);
+		WorldController.playerSleep = new Player(new Vector2(-1.5f, -1.0f), ItemType.Sleep_Item, -10, PlayerType.Sleep);
+		WorldController.playerSleep.setName("PlayerSleep");
+		WorldController.playerWake = new Player(new Vector2(1.5f, -1.0f), ItemType.Wake_Item, +10, PlayerType.Wake);
+		WorldController.playerWake.setName("PlayerWake");
 		// this.cameraHelper.setTarget(this.playerSleep.getB2Body());
-		this.cameraHelper.setTarget(new Vector2(this.playerSleep.position.x - this.playerWake.position.x, this.playerSleep.position.y - this.playerWake.position.y));
+		WorldController.cameraHelper.setTarget(new Vector2(WorldController.playerSleep.position.x - WorldController.playerWake.position.x, WorldController.playerSleep.position.y
+				- WorldController.playerWake.position.y));
 		// Vector(x2-x1,y2-y1
 		// this.level = new Level(this.b2World);
 
-		this.level = new GeneratedLevel(this.b2World);
-		this.contactListener = new MyContactListener(this);
-		this.b2World.setContactListener(this.contactListener);
-		this.inputManager = new InputManager(this.playerWake, this.playerSleep, this.cameraHelper);
-		Gdx.input.setInputProcessor(this.inputManager);
+		WorldController.level = new GeneratedLevel(WorldController.topDown_b2World);
+		WorldController.contactListener = new MyContactListener();
+		WorldController.topDown_b2World.setContactListener(WorldController.contactListener);
+		WorldController.inputManager = new InputManager(WorldController.playerWake, WorldController.playerSleep, WorldController.cameraHelper);
+		Gdx.input.setInputProcessor(WorldController.inputManager);
 		/*midiPlayer.open(Constants.MUSIC);
 		midiPlayer.setLooping(true);
 		midiPlayer.setVolume(0.5f);
 		midiPlayer.play();*/
-		if (this.debug) {
+		if (WorldController.debug) {
 			WorldController.setUpLogger();
 		}
 	}
@@ -102,7 +91,6 @@ public class WorldController {
 		try {
 			fileTxt = new FileHandler("Logging.txt");
 		} catch (SecurityException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		// create a TXT formatter
@@ -112,40 +100,38 @@ public class WorldController {
 		WorldController.LOGGER.info("test info 2");
 	}
 
-	public void update(final float deltaTime) {
+	protected void update(final float deltaTime) {
 		// remove objects before or after step!!
-		final List<GameObject> removeList = this.contactListener.getObjectsToRemove();
+		final List<GameObject> removeList = WorldController.contactListener.getObjectsToRemove();
 		if (removeList.size() > 0) {
 			for (final GameObject object : removeList) {
 				if (object.toDelete) {
-					this.b2World.destroyBody(object.getB2Body());
+					WorldController.topDown_b2World.destroyBody(object.getB2Body());
 					object.setToRender(false);
 					GameObject.totalObjects.remove(object);
-					if (object instanceof Thesis) {
+					/*if (object.getType == Item2) {
 						Thesis.itemCount--;
 					}
-					if (object instanceof RedBull) {
-						RedBull.itemCount--;
-					}
+					if (object.getType == Item1) {
+						RedBull.itemCount--; // Item1 = REDBULL
+					}*/
 				}
 			}
-			this.contactListener.getObjectsToRemove().clear();
+			WorldController.contactListener.getObjectsToRemove().clear();
 		}
 
-		this.timeElapsed += deltaTime * 1000;
-		this.b2World.step(1 / 60f, 3, 8); // timeStep, velocityIteration, positionIteration
+		WorldController.timeElapsed += deltaTime * 1000;
+		WorldController.topDown_b2World.step(1 / 60f, 3, 8); // timeStep, velocityIteration, positionIteration
 
 		// this.cameraHelper.update(deltaTime);
-		final Vector2 vector = this.calcPlayerDistance();
-		this.cameraHelper.update(vector);
-		this.cameraHelper.setZoom((float) (this.distance * 0.2f));
-		this.createDynamicObjects();
+		final Vector2 vector = WorldController.calcPlayerDistance();
+		WorldController.cameraHelper.update(vector);
+		WorldController.cameraHelper.setZoom((float) (WorldController.distance * 0.2f));
+		WorldController.createDynamicObjects();
 
-		this.playerSleep.update(deltaTime);
-		this.playerWake.update(deltaTime);
-		this.sleepBar.update(deltaTime);
-		this.wakeBar.update(deltaTime);
-		this.level.update(deltaTime);
+		WorldController.playerSleep.update(deltaTime);
+		WorldController.playerWake.update(deltaTime);
+		WorldController.level.update(deltaTime);
 
 		// check max player distance for camera
 		/*this.printTime += deltaTime;
@@ -156,9 +142,9 @@ public class WorldController {
 
 		// verhindert dass sich die Spieler zuweit voneinander entfernen
 		final double maxDistance = 14f;
-		if (this.distance > maxDistance) {
-			final Body wakeBody = this.playerWake.b2Body;
-			final Body sleepBody = this.playerSleep.b2Body;
+		if (WorldController.distance > maxDistance) {
+			final Body wakeBody = WorldController.playerWake.b2Body;
+			final Body sleepBody = WorldController.playerSleep.b2Body;
 
 			float wakeX = wakeBody.getPosition().x;
 			float sleepX = sleepBody.getPosition().x;
@@ -197,86 +183,83 @@ public class WorldController {
 
 		for (final Item item : Item.itemList) {
 			if (item.isFlying()) {
-				item.flyingTime += deltaTime;
+				item.setFlyingTime(item.getFlyingTime() + deltaTime);
 			}
-			if (item.flyingTime > 0.8) {
+			if (item.getFlyingTime() > 0.8) {
 				item.setCollectable(true);
 			}
 		}
 
 		if (WorldController.spawnEnabled) {
-			boolean spawn = false;
-			this.lastSpawn = this.lastSpawn + deltaTime;
-			if (this.lastSpawn > 10) {
+			final boolean spawn = false;
+			WorldController.lastSpawn = WorldController.lastSpawn + deltaTime;
+			if (WorldController.lastSpawn > 10) {
 				final Random rnd = new Random();
 				final float i = rnd.nextFloat();
-				if (RedBull.itemCount < 10) {
+				/*if (RedBull.itemCount < 10) { // TODO class itemManager which holds all instances and counts, in class Item
 					spawn = true;
-					this.addTempGameObject(new RedBull(new Vector2(2f + i, 2f), this.b2World, true));
-					this.addTempGameObject(new RedBull(new Vector2(-1.5f, 1f + i), this.b2World, true));
-				}
+					this.addTempGameObject(new RedBull(new Vector2(2f + i, 2f), true));
+					this.addTempGameObject(new RedBull(new Vector2(-1.5f, 1f + i), true));
+				}*/
 			}
-			if (this.lastSpawn > 10) {
+			if (WorldController.lastSpawn > 10) {
 				final Random rnd = new Random();
 				final float i = rnd.nextFloat();
-				if (Thesis.itemCount < 10) {
+				/*if (Thesis.itemCount < 10) {
 					spawn = true;
-					this.addTempGameObject(new Thesis(new Vector2(2f + i, -2.5f), this.b2World, true));
-					this.addTempGameObject(new Thesis(new Vector2(-2f, -1.5f + i), this.b2World, true));
-				}
+					this.addTempGameObject(new Thesis(new Vector2(2f + i, -2.5f), true));
+					this.addTempGameObject(new Thesis(new Vector2(-2f, -1.5f + i), true));
+				}*/
 			}
 			if (spawn) {
-				this.lastSpawn = 0;
+				WorldController.lastSpawn = 0;
 			}
 		}
 	}
 
-	public Vector2 calcPlayerDistance() {
+	protected static Vector2 calcPlayerDistance() {
 		final Vector2 vector = new Vector2();
-		vector.x = (this.playerWake.position.x + this.playerSleep.position.x) / 2;
-		vector.y = (this.playerWake.position.y + this.playerSleep.position.y) / 2;
-		final double temp1 = Math.pow((this.playerWake.position.x - this.playerSleep.position.x), 2);
-		final double temp2 = Math.pow((this.playerWake.position.y - this.playerSleep.position.y), 2);
-		this.distance = Math.sqrt(temp1 + temp2);
+		vector.x = (WorldController.playerWake.position.x + WorldController.playerSleep.position.x) / 2;
+		vector.y = (WorldController.playerWake.position.y + WorldController.playerSleep.position.y) / 2;
+		final double temp1 = Math.pow((WorldController.playerWake.position.x - WorldController.playerSleep.position.x), 2);
+		final double temp2 = Math.pow((WorldController.playerWake.position.y - WorldController.playerSleep.position.y), 2);
+		WorldController.distance = Math.sqrt(temp1 + temp2);
 		return vector;
 	}
 
-	public double calcPossibleXPlayerDistance() {
+	protected static double calcPossibleXPlayerDistance() {
 		final Vector2 vector = new Vector2();
 		int xOffset = 2;
 		int yOffset = 2;
-		if (this.playerWake.position.x < this.playerSleep.position.x) {
+		if (WorldController.playerWake.position.x < WorldController.playerSleep.position.x) {
 			xOffset = -2;
 		}
-		if (this.playerWake.position.y < this.playerSleep.position.y) {
+		if (WorldController.playerWake.position.y < WorldController.playerSleep.position.y) {
 			yOffset = -2;
 		}
 
-		vector.x = (this.playerWake.position.x + xOffset + this.playerSleep.position.x) / 2;
-		vector.y = (this.playerWake.position.y + yOffset + this.playerSleep.position.y) / 2;
-		final double temp1 = Math.pow(((this.playerWake.position.x + xOffset) - this.playerSleep.position.x), 2);
-		final double temp2 = Math.pow(((this.playerWake.position.y + yOffset) - this.playerSleep.position.y), 2);
+		vector.x = (WorldController.playerWake.position.x + xOffset + WorldController.playerSleep.position.x) / 2;
+		vector.y = (WorldController.playerWake.position.y + yOffset + WorldController.playerSleep.position.y) / 2;
+		final double temp1 = Math.pow(((WorldController.playerWake.position.x + xOffset) - WorldController.playerSleep.position.x), 2);
+		final double temp2 = Math.pow(((WorldController.playerWake.position.y + yOffset) - WorldController.playerSleep.position.y), 2);
 		return Math.sqrt(temp1 + temp2);
 	}
 
-	/**
-	 *
-	 */
-	public void createDynamicObjects() {
+	protected static void createDynamicObjects() {
 		// add objects after step!!
-		for (final GameObject object : this.contactListener.getObjectsToAdd()) {
+		for (final GameObject object : WorldController.contactListener.getObjectsToAdd()) {
 			object.setToRender(true);
-			this.level.addGameObject(object);
+			WorldController.level.addGameObject(object);
 			object.initPhysics();
 		}
-		this.contactListener.getObjectsToAdd().clear();
+		WorldController.contactListener.getObjectsToAdd().clear();
 		// add objects after step!!
-		for (final GameObject object : this.objectsToAdd) {
+		for (final GameObject object : WorldController.objectsToAdd) {
 			object.setToRender(true);
-			this.level.addGameObject(object);
+			WorldController.level.addGameObject(object);
 			// object.initPhysics();
 		}
-		this.objectsToAdd.clear();
+		WorldController.objectsToAdd.clear();
 	}
 
 	/*private void reset() {
@@ -288,38 +271,32 @@ public class WorldController {
 		this.coinCount = 0;
 		}*/
 
-	public void addTempGameObject(final GameObject object) {
-		this.objectsToAdd.add(object);
+	public static void addTempGameObject(final GameObject object) {
+		WorldController.objectsToAdd.add(object);
 		// System.out.println("temp objectsToAdd:" + this.objectsToAdd.size());
 	}
 
-	public boolean isDebug() {
-		return this.debug;
+	protected static boolean isDebug() {
+		return WorldController.debug;
 	}
 
-	public World getB2World() {
-		return this.b2World;
+	protected static World getB2World() {
+		return WorldController.topDown_b2World;
 	}
 
-	protected GeneratedLevel getLevel() {
-		return this.level;
+	protected static GeneratedLevel getLevel() {
+		return WorldController.level;
 	}
 
-	/*protected void addAbstractItem(final GameObject object) {
-		this.level.addGameObject(object);
-		}*/
-
-	public InputManager getInputManager() {
-		return this.inputManager;
+	protected static InputManager getInputManager() {
+		return WorldController.inputManager;
 	}
 
-	public boolean loadMusic() {
-		this.ingameMusic = Gdx.audio.newSound(Gdx.files.internal(Constants.MUSIC2));
-		this.winMusic = Gdx.audio.newSound(Gdx.files.internal(Constants.VICTORY));
-		if (this.ingameMusic != null) {
-			this.ingameMusic.play();
-			this.ingameMusic.setVolume(1, 0.5f);
-		}
-		return true;
+	protected static CameraHelper getCameraHelper() {
+		return WorldController.cameraHelper;
+	}
+
+	protected static long getTimeElapsed() {
+		return WorldController.timeElapsed;
 	}
 }

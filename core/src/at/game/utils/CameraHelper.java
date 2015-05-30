@@ -1,4 +1,4 @@
-package at.gamejam.ktn.utils;
+package at.game.utils;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;

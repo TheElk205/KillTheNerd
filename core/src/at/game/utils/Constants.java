@@ -1,4 +1,4 @@
-package at.gamejam.ktn.utils;
+package at.game.utils;
 
 public class Constants {
 	// 5 Meters

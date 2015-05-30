@@ -1,10 +1,8 @@
-package at.game;
+package at.game.visuals.tiles;
+
+import at.game.enums.BorderStyle;
 
 public class TileData {
-	public enum BorderStyle {
-		BOX, NONE, RIGHT_TOP, RIGHT_BOTTOM, LEFT_BOTTOM, LEFT_TOP
-	}
-
 	private String		name;
 	private BorderStyle	borderStyle	= BorderStyle.NONE;
 	private int			offsetNorth	= 0, offsetSouth = 0, offsetWest = 0, offsetEast = 0;

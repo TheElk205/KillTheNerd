@@ -3,7 +3,7 @@ package at.game.visuals;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.gamejam.ktn.utils.Assets;
+import at.game.managers.Assets;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -47,8 +47,7 @@ public abstract class GameObject {
 
 	public abstract void update(final float deltaTime);
 
-	public void initPhysics() {
-	}
+	public abstract void initPhysics();
 
 	/**
 	 * @return the toRender

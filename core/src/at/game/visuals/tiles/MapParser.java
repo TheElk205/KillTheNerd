@@ -1,4 +1,4 @@
-package at.game;
+package at.game.visuals.tiles;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;

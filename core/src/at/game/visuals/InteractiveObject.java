@@ -1,28 +1,17 @@
-package at.gamejam.ktn.game.entites;
-
-import at.game.visuals.GameObject;
+package at.game.visuals;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.physics.box2d.World;
 
 public abstract class InteractiveObject extends GameObject {
-	// private Body b2Body;
-	boolean						animated		= false;
-	public World				b2World;
-	protected TextureRegion		texture;
-	protected int				numPictures		= 0;
-	public float				frameDuration	= 0.1f;
-	protected Animation			animation;
-	// animated
+	protected float				frameDuration	= 0.1f;
 	protected TextureRegion[]	textureRegion;
 	protected float				startTime		= 0;
-
-	/*public InteractiveObject(World b2World) {
-		super();
-		this.b2World = b2World;
-	}*/
+	protected Animation			animation;
+	protected boolean			animated		= false;
+	protected TextureRegion		texture;
+	protected int				numPictures		= 0;
 
 	protected void initAnimated() {
 		TextureRegion[][] tmp = null;
