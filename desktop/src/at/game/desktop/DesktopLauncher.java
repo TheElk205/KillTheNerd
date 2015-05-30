@@ -1,4 +1,4 @@
-package at.gamejam.ktn.desktop;
+package at.game.desktop;
 
 import at.game.Game;
 import at.game.utils.Constants;
