@@ -2,7 +2,9 @@ package at.game;
 
 import java.util.concurrent.TimeUnit;
 
+import at.game.gamemechanics.Item;
 import at.game.managers.Assets;
+import at.game.maps.AbstractLevel;
 import at.game.utils.Constants;
 import at.game.visuals.GameObject;
 import at.game.visuals.hud.Scoreboard;
@@ -13,38 +15,44 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 
+/**
+ * @author Herkt Kevin
+ */
 public class WorldRenderer implements Disposable {
 	private final OrthographicCamera	camera;
+	private final OrthographicCamera	b2dCamera;
 	private final OrthographicCamera	cameraGUI;
 	private final SpriteBatch			batch;
-	private Box2DDebugRenderer			debugRenderer;
+	private final Box2DDebugRenderer	debugRenderer;
 	private final BitmapFont			font;
-	private TextureRegion				coinTexture;
-	private TextureRegion				redbullTexture;
-	private TextureRegion				victory;
-	private final int					bookPosition			= 40;
-	private final int					redBullPosition			= 40;
-	private Scoreboard					score;
+	private final TextureRegion			coinTexture;
+	private final TextureRegion			redbullTexture;
+	private final TextureRegion			victory;
+	private final float					bookPosition			= Constants.HEIGHT_8P;
+	// private final int redBullPosition = 40;
+	private final Scoreboard			score;
 	private boolean						winMusicAlreadyStarted	= false;
+	private final AbstractLevel			level;
+	private final World					world;
+	private final WorldController		worldController;
 
-	public WorldRenderer() {
-		this.camera = new OrthographicCamera(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
-		this.camera.position.set(0, 0, 0);
-		this.camera.update();
-		this.font = new BitmapFont(true); // default 15pt Arial
-		this.batch = new SpriteBatch();
-		// GUI camera
-		this.cameraGUI = new OrthographicCamera(Constants.VIEWPORT_GUI_WIDTH, Constants.VIEWPORT_GUI_HEIGHT);
-		this.cameraGUI.position.set(0, 0, 0);
-		this.cameraGUI.setToOrtho(true); // flip y-axis
-		this.cameraGUI.update();
-
-		this.init();
-	}
-
-	private void init() {
+	/**
+	 * @param level
+	 * @param worldController
+	 */
+	public WorldRenderer(final AbstractLevel level, final WorldController worldController) {
+		this.world = WorldController.getB2World();
+		this.worldController = worldController;
+		System.out.println("WorldRenderer - Constructor");
+		this.level = level;
+		// Gdx.graphics.getWidth() gets the width defined in DesktopLauncher.java
+		// final float width = Gdx.graphics.getWidth();
+		// final float height = Gdx.graphics.getHeight();
+		// this.camera = new OrthographicCamera(width, height * (height / width));
+		// this.camera = new OrthographicCamera(width, height * (height / width));
 		this.debugRenderer = new Box2DDebugRenderer();
 
 		this.coinTexture = Assets.getInstance(new AssetManager()).findRegion("book_green_small");
@@ -54,43 +62,44 @@ public class WorldRenderer implements Disposable {
 
 		this.coinTexture.flip(false, true);
 		this.redbullTexture.flip(false, true);
-		this.score = new Scoreboard(WorldController.getLevel());
-		this.score.setPosition(280, 10);
-	}
+		this.score = new Scoreboard();
+		// camera
+		this.camera = new OrthographicCamera();
+		this.camera.setToOrtho(false, Constants.SCREEN_WIDTH_IN_PIXEL, Constants.SCREEN_HEIGHT_IN_PIXEL);
+		/*this.camera.position.set(0, 0, 0);
+		this.camera.update();*/
 
-	private void renderGUI() {
-		this.batch.setProjectionMatrix(this.cameraGUI.combined);
-		this.batch.begin();
-		final String mmss = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(WorldController.getTimeElapsed()) % TimeUnit.HOURS.toMinutes(1),
-				TimeUnit.MILLISECONDS.toSeconds(WorldController.getTimeElapsed()) % TimeUnit.MINUTES.toSeconds(1));
-		this.font.draw(this.batch, mmss, 10, 10);
+		// GUI camera
+		this.cameraGUI = new OrthographicCamera();
+		this.cameraGUI.setToOrtho(true, Constants.SCREEN_WIDTH_IN_PIXEL, Constants.SCREEN_HEIGHT_IN_PIXEL); // flip y
+		/*this.cameraGUI.position.set(0, 0, 0);
+		this.cameraGUI.update();*/
 
-		if (WorldController.isDebug()) {
-			this.font.draw(this.batch, Integer.toString(GameObject.totalObjects.size()), Constants.VIEWPORT_GUI_WIDTH / 2, 40);
-			// this.font.draw(this.batch, Integer.toString(RedBull.itemCount), Constants.VIEWPORT_GUI_WIDTH / 2, 60);
-			// this.font.draw(this.batch, Integer.toString(Thesis.itemCount), Constants.VIEWPORT_GUI_WIDTH / 2, 80);
-		}
+		// b2d camera - collision debugger - Box2D - view is for example 10x17 meters
+		this.b2dCamera = new OrthographicCamera(Constants.VIEWPORT_WIDTH_IN_METER, Constants.VIEWPORT_HEIGHT_IN_METER);
+		// this.b2dCamera.position.set(0, 0, 0);
+		this.b2dCamera.update();
 
-		this.font.draw(this.batch, Integer.toString(WorldController.playerSleep.getItemCount()), 35, 40);
-		this.font.draw(this.batch, Integer.toString(WorldController.playerWake.getItemCount()), 980, 40);
-
-		this.drawMunition();
-		this.drawScoreboard();
-
-		this.batch.end();
+		this.font = new BitmapFont(true); // default 15pt Arial
+		final float scale = (float) Constants.SCREEN_WIDTH_IN_PIXEL / (float) Constants.REF_WIDTH_IN_PIXEL;
+		this.font.getData().setScale(scale, scale);
+		this.batch = new SpriteBatch();
 	}
 
 	private void drawMunition() {
-		int offset = 0;
-		for (int i = 0; i < WorldController.playerWake.getItemCount(); i++) {
-			this.batch.draw(this.redbullTexture, 1000, this.redBullPosition + offset, 30, 30);
+		this.font.draw(this.batch, "Mun: " + Integer.toString(this.level.getPlayer1().getItemCount()), Constants.WIDTH_1P, Constants.HEIGHT_4P);
+		final float sizeOfImage = Constants.WIDTH_2P;
+		// this.font.draw(this.batch, Integer.toString(WorldController.playerWake.getItemCount()), 980, 40);
+		float offset = 0;
+		/*for (int i = 0; i < WorldController.playerWake.getItemCount(); i++) {
+			this.batch.draw(this.redbullTexture, 1000, this.redBullPosition + offset, sizeOfImage, sizeOfImage);
 			offset += 30;
-		}
+		}*/
 
 		offset = 0;
-		for (int i = 0; i < WorldController.playerSleep.getItemCount(); i++) {
-			this.batch.draw(this.coinTexture, 10, this.bookPosition + offset, 30, 30);
-			offset += 30;
+		for (int i = 0; i < this.level.getPlayer1().getItemCount(); i++) {
+			this.batch.draw(this.coinTexture, Constants.WIDTH_2P, this.bookPosition + offset, sizeOfImage, sizeOfImage);
+			offset += sizeOfImage;
 		}
 	}
 
@@ -99,35 +108,76 @@ public class WorldRenderer implements Disposable {
 		this.score.render(this.batch);
 
 		if (this.score.won() != 0) {
-			WorldController.getInputManager().setEnabled(false);
+			// WorldController.getInputManager().setEnabled(false);
 			this.batch.draw(this.victory, 300, 300, 400, 150);
-			if (!this.winMusicAlreadyStarted && (Game.winMusic != null)) {
-				Game.ingameMusic.dispose();
-				Game.winMusic.play();
+			if (!this.winMusicAlreadyStarted && (GameTitle.winMusic != null)) {
+				GameTitle.ingameMusic.dispose();
+				GameTitle.winMusic.play();
 				this.winMusicAlreadyStarted = true;
 			}
 		}
 	}
 
-	protected void render() {
-		WorldController.getCameraHelper().applyTo(this.camera);
-		this.batch.setProjectionMatrix(this.camera.combined);
-		this.batch.begin();
-		WorldController.getLevel().render(this.batch);
-		WorldController.playerSleep.render(this.batch);
-		WorldController.playerWake.render(this.batch); // TODO make global list.. for all players, for level for bars...
-		this.batch.end();
+	public void renderAll() {
+		// this.renderWorld(); // TODO einkommentiern wenn grafiken vorhanden, vorerst nur Box2D rendern
 		this.renderGUI();
-		if (WorldController.isDebug()) {
-			this.debugRenderer.render(WorldController.getB2World(), this.camera.combined);
+		// this.level.getCameraHelper().applyTo(this.b2dCamera);
+		// System.out.println(this.level.getCameraHelper());
+		if (Constants.DEBUG) {
+			this.b2dCamera.position.set(this.level.getPlayer1().position.x, this.level.getPlayer1().position.y, 0f); // camera should follow player1
+			// System.out.println("WorldRenderer - player1 pos: " + this.level.getPlayer1().position.x + ":" + this.level.getPlayer1().position.y);
+			this.b2dCamera.update();
+			this.debugRenderer.render(this.world, this.b2dCamera.combined);
 		}
 	}
 
-	protected void resize(final int width, final int height) {
-		this.camera.viewportWidth = (Constants.VIEWPORT_HEIGHT / height) * width; // calculate aspect ratio
-		// this.camera.viewportHeight = (Constants.VIEWPORT_WIDTH / width) * height; // calculate aspect ratio
-		this.camera.update();
+	/**
+	 *
+	 */
+	public void renderWorld() {
+		this.batch.setProjectionMatrix(this.camera.combined);
+		this.level.getCameraHelper().setTarget(this.level.getPlayer1().getB2Body());
+		this.batch.begin();
+		this.level.render(this.batch);
+		this.batch.end();
+
+		System.out.println(this.level.getCameraHelper());
 	}
+
+	private void renderGUI() {
+		this.batch.setProjectionMatrix(this.cameraGUI.combined);
+		this.batch.begin();
+		final String mmss = String.format("%02d:%02d",
+				TimeUnit.MILLISECONDS.toMinutes(this.worldController.getTimeElapsed()) % TimeUnit.HOURS.toMinutes(1),
+				TimeUnit.MILLISECONDS.toSeconds(this.worldController.getTimeElapsed()) % TimeUnit.MINUTES.toSeconds(1));
+		this.font.draw(this.batch, mmss, Constants.SCREEN_WIDTH_IN_PIXEL - Constants.HEIGHT_5P, 10);
+
+		if (Constants.DEBUG) {
+			this.font.draw(this.batch, "total Objects: " + Integer.toString(GameObject.totalObjects.size()), Constants.SCREEN_WIDTH_IN_PIXEL / 2,
+					Constants.HEIGHT_5P);
+			this.font.draw(this.batch, "all Items: " + Integer.toString(Item.getAllItems().size()), Constants.SCREEN_WIDTH_IN_PIXEL / 2,
+					Constants.SCREEN_HEIGHT_IN_PIXEL * 0.075f);
+			// this.font.draw(this.batch, Integer.toString(RedBull.itemCount), Constants.VIEWPORT_GUI_WIDTH / 2, 60);
+			// this.font.draw(this.batch, Integer.toString(Thesis.itemCount), Constants.VIEWPORT_GUI_WIDTH / 2, 80);
+		}
+		this.drawMunition();
+		this.drawScoreboard();
+		this.batch.end();
+	}
+
+	/*protected void resize(final int width, final int height) {
+		this.b2dCamera.viewportWidth = (Constants.VIEWPORT_HEIGHT_IN_METER / height) * width;
+		this.camera.viewportWidth = (Constants.SCREEN_HEIGHT_IN_PIXEL / height) * width;
+		// this.camera.viewportHeight = height;
+		this.cameraGUI.viewportWidth = (Constants.SCREEN_HEIGHT_IN_PIXEL / height) * width;
+		// this.cameraGUI.viewportHeight = height;
+
+		// this.camera.viewportWidth = (Constants.VIEWPORT_HEIGHT / height) * width; // calculate aspect ratio
+		// this.camera.viewportHeight = (Constants.VIEWPORT_WIDTH / width) * height; // calculate aspect ratio
+		this.b2dCamera.update();
+		this.camera.update();
+		this.cameraGUI.update();
+	}*/
 
 	@Override
 	public void dispose() {

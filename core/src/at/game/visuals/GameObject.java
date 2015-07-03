@@ -15,8 +15,8 @@ public abstract class GameObject {
 	public static ArrayList<TextureRegion>	textureList			= new ArrayList<TextureRegion>();
 	public static ArrayList<String>			textureNameList		= new ArrayList<String>();
 	public Vector2							position;
-	public Body								b2Body;
-	public Vector2							dimension;
+	protected Body							b2Body;
+	public Vector2							renderDimension		= null;							// = new Vector2(1, 1);
 	public Vector2							origin;
 	public Vector2							scale;
 	public float							rotation;
@@ -33,9 +33,8 @@ public abstract class GameObject {
 
 	public GameObject() {
 		this.position = new Vector2();
-		this.dimension = new Vector2(1, 1);
 		this.origin = new Vector2();
-		this.scale = new Vector2(1, 1);
+		// this.scale = new Vector2(1, 1);
 		this.rotation = 0;
 
 		GameObject.totalObjects.add(this);

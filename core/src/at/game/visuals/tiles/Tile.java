@@ -1,5 +1,7 @@
 package at.game.visuals.tiles;
 
+import at.game.RenderObject;
+import at.game.WorldController;
 import at.game.visuals.GameObject;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,17 +14,17 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-public class Tile extends GameObject {
+/**
+ * @author Herkt Kevin
+ */
+public class Tile extends RenderObject {
 	private TextureRegion	texture		= null;
-	/** used to create bodies */
-	private final World		b2World;
 	private Body			b2Body;
 	private final TileData	tileData;
 	private String			tileName	= null;
 
-	public Tile(final Vector2 position, final World b2World, final TileData tiledata) {
+	public Tile(final Vector2 position, final TileData tiledata) {
 		this.position = position;
-		this.b2World = b2World;
 		this.tileData = tiledata;
 		if (tiledata != null) {
 			this.tileName = tiledata.getName();
@@ -52,13 +54,13 @@ public class Tile extends GameObject {
 		this.dimension = new Vector2(0.5f, 0.5f);
 	}
 
-	@Override
-	public void initPhysics() {
+	private void initPhysics() {
 		final BodyDef bodyDef = new BodyDef();
-		bodyDef.position.set(new Vector2(this.position.x + (this.dimension.x / 4f), this.position.y + (this.dimension.y / 4f)));
+		bodyDef.position.set(new Vector2((this.position.x) + (this.dimension.x / 4f), (this.position.y) + (this.dimension.y / 4f)));
 		bodyDef.type = BodyType.StaticBody;
 
-		this.b2Body = this.b2World.createBody(bodyDef);
+		final World world = WorldController.getB2World();
+		this.b2Body = world.createBody(bodyDef);
 
 		if (this.tileData != null) {
 			switch (this.tileData.getBorderStyle()) {
@@ -73,7 +75,7 @@ public class Tile extends GameObject {
 
 	private void createBoxBorder() {
 		final PolygonShape poly = new PolygonShape();
-		poly.setAsBox(this.dimension.x / 4f, this.dimension.y / 4f);
+		poly.setAsBox(this.dimension.x, this.dimension.y);
 
 		final FixtureDef fixtureDef = new FixtureDef();
 
@@ -106,8 +108,7 @@ public class Tile extends GameObject {
 		return "Tile (" + this.tileName + ")";
 	}
 
-	@Override
 	public void update(final float deltaTime) {
-		// a tile has nothing to update, maybe introduce states for tiles? -> animated tile with changeable state
+		// a tile has nothing to update, maybe introduce states for tiles? -> animated tile with changeable state, water lava
 	}
 }

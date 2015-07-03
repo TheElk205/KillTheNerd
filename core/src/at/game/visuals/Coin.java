@@ -15,7 +15,7 @@ public class Coin extends GameObject {
 	public Coin(final Vector2 position) {
 		super();
 		this.position = position;
-		this.dimension = new Vector2(0.25f, 0.2f);
+		this.renderDimension = new Vector2(0.25f, 0.2f);
 		this.init();
 	}
 
@@ -34,7 +34,7 @@ public class Coin extends GameObject {
 	@Override
 	public void render(final SpriteBatch batch) {
 		if (!this.collected) {
-			batch.draw(this.animation.getKeyFrame(this.startTime, true), this.position.x, this.position.y, this.dimension.x, this.dimension.y);
+			batch.draw(this.animation.getKeyFrame(this.startTime, true), this.position.x, this.position.y, this.renderDimension.x, this.renderDimension.y);
 		}
 	}
 

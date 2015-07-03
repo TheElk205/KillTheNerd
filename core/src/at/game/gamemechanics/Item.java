@@ -1,21 +1,23 @@
-package at.game.visuals;
+package at.game.gamemechanics;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import at.game.WorldController;
 import at.game.enums.ItemType;
+import at.game.gamemechanics.movement.BodyFactory;
 import at.game.utils.Constants;
+import at.game.visuals.GameObject;
+import at.game.visuals.InteractiveObject;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 
+/**
+ * @author Herkt Kevin
+ */
 public class Item extends InteractiveObject {
 	private static final Sound	GRAB_SOUND		= Gdx.audio.newSound(Gdx.files.internal(Constants.GRAB_SOUND));
 	private boolean				collected		= false;
@@ -24,12 +26,18 @@ public class Item extends InteractiveObject {
 	private Player				itemIsThrownBy	= null;
 	private final float			dmg				= 0.05f;
 	// public boolean destroyed = false;
-	public static List<Item>	itemList		= new ArrayList<Item>();
+	private static List<Item>	allItems		= new ArrayList<Item>();
 	private float				flyingTime		= 0;
 	private boolean				isFlying		= false;
 	private String				name			= "no Name";
-	final private ItemType		itemType;
+	private final ItemType		itemType;
 
+	/**
+	 * @param position
+	 * @param initPhysics
+	 * @param itemType
+	 * @param name
+	 */
 	public Item(final Vector2 position, final boolean initPhysics, final ItemType itemType, final String name) {
 		this.itemType = itemType;
 		switch (itemType) {
@@ -46,9 +54,9 @@ public class Item extends InteractiveObject {
 		}
 		this.name = name;
 		this.position = position;
-		Item.itemList.add(this);
+		Item.allItems.add(this);
 		// this.dimension = new Vector2(0.25f, 0.2f);
-		this.dimension = new Vector2(0.15f, 0.15f);
+		this.renderDimension = new Vector2(0.15f, 0.15f);
 		// this.sound = Gdx.audio.newSound(Gdx.files.internal(Constants.THROW_SOUND));
 		if (initPhysics) {
 			this.init(true, initPhysics);
@@ -68,12 +76,15 @@ public class Item extends InteractiveObject {
 		}
 	}
 
-	public void setFlying() {
+	protected void setFlying() {
 		this.collected = false;
 		this.collectable = false;
 		this.isFlying = true;
 	}
 
+	/**
+	 * sets the item to its default state.
+	 */
 	public void reset() {
 		this.isFlying = false;
 		this.collectable = true;
@@ -95,22 +106,7 @@ public class Item extends InteractiveObject {
 	public void initPhysics() {
 		if (!this.physicsAlreadyInit) {
 			this.physicsAlreadyInit = true;
-			final BodyDef bodyDef = new BodyDef();
-			// System.out.println(this.dimension + " " + this.position);
-			bodyDef.position.set(new Vector2(this.position.x + (this.dimension.x / 2f), this.position.y + (this.dimension.y / 2f)));
-			bodyDef.type = BodyDef.BodyType.DynamicBody;
-			this.b2Body = WorldController.topDown_b2World.createBody(bodyDef);
-			final PolygonShape polygonShape = new PolygonShape();
-			// System.out.println(this.dimension.x);
-			polygonShape.setAsBox(this.dimension.x / 2f, this.dimension.y / 2f);
-			final FixtureDef fixtureDef = new FixtureDef();
-			fixtureDef.isSensor = false;
-			fixtureDef.density = 5f;
-			fixtureDef.friction = 0f;
-			fixtureDef.restitution = 0;
-			fixtureDef.shape = polygonShape;
-			this.b2Body.setBullet(true);
-			this.b2Body.createFixture(fixtureDef);
+			this.b2Body = BodyFactory.createItemBody(this.position, this.renderDimension);
 			this.b2Body.setUserData(this);
 		}
 	}
@@ -118,12 +114,13 @@ public class Item extends InteractiveObject {
 	@Override
 	public void render(final SpriteBatch batch) {
 		if (this.animated && !this.collected && this.toRender) {
-			batch.draw(this.animation.getKeyFrame(this.startTime, true), this.position.x, this.position.y, this.dimension.x, this.dimension.y);
+			batch.draw(this.animation.getKeyFrame(this.startTime, true), this.position.x, this.position.y, this.renderDimension.x,
+					this.renderDimension.y);
 		}
 		if (!this.animated && !this.collectable && this.toRender) {
 
-			batch.draw(this.texture, this.position.x - (this.dimension.x / 2), this.position.y - (this.dimension.y / 2), this.origin.x, this.origin.y, this.dimension.x, this.dimension.y,
-					this.scale.x, this.scale.y, this.rotation);
+			batch.draw(this.texture, this.position.x - (this.renderDimension.x / 2), this.position.y - (this.renderDimension.y / 2), this.origin.x,
+					this.origin.y, this.renderDimension.x, this.renderDimension.y, this.scale.x, this.scale.y, this.rotation);
 
 		}
 	}
@@ -134,8 +131,8 @@ public class Item extends InteractiveObject {
 		this.startTime += deltaTime;
 		if (this.b2Body != null) {
 			this.position = this.b2Body.getPosition();
-			this.position.x = this.position.x - (this.dimension.x / 2);
-			this.position.y = this.position.y - (this.dimension.y / 2);
+			this.position.x = this.position.x - (this.renderDimension.x / 2);
+			this.position.y = this.position.y - (this.renderDimension.y / 2);
 			this.rotation = this.b2Body.getAngle() * MathUtils.radiansToDegrees;
 		}
 	}
@@ -214,5 +211,12 @@ public class Item extends InteractiveObject {
 
 	public void setFlyingTime(final float f) {
 		this.flyingTime = f;
+	}
+
+	/**
+	 * @return Item.allItems
+	 */
+	public static List<Item> getAllItems() {
+		return Item.allItems;
 	}
 }

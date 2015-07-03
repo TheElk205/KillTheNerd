@@ -1,13 +1,12 @@
 package at.game.utils;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
 public class CameraHelper {
-	private final float	MAX_ZOOM_IN		= 1.1f;
-	private final float	MAX_ZOOM_OUT	= 1.8f;
+	private final float	MAX_ZOOM_IN		= -9999300f;
+	private final float	MAX_ZOOM_OUT	= 9999200f;
 
 	private Vector2		position;
 	private float		zoom;
@@ -43,16 +42,8 @@ public class CameraHelper {
 		this.setZoom(this.zoom + ammount);
 	}
 
-	public float getZoom() {
-		return this.zoom;
-	}
-
-	public void setZoom(final float zoom) {
+	private void setZoom(final float zoom) {
 		this.zoom = MathUtils.clamp(zoom, this.MAX_ZOOM_IN, this.MAX_ZOOM_OUT);
-	}
-
-	public Body getTarget() {
-		return this.target;
 	}
 
 	public void setTarget(final Body target) {
@@ -63,22 +54,28 @@ public class CameraHelper {
 		this.calcPosition = position;
 	}
 
-	public boolean hasTarget() {
+	private boolean hasTarget() {
 		return this.target != null;
 	}
 
-	public boolean hasTarget(final Body target) {
+	private boolean hasTarget(final Body target) {
 		return this.hasTarget() && this.target.equals(target);
 	}
+
+	/*
+	 * @param camera
 
 	public void applyTo(final OrthographicCamera camera) {
 		camera.position.x = this.position.x;
 		camera.position.y = this.position.y;
-		camera.zoom = this.zoom;
+		// camera.zoom = this.zoom;
+		// System.out.println("CameraHelper: " + camera.zoom);
+		// camera.zoom = 0;
 		camera.update();
-	}
+	} */
 
-	public void update(Vector2 vector) {
-		this.position = vector;
+	@Override
+	public String toString() {
+		return "CameraHelper - Target: " + this.target + " position: " + this.position;
 	}
 }

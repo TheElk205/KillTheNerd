@@ -11,68 +11,60 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import at.game.enums.ItemType;
-import at.game.enums.PlayerType;
-import at.game.managers.InputManager;
-import at.game.utils.CameraHelper;
+import at.game.gamemechanics.Item;
+import at.game.maps.AbstractLevel;
+import at.game.utils.Constants;
 import at.game.visuals.GameObject;
-import at.game.visuals.Item;
-import at.game.visuals.Player;
-import at.game.visuals.tiles.GeneratedLevel;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 
+/**
+ * @author Herkt Kevin
+ */
 public class WorldController {
-	private static final boolean			spawnEnabled	= true;
-	private static CameraHelper				cameraHelper;
-	protected static Player					playerSleep;
-	protected static Player					playerWake;
-
-	private static long						timeElapsed;
-	public static World						topDown_b2World;
-	private static GeneratedLevel			level;
-	private static float					lastSpawn		= 0;
-	private static final boolean			debug			= false;
-	private static InputManager				inputManager;
-	private static final List<GameObject>	objectsToAdd	= new ArrayList<GameObject>();
-	private static MyContactListener		contactListener;
-	private static double					distance;
-	// private final static Logger LOGGER = new Logger("WorldController-Logger", Logger.INFO);
+	private float							accumulator		= 0;
+	private long							timeElapsed;
+	private static World					b2World;
+	public static final float				GRAVITY			= -10f;
+	// private static GeneratedLevel level;
+	private float							lastSpawn		= 0;
+	private final MyContactListener			contactListener;
+	// private static double distanceBetweenSplitscreenPlayer;
 	private final static Logger				LOGGER			= Logger.getLogger(WorldController.class.getName());
+	private final static List<GameObject>	objectsToAdd	= new ArrayList<GameObject>();
+	private final boolean					spawnEnabled	= true;
+	private final AbstractLevel				level;
 
-	protected WorldController() {
-		if (WorldController.debug) {
-			WorldController.LOGGER.info("test info");
+	public WorldController(final AbstractLevel level) {
+		System.out.println("WorldController - Constructor");
+		this.level = level;
+		if (Constants.DEBUG) {
+			// LOGGER.info("test info");
 		}
-		WorldController.cameraHelper = new CameraHelper();
-		// this.b2World = new World(new Vector2(0, -9.81f), true);
-		WorldController.topDown_b2World = new World(new Vector2(0, 0), true); // no gravity
 
-		WorldController.playerSleep = new Player(new Vector2(-1.5f, -1.0f), ItemType.Sleep_Item, -10, PlayerType.Sleep);
-		WorldController.playerSleep.setName("PlayerSleep");
-		WorldController.playerWake = new Player(new Vector2(1.5f, -1.0f), ItemType.Wake_Item, +10, PlayerType.Wake);
-		WorldController.playerWake.setName("PlayerWake");
-		// this.cameraHelper.setTarget(this.playerSleep.getB2Body());
-		WorldController.cameraHelper.setTarget(new Vector2(WorldController.playerSleep.position.x - WorldController.playerWake.position.x, WorldController.playerSleep.position.y
-				- WorldController.playerWake.position.y));
-		// Vector(x2-x1,y2-y1
-		// this.level = new Level(this.b2World);
+		WorldController.b2World = new World(new Vector2(0, WorldController.GRAVITY), true); // with -10 gravity
+		// level = new GeneratedLevel();
+		// level.init(); // TODO 28.06
+		this.contactListener = new MyContactListener();
+		WorldController.b2World.setContactListener(this.contactListener);
 
-		WorldController.level = new GeneratedLevel(WorldController.topDown_b2World);
-		WorldController.contactListener = new MyContactListener();
-		WorldController.topDown_b2World.setContactListener(WorldController.contactListener);
-		WorldController.inputManager = new InputManager(WorldController.playerWake, WorldController.playerSleep, WorldController.cameraHelper);
-		Gdx.input.setInputProcessor(WorldController.inputManager);
-		/*midiPlayer.open(Constants.MUSIC);
-		midiPlayer.setLooping(true);
-		midiPlayer.setVolume(0.5f);
-		midiPlayer.play();*/
-		if (WorldController.debug) {
+		if (Constants.DEBUG) {
 			WorldController.setUpLogger();
 		}
+
+		/*
+		final BodyDef testBodyDef = new BodyDef();
+		testBodyDef.position.set(0, -2); // -2meter height
+		testBodyDef.type = BodyDef.BodyType.StaticBody;
+		final Body body = getB2World().createBody(testBodyDef);
+		final PolygonShape testBoxShape = new PolygonShape();
+		testBoxShape.setAsBox(10f / 2, 1f / 2); // 10meter long platform
+		final FixtureDef testFixtureDef = new FixtureDef();
+		testFixtureDef.shape = testBoxShape;
+		testFixtureDef.friction = 1f;
+		// body.createFixture(testFixtureDef);
+		testBoxShape.dispose();*/
 	}
 
 	private static void setUpLogger() {
@@ -100,13 +92,13 @@ public class WorldController {
 		WorldController.LOGGER.info("test info 2");
 	}
 
-	protected void update(final float deltaTime) {
+	public void update(final float deltaTime) {
 		// remove objects before or after step!!
-		final List<GameObject> removeList = WorldController.contactListener.getObjectsToRemove();
+		final List<GameObject> removeList = this.contactListener.getObjectsToRemove();
 		if (removeList.size() > 0) {
 			for (final GameObject object : removeList) {
 				if (object.toDelete) {
-					WorldController.topDown_b2World.destroyBody(object.getB2Body());
+					WorldController.b2World.destroyBody(object.getB2Body());
 					object.setToRender(false);
 					GameObject.totalObjects.remove(object);
 					/*if (object.getType == Item2) {
@@ -117,21 +109,18 @@ public class WorldController {
 					}*/
 				}
 			}
-			WorldController.contactListener.getObjectsToRemove().clear();
+			this.contactListener.getObjectsToRemove().clear();
 		}
 
-		WorldController.timeElapsed += deltaTime * 1000;
-		WorldController.topDown_b2World.step(1 / 60f, 3, 8); // timeStep, velocityIteration, positionIteration
+		this.timeElapsed += deltaTime * 1000;
+		this.doPhysicsStep(deltaTime);
 
-		// this.cameraHelper.update(deltaTime);
-		final Vector2 vector = WorldController.calcPlayerDistance();
-		WorldController.cameraHelper.update(vector);
-		WorldController.cameraHelper.setZoom((float) (WorldController.distance * 0.2f));
-		WorldController.createDynamicObjects();
+		// final Vector2 vector = calcPlayerDistance();
+		// cameraHelper.update(vector);
+		// cameraHelper.setZoom((float) (distance * 0.2f));
+		this.createDynamicObjects();
 
-		WorldController.playerSleep.update(deltaTime);
-		WorldController.playerWake.update(deltaTime);
-		WorldController.level.update(deltaTime);
+		this.level.update(deltaTime);
 
 		// check max player distance for camera
 		/*this.printTime += deltaTime;
@@ -141,10 +130,10 @@ public class WorldController {
 		}*/
 
 		// verhindert dass sich die Spieler zuweit voneinander entfernen
-		final double maxDistance = 14f;
-		if (WorldController.distance > maxDistance) {
-			final Body wakeBody = WorldController.playerWake.b2Body;
-			final Body sleepBody = WorldController.playerSleep.b2Body;
+		/*final double maxDistance = 14f;
+		if (distance > maxDistance) {
+			final Body wakeBody = playerWake.b2Body;
+			final Body sleepBody = playerSleep.b2Body;
 
 			float wakeX = wakeBody.getPosition().x;
 			float sleepX = sleepBody.getPosition().x;
@@ -159,16 +148,9 @@ public class WorldController {
 				sleepX = sleepX - offset;
 			}
 
-			/*if (wakeY > sleepY) {
-				wakeY = wakeY - offset;
-				sleepY = sleepY + offset;
-			} else {
-				wakeY = wakeY + offset;
-				sleepY = sleepY - offset;
-			}*/
 			wakeBody.setTransform(new Vector2(wakeX, wakeY), wakeBody.getAngle());
 			sleepBody.setTransform(new Vector2(sleepX, sleepY), wakeBody.getAngle());
-		}
+		}*/
 
 		/*this.b2Body.setLinearVelocity(lin);
 		this.b2Body.applyForceToCenter(toApply, true);
@@ -181,7 +163,7 @@ public class WorldController {
 		}*/
 		// this.b2Body.setLinearVelocity(new Vector2(-lin.x * 3, -lin.y * 3));
 
-		for (final Item item : Item.itemList) {
+		for (final Item item : Item.getAllItems()) {
 			if (item.isFlying()) {
 				item.setFlyingTime(item.getFlyingTime() + deltaTime);
 			}
@@ -190,10 +172,17 @@ public class WorldController {
 			}
 		}
 
-		if (WorldController.spawnEnabled) {
+		this.spawn(deltaTime);
+	}
+
+	/**
+	 * @param deltaTime
+	 */
+	public void spawn(final float deltaTime) {
+		if (this.spawnEnabled) {
 			final boolean spawn = false;
-			WorldController.lastSpawn = WorldController.lastSpawn + deltaTime;
-			if (WorldController.lastSpawn > 10) {
+			this.lastSpawn = this.lastSpawn + deltaTime;
+			if (this.lastSpawn > 10) {
 				final Random rnd = new Random();
 				final float i = rnd.nextFloat();
 				/*if (RedBull.itemCount < 10) { // TODO class itemManager which holds all instances and counts, in class Item
@@ -202,7 +191,7 @@ public class WorldController {
 					this.addTempGameObject(new RedBull(new Vector2(-1.5f, 1f + i), true));
 				}*/
 			}
-			if (WorldController.lastSpawn > 10) {
+			if (this.lastSpawn > 10) {
 				final Random rnd = new Random();
 				final float i = rnd.nextFloat();
 				/*if (Thesis.itemCount < 10) {
@@ -212,57 +201,78 @@ public class WorldController {
 				}*/
 			}
 			if (spawn) {
-				WorldController.lastSpawn = 0;
+				this.lastSpawn = 0;
 			}
 		}
 	}
 
-	protected static Vector2 calcPlayerDistance() {
-		final Vector2 vector = new Vector2();
-		vector.x = (WorldController.playerWake.position.x + WorldController.playerSleep.position.x) / 2;
-		vector.y = (WorldController.playerWake.position.y + WorldController.playerSleep.position.y) / 2;
-		final double temp1 = Math.pow((WorldController.playerWake.position.x - WorldController.playerSleep.position.x), 2);
-		final double temp2 = Math.pow((WorldController.playerWake.position.y - WorldController.playerSleep.position.y), 2);
-		WorldController.distance = Math.sqrt(temp1 + temp2);
-		return vector;
+	/**
+	 * @param deltaTime
+	 */
+	private void doPhysicsStep(final float deltaTime) {
+		/*while (accumulator > FPSCAP) {
+			if ((accumulator - FPSCAP) > FPSCAP) {
+				b2World.step(FPSCAP, 1, 1); // 1/60f timeStep, velocityIteration, positionIteration
+			} else {
+				b2World.step(accumulator - FPSCAP, 1, 1); // 1/60f timeStep, velocityIteration,
+			}
+			accumulator -= FPSCAP;
+		}*/
+		final float frameTime = Math.min(deltaTime, 0.25f);
+		this.accumulator += frameTime;
+		final float timeStep = 1 / 60f;
+		while (this.accumulator >= timeStep) {
+			WorldController.b2World.step(timeStep, 3, 8);
+			this.accumulator -= timeStep;
+		}
 	}
 
-	protected static double calcPossibleXPlayerDistance() {
+	/*protected static Vector2 calcPlayerDistance() {
+		final Vector2 vector = new Vector2();
+		vector.x = (playerWake.position.x + playerSleep.position.x) / 2;
+		vector.y = (playerWake.position.y + playerSleep.position.y) / 2;
+		final double temp1 = Math.pow((playerWake.position.x - playerSleep.position.x), 2);
+		final double temp2 = Math.pow((playerWake.position.y - playerSleep.position.y), 2);
+		distance = Math.sqrt(temp1 + temp2);
+		return vector;
+	}*/
+
+	/*protected static double calcPossibleXPlayerDistance() {
 		final Vector2 vector = new Vector2();
 		int xOffset = 2;
 		int yOffset = 2;
-		if (WorldController.playerWake.position.x < WorldController.playerSleep.position.x) {
+		if (playerWake.position.x < playerSleep.position.x) {
 			xOffset = -2;
 		}
-		if (WorldController.playerWake.position.y < WorldController.playerSleep.position.y) {
+		if (playerWake.position.y < playerSleep.position.y) {
 			yOffset = -2;
 		}
 
-		vector.x = (WorldController.playerWake.position.x + xOffset + WorldController.playerSleep.position.x) / 2;
-		vector.y = (WorldController.playerWake.position.y + yOffset + WorldController.playerSleep.position.y) / 2;
-		final double temp1 = Math.pow(((WorldController.playerWake.position.x + xOffset) - WorldController.playerSleep.position.x), 2);
-		final double temp2 = Math.pow(((WorldController.playerWake.position.y + yOffset) - WorldController.playerSleep.position.y), 2);
+		vector.x = (playerWake.position.x + xOffset + playerSleep.position.x) / 2;
+		vector.y = (playerWake.position.y + yOffset + playerSleep.position.y) / 2;
+		final double temp1 = Math.pow(((playerWake.position.x + xOffset) - playerSleep.position.x), 2);
+		final double temp2 = Math.pow(((playerWake.position.y + yOffset) - playerSleep.position.y), 2);
 		return Math.sqrt(temp1 + temp2);
-	}
+	}*/
 
-	protected static void createDynamicObjects() {
+	private void createDynamicObjects() {
 		// add objects after step!!
-		for (final GameObject object : WorldController.contactListener.getObjectsToAdd()) {
+		for (final GameObject object : this.contactListener.getObjectsToAdd()) {
 			object.setToRender(true);
-			WorldController.level.addGameObject(object);
+			// level.addGameObject(object);
 			object.initPhysics();
 		}
-		WorldController.contactListener.getObjectsToAdd().clear();
+		this.contactListener.getObjectsToAdd().clear();
 		// add objects after step!!
 		for (final GameObject object : WorldController.objectsToAdd) {
 			object.setToRender(true);
-			WorldController.level.addGameObject(object);
+			// level.addGameObject(object);
 			// object.initPhysics();
 		}
 		WorldController.objectsToAdd.clear();
 	}
 
-	/*private void reset() {
+	/*private void resetGame() {
 		this.reset = false;
 		this.playerSleep.getBody().setTransform(new Vector2(0.5f, 1.5f), 0);
 		this.playerSleep.getBody().setLinearVelocity(new Vector2(0, 0));
@@ -271,32 +281,26 @@ public class WorldController {
 		this.coinCount = 0;
 		}*/
 
+	/**
+	 * Use this method to add dynamic objects. For example if the Player shoots, to add the bullet he shoots. "throwItem(float)"
+	 *
+	 * @param object
+	 */
 	public static void addTempGameObject(final GameObject object) {
 		WorldController.objectsToAdd.add(object);
-		// System.out.println("temp objectsToAdd:" + this.objectsToAdd.size());
 	}
 
-	protected static boolean isDebug() {
-		return WorldController.debug;
+	/**
+	 * The World is needed to create bodies and fixtures, for example in the Player
+	 *
+	 * @return b2World the World
+	 */
+	public static World getB2World() {
+		System.out.println("WorldController - static getB2World");
+		return WorldController.b2World;
 	}
 
-	protected static World getB2World() {
-		return WorldController.topDown_b2World;
-	}
-
-	protected static GeneratedLevel getLevel() {
-		return WorldController.level;
-	}
-
-	protected static InputManager getInputManager() {
-		return WorldController.inputManager;
-	}
-
-	protected static CameraHelper getCameraHelper() {
-		return WorldController.cameraHelper;
-	}
-
-	protected static long getTimeElapsed() {
-		return WorldController.timeElapsed;
+	protected long getTimeElapsed() {
+		return this.timeElapsed;
 	}
 }

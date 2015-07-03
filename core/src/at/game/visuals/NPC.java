@@ -2,14 +2,15 @@ package at.game.visuals;
 
 import java.util.Random;
 
-import at.game.WorldController;
+import at.game.gamemechanics.Player;
+import at.game.gamemechanics.movement.BodyFactory;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 
+/**
+ * @author Herkt Kevin
+ */
 public class NPC extends InteractiveObject {
 	private static int		count				= 0;
 	private final int		number;
@@ -25,7 +26,7 @@ public class NPC extends InteractiveObject {
 	 */
 	public NPC(final Vector2 position) {
 		this.position = position;
-		this.dimension = new Vector2(1.5f, 1.5f);
+		this.renderDimension = new Vector2(1.5f, 1.5f);
 		this.numPictures = 5;
 
 		final Random rnd = new Random();
@@ -52,30 +53,9 @@ public class NPC extends InteractiveObject {
 
 	@Override
 	public void initPhysics() {
-		final BodyDef bodyDef = new BodyDef();
-		bodyDef.position.set(new Vector2(this.position.x + (this.dimension.x / 2f), this.position.y + (this.dimension.y / 2f)));
-		bodyDef.type = BodyDef.BodyType.StaticBody;
-		this.b2Body = WorldController.topDown_b2World.createBody(bodyDef);
-
-		CircleShape circleShape = new CircleShape();
-		circleShape.setRadius(0.75f);
-		FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.isSensor = true;
-		fixtureDef.density = 0f;
-		fixtureDef.friction = 0f;
-		fixtureDef.restitution = 0;
-		fixtureDef.shape = circleShape;
-		this.b2Body.createFixture(fixtureDef);
-
-		circleShape = new CircleShape();
-		circleShape.setRadius(0.10f);
-		fixtureDef = new FixtureDef();
-		fixtureDef.density = 0f;
-		fixtureDef.friction = 0f;
-		fixtureDef.restitution = 0;
-		fixtureDef.shape = circleShape;
-		this.b2Body.createFixture(fixtureDef);
-		this.b2Body.setUserData(this);
+		this.b2Body = BodyFactory.createNPCBody(this.position, this.renderDimension);
+		// this.b2Body.setUserData(this);
+		// this.b2Body.setUserData("Worker");
 	}
 
 	@Override
@@ -113,18 +93,17 @@ public class NPC extends InteractiveObject {
 			}
 			// System.out.println("New Energy: " + energy);
 		}
-
 	}
 
 	@Override
 	public void render(final SpriteBatch batch) {
 		// if (this.toRender) {
-		batch.draw(this.animation.getKeyFrame(this.startTime, true), this.position.x, this.position.y, this.dimension.x, this.dimension.y);
+		batch.draw(this.animation.getKeyFrame(this.startTime, true), this.position.x, this.position.y, this.renderDimension.x, this.renderDimension.y);
 		// }
 	}
 
 	public void loadAsset() {
-		this.texture = GameObject.assets.findRegion("worker"); // worker
+		this.texture = GameObject.assets.findRegion("worker");
 	}
 
 	/*public void addFactor(final float factor) {

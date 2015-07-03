@@ -1,6 +1,7 @@
 package at.game.visuals;
 
 import at.game.enums.ItemType;
+import at.game.gamemechanics.Item;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -33,7 +34,7 @@ public class ThrowableObject extends Item {
 	@Override
 	public void render(final SpriteBatch batch) {
 		if (!this.collected) {
-			batch.draw(this.animation.getKeyFrame(this.startTime, true), this.position.x, this.position.y, this.dimension.x, this.dimension.y);
+			batch.draw(this.animation.getKeyFrame(this.startTime, true), this.position.x, this.position.y, this.renderDimension.x, this.renderDimension.y);
 		}
 	}
 

@@ -1,6 +1,6 @@
 package at.game.desktop;
 
-import at.game.Game;
+import at.game.GameTitle;
 import at.game.utils.Constants;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
@@ -30,12 +30,16 @@ public class DesktopLauncher {
 		final LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
 		config.fullscreen = false;
-		config.backgroundFPS = 10;
-		config.title = "Nerd Wars - Version_0.1_2015.05.01 - Created by Herkt Kevin, Ferdinand Koeppen and Philip Polczer";
-		config.height = Constants.VIEWPORT_GUI_HEIGHT;
-		config.width = Constants.VIEWPORT_GUI_WIDTH;
-		config.foregroundFPS = 60;
-		// config.useGL30 = true;
-		final LwjglApplication lwjglApplication = new LwjglApplication(new Game(), config);
+		config.useGL30 = false;
+		config.backgroundFPS = 60; // TODO objects behave strange, if less than config.foregroundFPS
+		config.title = "Nerd Wars - Version_0.3_2015.06.29 - Created by Herkt Kevin, Ferdinand Koeppen and Philip Polczer";
+		// size of the screen-window, not of the camera
+		config.height = Constants.SCREEN_HEIGHT_IN_PIXEL;
+		config.width = Constants.SCREEN_WIDTH_IN_PIXEL;
+		config.resizable = false;
+		config.foregroundFPS = Constants.MAX_FAMES;
+		System.out.println("Starting game: " + config.width + " x " + config.height + " with ViewPort: " + Constants.VIEWPORT_WIDTH_IN_METER + "x"
+				+ Constants.VIEWPORT_HEIGHT_IN_METER + " in meter");
+		final LwjglApplication lwjglApplication = new LwjglApplication(new GameTitle(), config);
 	}
 }
