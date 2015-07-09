@@ -21,7 +21,8 @@ public class DesktopLauncher {
 		if (DesktopLauncher.REBUILD_ALTLAS) {
 			final TexturePacker.Settings settings = new TexturePacker.Settings();
 			settings.edgePadding = true;
-			settings.maxWidth = 1024; final X
+			settings.maxWidth = 1024;
+			final int x = 1;
 			settings.maxHeight = 1024;
 			settings.debug = false;
 			settings.duplicatePadding = true;
