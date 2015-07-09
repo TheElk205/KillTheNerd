@@ -1,6 +1,7 @@
 package at.game;
 
 import at.game.screens.PlayScreen;
+import at.game.utils.Constants;
 import at.game.visuals.tiles.Overlap2DLevel;
 
 import com.badlogic.gdx.Game;
@@ -13,7 +14,7 @@ public class GameTitle extends Game {
 	protected static Sound	ingameMusic;
 	protected static Sound	winMusic;
 	private final boolean	isLoading	= true;
-	// private WorldRenderer worldRenderer;
+	// private PlayRenderer worldRenderer;
 	/** used to simulate loading screen */
 	private LoadRenderer	loadRenderer;
 	/** used to simulate loading screen */
@@ -23,8 +24,10 @@ public class GameTitle extends Game {
 
 	@Override
 	public void create() {
+		Constants.init();
 		this.setScreen(new PlayScreen());
-		// this.worldRenderer = new WorldRenderer();
+		// this.setScreen(new MenuScreen());
+		// this.worldRenderer = new PlayRenderer();
 		// this.loadRenderer = new LoadRenderer();
 		// TODO overlap2D
 		// this.overlap2DLevel = new Overlap2DLevel();

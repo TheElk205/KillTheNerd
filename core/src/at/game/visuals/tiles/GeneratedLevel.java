@@ -102,7 +102,7 @@ public class GeneratedLevel {
 	public void update(final float deltaTime) {
 		this.sleepingcount = 0;
 		this.awakecount = 0;
-		for (final GameObject gameObject : this.gameObjects) {
+		for (final AbstractGameObject gameObject : this.gameObjects) {
 			gameObject.update(deltaTime);
 			if (gameObject instanceof NPC) {
 				final NPC npc = (NPC) gameObject;

@@ -1,6 +1,6 @@
 package at.game.managers;
 
-import at.game.gamemechanics.movement.PlayerController;
+import at.game.mechanics.movement.PlayerController;
 import at.game.utils.Constants;
 
 import com.badlogic.gdx.Input;
@@ -83,12 +83,16 @@ public class InputManager extends InputAdapter {
 				case Input.Keys.S:
 					this.playerController.setDown(true);
 					break;
+				case Input.Keys.C:
+					this.playerController.setSwitchClimbLock();
+					break;
 				case Input.Keys.CONTROL_LEFT:
 					this.playerController.setPressingShoot(true);
 					break;
 				case Input.Keys.SPACE:
 					// System.out.println("InputManager - pressing jump");
 					this.playerController.setPressingJump(true);
+					this.playerController.setSwitchClimbLock(false);
 					break;
 				/*case Input.Keys.R:
 				this.reset = true;

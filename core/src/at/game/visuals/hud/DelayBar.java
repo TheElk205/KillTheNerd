@@ -1,7 +1,7 @@
 package at.game.visuals.hud;
 
-import at.game.gamemechanics.Player;
-import at.game.visuals.GameObject;
+import at.game.mechanics.Player;
+import at.game.objects.AbstractGameObject;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -11,14 +11,14 @@ public class DelayBar extends AbstractHUDElement {
 	private TextureRegion	green;
 	private TextureRegion	red;
 	private final Player	belongsTo;
-	private float			duration	= 0f;
+	private final float		duration	= 0f;
 	private float			startedAt	= 0f;
 	private float			time		= 0f;
 	private boolean			started		= false;
 
 	public DelayBar(final Player belongsto) {
 		this.belongsTo = belongsto;
-		this.duration = this.belongsTo.getHandicapduration();
+		// this.duration = this.belongsTo.getHandicapduration();
 		this.loadAssets();
 		this.dimension = new Vector2(0.1f, 0.1f);
 	}
@@ -28,15 +28,17 @@ public class DelayBar extends AbstractHUDElement {
 		if (!this.started) {
 			return;
 		}
-		final float length = this.belongsTo.renderDimension.y;
+		final float length = this.belongsTo.getRenderDimension().y;
 		final float value = (this.time - this.startedAt) / this.duration;
 		if (value >= 1) {
 			this.started = false;
 		}
 		final float pos = length * value;
 
-		batch.draw(this.green, this.belongsTo.position.x, this.belongsTo.position.y + (this.belongsTo.renderDimension.y / 2), pos, this.dimension.y);
-		batch.draw(this.red, this.belongsTo.position.x + pos, this.belongsTo.position.y + (this.belongsTo.renderDimension.y / 2), length - pos, this.dimension.y);
+		batch.draw(this.green, this.belongsTo.getPosition().x, this.belongsTo.getPosition().y + (this.belongsTo.getRenderDimension().y / 2), pos,
+				this.dimension.y);
+		batch.draw(this.red, this.belongsTo.getPosition().x + pos, this.belongsTo.getPosition().y + (this.belongsTo.getRenderDimension().y / 2),
+				length - pos, this.dimension.y);
 
 	}
 
@@ -56,7 +58,7 @@ public class DelayBar extends AbstractHUDElement {
 	}
 
 	private void loadAssets() {
-		this.green = GameObject.assets.findRegion("green_pixels");
-		this.red = GameObject.assets.findRegion("red_pixels");
+		this.green = AbstractGameObject.assets.findRegion("green_pixels");
+		this.red = AbstractGameObject.assets.findRegion("red_pixels");
 	}
 }

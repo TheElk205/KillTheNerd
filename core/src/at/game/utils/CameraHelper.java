@@ -18,7 +18,7 @@ public class CameraHelper {
 		this.zoom = 1.0f;
 	}
 
-	public void update(final float deltaTime) {
+	private void update(final float deltaTime) {
 		/*if (!this.hasTarget()) {
 			return;
 		}
@@ -30,15 +30,15 @@ public class CameraHelper {
 		// }
 	}
 
-	public void setPosition(final float x, final float y) {
+	private void setPosition(final float x, final float y) {
 		this.position.set(x, y);
 	}
 
-	public Vector2 getPosition() {
+	private Vector2 getPosition() {
 		return this.position;
 	}
 
-	public void addZoom(final float ammount) {
+	private void addZoom(final float ammount) {
 		this.setZoom(this.zoom + ammount);
 	}
 
@@ -50,7 +50,7 @@ public class CameraHelper {
 		this.target = target;
 	}
 
-	public void setTarget(final Vector2 position) {
+	private void setTarget(final Vector2 position) {
 		this.calcPosition = position;
 	}
 

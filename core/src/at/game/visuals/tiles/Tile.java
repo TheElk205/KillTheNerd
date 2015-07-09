@@ -1,18 +1,14 @@
 package at.game.visuals.tiles;
 
 import at.game.RenderObject;
-import at.game.WorldController;
-import at.game.visuals.GameObject;
+import at.game.objects.AbstractGameObject;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
 
 /**
  * @author Herkt Kevin
@@ -30,23 +26,23 @@ public class Tile extends RenderObject {
 			this.tileName = tiledata.getName();
 			final int fileNameIndex = this.tileName.indexOf("."); // ohne .png Endung
 			this.tileName = tiledata.getName().substring(0, fileNameIndex);
-			if (GameObject.textureList.contains(this.tileName)) {
-				for (int i = 0; i < GameObject.textureList.size(); i++) {
-					if (GameObject.textureNameList.get(i).equalsIgnoreCase(this.tileName)) {
-						this.texture = GameObject.textureList.get(i);
+			if (AbstractGameObject.getTextureList().contains(this.tileName)) {
+				for (int i = 0; i < AbstractGameObject.getTextureList().size(); i++) {
+					if (AbstractGameObject.getTextureNameList().get(i).equalsIgnoreCase(this.tileName)) {
+						this.texture = AbstractGameObject.getTextureList().get(i);
 						break;
 					}
 				}
 
 			} else {
-				this.texture = GameObject.assets.findRegion(this.tileName);
-				GameObject.textureList.add(this.texture);
+				this.texture = AbstractGameObject.assets.findRegion(this.tileName);
+				AbstractGameObject.getTextureList().add(this.texture);
 			}
-			if (!GameObject.textureNameList.contains(this.tileName)) {
-				GameObject.textureNameList.add(this.tileName);
+			if (!AbstractGameObject.getTextureNameList().contains(this.tileName)) {
+				AbstractGameObject.getTextureNameList().add(this.tileName);
 			}
 		} else {
-			this.texture = GameObject.assets.findRegion("errorTile");
+			this.texture = AbstractGameObject.assets.findRegion("errorTile");
 		}
 
 		this.initPhysics();
@@ -55,10 +51,11 @@ public class Tile extends RenderObject {
 	}
 
 	private void initPhysics() {
-		final BodyDef bodyDef = new BodyDef();
+		/*final BodyDef bodyDef = new BodyDef();
 		bodyDef.position.set(new Vector2((this.position.x) + (this.dimension.x / 4f), (this.position.y) + (this.dimension.y / 4f)));
 		bodyDef.type = BodyType.StaticBody;
 
+		// TODO: may be generate tiles here, but generate the bodies/borders for it in the level - see Level1 class
 		final World world = WorldController.getB2World();
 		this.b2Body = world.createBody(bodyDef);
 
@@ -70,7 +67,7 @@ public class Tile extends RenderObject {
 				default:
 					break;
 			}
-		}
+		}*/
 	}
 
 	private void createBoxBorder() {

@@ -1,7 +1,7 @@
 package at.game.visuals.hud;
 
+import at.game.objects.AbstractGameObject;
 import at.game.utils.Constants;
-import at.game.visuals.GameObject;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -47,9 +47,9 @@ public class Scoreboard extends AbstractHUDElement {
 	}
 
 	private void loadAssets() {
-		this.green = GameObject.assets.findRegion("green_pixels");
-		this.red = GameObject.assets.findRegion("red_pixels");
-		this.yellow = GameObject.assets.findRegion("yellow_pixels");
+		this.green = AbstractGameObject.assets.findRegion("green_pixels");
+		this.red = AbstractGameObject.assets.findRegion("red_pixels");
+		this.yellow = AbstractGameObject.assets.findRegion("yellow_pixels");
 	}
 
 	@Override

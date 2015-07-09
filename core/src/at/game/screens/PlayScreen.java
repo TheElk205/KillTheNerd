@@ -1,26 +1,28 @@
 package at.game.screens;
 
+import at.game.PlayRenderer;
 import at.game.WorldController;
-import at.game.WorldRenderer;
-import at.game.gamemechanics.movement.BodyFactory;
 import at.game.managers.InputManager;
 import at.game.maps.AbstractLevel;
 import at.game.maps.Level1;
+import at.game.mechanics.movement.BodyFactory;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 
 public class PlayScreen implements Screen {
-	private final AbstractLevel		level			= new Level1();
-	private final WorldController	worldController	= new WorldController(this.level);
-	private final WorldRenderer		worldRenderer	= new WorldRenderer(this.level, this.worldController);
-	private InputManager			inputManager;
+	private final AbstractLevel	level	= new Level1();
+	private WorldController		worldController;
+	private PlayRenderer		playRenderer;
+	private InputManager		inputManager;
 
 	@Override
 	public void show() { // act like a Constructor
 		// do not change the order !
-		BodyFactory.init(WorldController.getB2World());
+		this.worldController = new WorldController(this.level); // MVC
+		BodyFactory.init(this.worldController.getB2World());
+		this.playRenderer = new PlayRenderer(this.level, this.worldController); // MVC - view gets the controller
 		this.level.init();
 		this.inputManager = new InputManager(this.level.getPlayer1().getPlayerController());
 		Gdx.input.setInputProcessor(this.inputManager);
@@ -29,7 +31,7 @@ public class PlayScreen implements Screen {
 	@Override
 	public void render(final float deltaTime) {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // needs to be before render
-		this.worldRenderer.renderAll();
+		this.playRenderer.renderAll();
 		this.worldController.update(deltaTime);
 	}
 

@@ -11,10 +11,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import at.game.gamemechanics.Item;
 import at.game.maps.AbstractLevel;
+import at.game.mechanics.Item;
+import at.game.objects.AbstractGameObject;
 import at.game.utils.Constants;
-import at.game.visuals.GameObject;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
@@ -23,18 +23,18 @@ import com.badlogic.gdx.physics.box2d.World;
  * @author Herkt Kevin
  */
 public class WorldController {
-	private float							accumulator		= 0;
-	private long							timeElapsed;
-	private static World					b2World;
-	public static final float				GRAVITY			= -10f;
+	private float									accumulator		= 0;
+	private long									timeElapsed;
+	private final World								b2World;
+	public static final float						GRAVITY			= -14f;
 	// private static GeneratedLevel level;
-	private float							lastSpawn		= 0;
-	private final MyContactListener			contactListener;
+	private float									lastSpawn		= 0;
+	private final MyContactListener					contactListener;
 	// private static double distanceBetweenSplitscreenPlayer;
-	private final static Logger				LOGGER			= Logger.getLogger(WorldController.class.getName());
-	private final static List<GameObject>	objectsToAdd	= new ArrayList<GameObject>();
-	private final boolean					spawnEnabled	= true;
-	private final AbstractLevel				level;
+	private final static Logger						LOGGER			= Logger.getLogger(WorldController.class.getName());
+	private final static List<AbstractGameObject>	objectsToAdd	= new ArrayList<AbstractGameObject>();
+	private final boolean							spawnEnabled	= true;
+	private final AbstractLevel						level;
 
 	public WorldController(final AbstractLevel level) {
 		System.out.println("WorldController - Constructor");
@@ -43,11 +43,11 @@ public class WorldController {
 			// LOGGER.info("test info");
 		}
 
-		WorldController.b2World = new World(new Vector2(0, WorldController.GRAVITY), true); // with -10 gravity
-		// level = new GeneratedLevel();
-		// level.init(); // TODO 28.06
+		this.b2World = new World(new Vector2(0, WorldController.GRAVITY), true); // with -10 gravity
+		// genLevel = new GeneratedLevel();
+		// genLevel.init();
 		this.contactListener = new MyContactListener();
-		WorldController.b2World.setContactListener(this.contactListener);
+		this.b2World.setContactListener(this.contactListener);
 
 		if (Constants.DEBUG) {
 			WorldController.setUpLogger();
@@ -94,13 +94,13 @@ public class WorldController {
 
 	public void update(final float deltaTime) {
 		// remove objects before or after step!!
-		final List<GameObject> removeList = this.contactListener.getObjectsToRemove();
+		final List<AbstractGameObject> removeList = this.contactListener.getObjectsToRemove();
 		if (removeList.size() > 0) {
-			for (final GameObject object : removeList) {
-				if (object.toDelete) {
-					WorldController.b2World.destroyBody(object.getB2Body());
-					object.setToRender(false);
-					GameObject.totalObjects.remove(object);
+			for (final AbstractGameObject object : removeList) {
+				if (object.isToDelete()) {
+					this.b2World.destroyBody(object.getB2Body());
+					// object.setToRender(false);
+					AbstractGameObject.getTotalObjects().remove(object);
 					/*if (object.getType == Item2) {
 						Thesis.itemCount--;
 					}
@@ -222,7 +222,7 @@ public class WorldController {
 		this.accumulator += frameTime;
 		final float timeStep = 1 / 60f;
 		while (this.accumulator >= timeStep) {
-			WorldController.b2World.step(timeStep, 3, 8);
+			this.b2World.step(timeStep, 3, 8);
 			this.accumulator -= timeStep;
 		}
 	}
@@ -257,15 +257,15 @@ public class WorldController {
 
 	private void createDynamicObjects() {
 		// add objects after step!!
-		for (final GameObject object : this.contactListener.getObjectsToAdd()) {
-			object.setToRender(true);
+		for (final AbstractGameObject object : this.contactListener.getObjectsToAdd()) {
+			// object.setToRender(true);
 			// level.addGameObject(object);
 			object.initPhysics();
 		}
 		this.contactListener.getObjectsToAdd().clear();
 		// add objects after step!!
-		for (final GameObject object : WorldController.objectsToAdd) {
-			object.setToRender(true);
+		for (final AbstractGameObject object : WorldController.objectsToAdd) {
+			// object.setToRender(true);
 			// level.addGameObject(object);
 			// object.initPhysics();
 		}
@@ -286,7 +286,7 @@ public class WorldController {
 	 *
 	 * @param object
 	 */
-	public static void addTempGameObject(final GameObject object) {
+	public static void addTempGameObject(final AbstractGameObject object) {
 		WorldController.objectsToAdd.add(object);
 	}
 
@@ -295,9 +295,8 @@ public class WorldController {
 	 *
 	 * @return b2World the World
 	 */
-	public static World getB2World() {
-		System.out.println("WorldController - static getB2World");
-		return WorldController.b2World;
+	public World getB2World() {
+		return this.b2World;
 	}
 
 	protected long getTimeElapsed() {

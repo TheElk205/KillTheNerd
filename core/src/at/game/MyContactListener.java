@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.game.enums.ItemType;
-import at.game.gamemechanics.Item;
-import at.game.gamemechanics.Player;
-import at.game.visuals.GameObject;
-import at.game.visuals.NPC;
-import at.game.visuals.ThrowableObject;
+import at.game.mechanics.Item;
+import at.game.mechanics.Player;
+import at.game.objects.AbstractGameObject;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -22,9 +20,9 @@ import com.badlogic.gdx.physics.box2d.Manifold;
  */
 public class MyContactListener implements ContactListener {
 	/** object contains a body */
-	private final List<GameObject>	objectsToRemove	= new ArrayList<GameObject>();
+	private final List<AbstractGameObject>	objectsToRemove	= new ArrayList<AbstractGameObject>();
 	/** the physics of this object (body) are not init yet */
-	private final List<GameObject>	objectsToAdd	= new ArrayList<GameObject>();
+	private final List<AbstractGameObject>	objectsToAdd	= new ArrayList<AbstractGameObject>();
 
 	protected MyContactListener() {
 	}
@@ -37,14 +35,18 @@ public class MyContactListener implements ContactListener {
 		final Object userDataB = fB.getBody().getUserData();
 		final Object userDataA = fA.getBody().getUserData();
 		// System.out.println("--" + userDataA + " collides with " + userDataB);
-		// fixture ist verbindung zwischen body und shape
-		// body physikalische eigenschaften
-		// shape kreis
 
-		// TODO: should be done with filter.maskbit
+		if ((userDataA instanceof AbstractGameObject) && (userDataB instanceof AbstractGameObject)) {
+			((AbstractGameObject) userDataA).onCollision((AbstractGameObject) userDataB);
+			return;
+		}
 
-		MyContactListener.checkFootCollision(fA, fB.getBody());
+		MyContactListener.checkFootCollision(fA, fB.getBody()); // TODO: return true if found, to avoid moving through all ifs
 		MyContactListener.checkFootCollision(fB, fA.getBody());
+		MyContactListener.checkWallCollision(fA, fB.getBody(), true);
+		MyContactListener.checkWallCollision(fB, fA.getBody(), true);
+		MyContactListener.checkHeadCollision(fA, fB.getBody(), true);
+		MyContactListener.checkHeadCollision(fB, fA.getBody(), true);
 
 		/*final boolean playerWithSpikes = ((userDataB instanceof Player) && (userDataA instanceof Spikes)) || ((userDataA instanceof Player) && (userDataB instanceof Spikes));
 		final boolean playerWithThrowable = ((userDataB instanceof Player) && (userDataA instanceof ThrowableObject)) || ((userDataA instanceof Player) && (userDataB instanceof ThrowableObject));
@@ -54,28 +56,24 @@ public class MyContactListener implements ContactListener {
 		// if (((userDataB instanceof Player) && (userDataA instanceof Spikes)) || ((userDataA instanceof Player) && (userDataB instanceof Spikes))) {
 		// collisionType = 1;
 		// } else
-		if (((userDataB instanceof Player) && (userDataA instanceof ThrowableObject))
+		/*if (((userDataB instanceof Player) && (userDataA instanceof ThrowableObject))
 				|| ((userDataA instanceof Player) && (userDataB instanceof ThrowableObject))) {
 			collisionType = 2;
+		} else*/
+		if ((userDataB instanceof Player) && (userDataA instanceof Player)) {
+			collisionType = 3;
 		} else
-			if ((userDataB instanceof Player) && (userDataA instanceof Player)) {
-				collisionType = 3;
+			if ((userDataB instanceof Player) && (userDataA instanceof Item)) {
+				// final Player playerB = (Player) userDataB;
+				// if (playerB.getPlayerType() == PlayerType.Sleep) {
+				// collisionType = 5;
+				// } else {
+				collisionType = 4; // any item collides with player wake
+				// }
 			} else
-				if ((userDataB instanceof Player) && (userDataA instanceof Item)) {
-					// final Player playerB = (Player) userDataB;
-					// if (playerB.getPlayerType() == PlayerType.Sleep) {
-					// collisionType = 5;
-					// } else {
-					collisionType = 4; // any item collides with player wake
-					// }
-				} else
-					if ((userDataB instanceof Item) && (userDataA instanceof Item)) {
-						collisionType = 6;
-					} else
-						if (((userDataB instanceof Player) && (userDataA instanceof NPC))
-								|| ((userDataB instanceof NPC) && (userDataA instanceof Player))) {
-							collisionType = 7;
-						}
+				if ((userDataB instanceof Item) && (userDataA instanceof Item)) {
+					collisionType = 6;
+				}
 
 		/*if (!(playerWithSpikes || playerWithThrowable || player1WithPlayer2 || playerWithItem)) {
 			return; // no collision at all
@@ -98,14 +96,14 @@ public class MyContactListener implements ContactListener {
 					if (itemA.getItemType() == ItemType.Wake_Item) {
 						this.wakeWithRedbull(playerB, itemA);
 					} else {
-						this.wakeWithThesis(playerB, itemA);
+						// this.wakeWithThesis(playerB, itemA);
 					}
 				} else
 					if (userDataB instanceof Item) {
 						final Item itemB = (Item) userDataB;
 						final Player playerA = (Player) userDataA;
 						if (itemB.getItemType() == ItemType.Sleep_Item) {
-							this.wakeWithThesis(playerA, itemB);
+							// this.wakeWithThesis(playerA, itemB);
 						} else {
 							this.wakeWithRedbull(playerA, itemB);
 						}
@@ -134,19 +132,6 @@ public class MyContactListener implements ContactListener {
 			case 6:
 				MyContactListener.itemWithItem(userDataA, userDataB);
 				break;
-			case 7: // Set Player wake
-				// System.out.println(userDataA + " with " + userDataB); // TODO: helper class die nur printet wenn debug
-				if (userDataA instanceof NPC) {
-					final NPC npc = (NPC) userDataA;
-					final Player player = (Player) userDataB;
-					npc.addPlayer(player);
-				} else
-					if (userDataB instanceof NPC) {
-						final NPC npc = (NPC) userDataB;
-						final Player player = (Player) userDataA;
-						npc.addPlayer(player);
-					}
-				break;
 			default:
 				// System.out.println("default hit - A: " + userDataA + " B: " + userDataB);
 				MyContactListener.itemWithNonSensor(fB, userDataA);
@@ -161,44 +146,86 @@ public class MyContactListener implements ContactListener {
 	 * @param bodyB
 	 */
 	public static void checkFootCollision(final Fixture fixtureA, final Body bodyB) {
-		if ((fixtureA.getUserData() == null)) {
+		if ((fixtureA.getUserData() == null) || (fixtureA.getBody().getUserData() == null)) {
+			return;
+		}
+		if (bodyB.getUserData() == null) {
 			return;
 		}
 		final boolean bIsGround = bodyB.getUserData().equals("ground");
+		final Object tempData = fixtureA.getBody().getUserData();
 		if (fixtureA.getUserData().equals("foot") && bIsGround) {
-			((Player) fixtureA.getBody().getUserData())
-			.setFooterCollidingCount(((Player) fixtureA.getBody().getUserData()).getFooterCollidingCount() + 1);
+			((Player) tempData).setFooterCollidingCount(((Player) tempData).getFooterCollidingCount() + 1);
 			// System.out.println("MyContactListener - playerIsOnGround = true");
 		} else
 			if (fixtureA.getUserData().equals("outerFootRight")) {
-				((Player) fixtureA.getBody().getUserData()).incrOuterFootRightCount();
+				((Player) tempData).incrOuterFootRightCount();
 			} else
 				if (fixtureA.getUserData().equals("outerFootLeft")) {
-					((Player) fixtureA.getBody().getUserData()).incrOuterFootLeftCount();
+					((Player) tempData).incrOuterFootLeftCount();
 				}
 	}
 
-	public static void checkEndFootCollision(final Fixture fixtureA, final Body bodyB) {
-		if ((fixtureA.getUserData() == null)) {
+	public static void checkWallCollision(final Fixture fixtureA, final Body bodyB, final boolean set) {
+		if ((fixtureA.getUserData() == null) || (fixtureA.getBody().getUserData() == null)) {
 			return;
 		}
+		if (bodyB.getUserData() == null) {
+			return;
+		}
+		final Object tempData = fixtureA.getBody().getUserData();
+		final boolean bIsGround = bodyB.getUserData().equals("ground");
+		if (fixtureA.getUserData().equals("wall") && bIsGround) {
+			if (set) {
+				((Player) tempData).incrWall();
+			} else {
+				((Player) tempData).decrWall();
+			}
+		}
+	}
+
+	public static void checkHeadCollision(final Fixture fixtureA, final Body bodyB, final boolean set) {
+		if ((fixtureA.getUserData() == null) || (fixtureA.getBody().getUserData() == null)) {
+			return;
+		}
+		if (bodyB.getUserData() == null) {
+			return;
+		}
+		final Object tempData = fixtureA.getBody().getUserData();
+		final boolean bIsGround = bodyB.getUserData().equals("ground");
+		if (fixtureA.getUserData().equals("head") && bIsGround) {
+			if (set) {
+				((Player) tempData).incrHead();
+			} else {
+				((Player) tempData).decrHead();
+			}
+		}
+	}
+
+	public static void checkEndFootCollision(final Fixture fixtureA, final Body bodyB) {
+		if ((fixtureA.getUserData() == null) || (fixtureA.getBody().getUserData() == null)) {
+			return;
+		}
+		if (bodyB.getUserData() == null) {
+			return;
+		}
+		final Object tempData = fixtureA.getBody().getUserData();
 		final boolean bIsGround = bodyB.getUserData().equals("ground");
 		if (fixtureA.getUserData().equals("foot") && bIsGround) {
-			((Player) fixtureA.getBody().getUserData())
-			.setFooterCollidingCount(((Player) fixtureA.getBody().getUserData()).getFooterCollidingCount() - 1);
+			((Player) tempData).setFooterCollidingCount(((Player) tempData).getFooterCollidingCount() - 1);
 			// System.out.println("MyContactListener - playerIsOnGround = true");
 		} else
 			if (fixtureA.getUserData().equals("outerFootRight")) {
-				((Player) fixtureA.getBody().getUserData()).decrOuterFootRightCount();
+				((Player) tempData).decrOuterFootRightCount();
 			} else
 				if (fixtureA.getUserData().equals("outerFootLeft")) {
-					((Player) fixtureA.getBody().getUserData()).decrOuterFootLeftCount();
+					((Player) tempData).decrOuterFootLeftCount();
 				}
 	}
 
 	private static void itemWithNonSensor(final Fixture fixture, final Object userData) {
 		if ((userData instanceof Item) && !fixture.isSensor()) {
-			((Item) userData).reset();
+			// ((Item) userData).reset();
 			// System.out.println(userData + " with non-sensor " + fixture.getBody().getUserData());
 		}
 	}
@@ -222,52 +249,51 @@ public class MyContactListener implements ContactListener {
 	private void wakeWithThesis(final Player player, final Item itemB) {
 		if (itemB.isFlying()) { // (itemB.getItemIsThrownBy().getPlayerType() == PlayerType.Sleep) &&
 			if (player.hitByItem(itemB)) { // does nothing cause players cannot die
-				player.setToRender(false);
+				// player.setToRender(false);
 				this.objectsToRemove.add(player);
-				itemB.toDelete = true;
+				itemB.setToDelete(true);
 			}
 			if (player.isHitAbleAgain()) {
-				player.setHandicap(itemB.getDmg());
+				// player.setHandicap(itemB.getDmg());
 				player.setHitAbleAgain(false);
 			}
-			itemB.setToRender(false);
+			// itemB.setToRender(false);
 			this.objectsToRemove.add(itemB);
-			itemB.toDelete = true;
+			itemB.setToDelete(true);
 		}
 	}
 
 	private void sleepWithRedbull(final Player playerA, final Item itemA) {
 		if (itemA.isFlying()) { // (itemA.getItemIsThrownBy().getPlayerType() == PlayerType.Wake) &&
 			if (playerA.hitByItem(itemA)) { // does nothing cause players cannot die
-				playerA.setToRender(false);
+				// playerA.setToRender(false);
 				this.objectsToRemove.add(playerA);
-				itemA.toDelete = true;
+				itemA.setToDelete(true);
 			}
 			if (playerA.isHitAbleAgain()) {
-				playerA.setHandicap(itemA.getDmg());
+				// playerA.setHandicap(itemA.getDmg());
 				playerA.setHitAbleAgain(false);
 			}
-			itemA.setToRender(false);
+			// itemA.setToRender(false);
 			this.objectsToRemove.add(itemA);
-			itemA.toDelete = true;
+			itemA.setToDelete(true);
 		}
 	}
 
 	private void sleepWithThesis(final Player playerA, final Item itemB) {
 		if (itemB.grabbedBy(playerA)) {
-			itemB.setToRender(false);
+			// itemB.setToRender(false);
 			this.objectsToRemove.add(itemB);
-			itemB.toDelete = true;
+			itemB.setToDelete(true);
 		}
 	}
 
 	private void wakeWithRedbull(final Player playerA, final Item itemB) {
 		if (itemB.grabbedBy(playerA)) {
-			itemB.setToRender(false);
+			// itemB.setToRender(false);
 			this.objectsToRemove.add(itemB);
-			itemB.toDelete = true;
+			itemB.setToDelete(true);
 		}
-
 	}
 
 	@Override
@@ -275,28 +301,32 @@ public class MyContactListener implements ContactListener {
 		final Fixture fA = contact.getFixtureA();
 		final Fixture fB = contact.getFixtureB();
 
-		final Object userDataB = fB.getBody().getUserData();
-		final Object userDataA = fA.getBody().getUserData();
+		// final Object userDataB = fB.getBody().getUserData();
+		// final Object userDataA = fA.getBody().getUserData();
 
 		MyContactListener.checkEndFootCollision(fA, fB.getBody());
 		MyContactListener.checkEndFootCollision(fB, fA.getBody());
-		int collisionType = 0;
-		if (((userDataB instanceof Player) && (userDataA instanceof NPC)) || ((userDataB instanceof NPC) && (userDataA instanceof Player))) {
+		MyContactListener.checkWallCollision(fA, fB.getBody(), false);
+		MyContactListener.checkWallCollision(fB, fA.getBody(), false);
+		MyContactListener.checkHeadCollision(fA, fB.getBody(), false);
+		MyContactListener.checkHeadCollision(fB, fA.getBody(), false);
+		final int collisionType = 0;
+		/*if (((userDataB instanceof Player) && (userDataA instanceof NPC)) || ((userDataB instanceof NPC) && (userDataA instanceof Player))) {
 			collisionType = 7;
-		}
+		}*/
 		switch (collisionType) {
-			case 7:
-				if (userDataA instanceof NPC) {
-					final NPC npc = (NPC) userDataA;
-					final Player player = (Player) userDataB;
-					npc.removePlayer(player);
-				} else
-					if (userDataB instanceof NPC) {
-						final NPC npc = (NPC) userDataB;
-						final Player player = (Player) userDataA;
-						npc.removePlayer(player);
-					}
-				break;
+			/*case 7:
+		if (userDataA instanceof NPC) {
+		final NPC npc = (NPC) userDataA;
+		final Player player = (Player) userDataB;
+		npc.removePlayer(player);
+		} else
+		if (userDataB instanceof NPC) {
+		final NPC npc = (NPC) userDataB;
+		final Player player = (Player) userDataA;
+		npc.removePlayer(player);
+		}
+		break;*/
 			default:
 				break;
 		}
@@ -304,23 +334,25 @@ public class MyContactListener implements ContactListener {
 
 	@Override
 	public void preSolve(final Contact contact, final Manifold oldManifold) {
+		//
 	}
 
 	@Override
 	public void postSolve(final Contact contact, final ContactImpulse impulse) {
+		//
 	}
 
 	/**
 	 * @return the bodysToRemove
 	 */
-	public List<GameObject> getObjectsToRemove() {
+	public List<AbstractGameObject> getObjectsToRemove() {
 		return this.objectsToRemove;
 	}
 
 	/**
 	 * @return the objectsToAdd
 	 */
-	public List<GameObject> getObjectsToAdd() {
+	public List<AbstractGameObject> getObjectsToAdd() {
 		return this.objectsToAdd;
 	}
 
