@@ -21,7 +21,6 @@ public class DesktopLauncher {
 		if (DesktopLauncher.REBUILD_ALTLAS) {
 			final TexturePacker.Settings settings = new TexturePacker.Settings();
 			settings.edgePadding = true;
-			settings.maxWidth = 1024; final have fun hribse
 			settings.maxWidth = 1024;
 			final int x = 1;
 			final String fu;
