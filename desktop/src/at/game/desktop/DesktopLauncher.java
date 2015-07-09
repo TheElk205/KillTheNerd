@@ -21,17 +21,8 @@ public class DesktopLauncher {
 		if (DesktopLauncher.REBUILD_ALTLAS) {
 			final TexturePacker.Settings settings = new TexturePacker.Settings();
 			settings.edgePadding = true;
-<<<<<<< HEAD
-			settings.maxWidth = 1024;int a = 7;
+			settings.maxWidth = 1024;int a = 79878;
 			settings.maxHeight = 1024; 
-=======
-			settings.maxWidth = 1024; final have fun hribse
-			settings.maxWidth = 1024;
-			final int x = 1;
-			final String fu;
-			settings.maxHeight = 1024;
-			settings.maxHeight = 1024;
->>>>>>> refs/remotes/origin/master
 			settings.debug = false;
 			settings.duplicatePadding = true;
 			TexturePacker.process(settings, Constants.ASSETS_RAW, Constants.ATLAS_FOLDER, Constants.ATLAS_NAME);
