@@ -23,6 +23,7 @@ public class DesktopLauncher {
 			settings.edgePadding = true;
 			settings.maxWidth = 1024;
 			final int x = 1;
+			final String fu;
 			settings.maxHeight = 1024;
 			settings.debug = false;
 			settings.duplicatePadding = true;
