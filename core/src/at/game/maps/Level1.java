@@ -3,7 +3,6 @@ package at.game.maps;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.game.enums.ItemType;
 import at.game.mechanics.Player;
 import at.game.mechanics.movement.BodyFactory;
 import at.game.objects.Enemy;
@@ -36,7 +35,7 @@ public class Level1 extends AbstractLevel {
 	@Override
 	public void init() {
 		if (!this.isInit) {
-			this.player1 = new Player(new Vector2(8, 11), ItemType.Sleep_Item, 0.9f, 1.8f);
+			this.player1 = new Player(new Vector2(8, 11), 0.9f, 1.8f);
 			this.player1.setName("Player1");
 			this.playerList.add(this.player1);
 			this.addGameObject(this.player1);

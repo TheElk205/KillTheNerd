@@ -1,25 +1,20 @@
 package at.game;
 
 import at.game.screens.PlayScreen;
-import at.game.utils.Constants;
-import at.game.visuals.tiles.Overlap2DLevel;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.audio.Sound;
 
 /**
  * @author Herkt Kevin
  */
 public class GameTitle extends Game {
-	protected static Sound	ingameMusic;
-	protected static Sound	winMusic;
 	private final boolean	isLoading	= true;
 	// private PlayRenderer worldRenderer;
 	/** used to simulate loading screen */
 	private LoadRenderer	loadRenderer;
 	/** used to simulate loading screen */
 	private final int		count		= 0;
-	private Overlap2DLevel	overlap2DLevel;
+	// private Overlap2DLevel overlap2DLevel;
 	private final boolean	overlap2D	= false;
 
 	@Override
@@ -60,20 +55,18 @@ public class GameTitle extends Game {
 			}
 	}*/
 
-	/**
+	/*
 	 * TODO: should be in level
 	 *
 	 * @return true if done
-	 */
+
 	private static boolean loadMusic() {
-		// GameTitle.ingameMusic = Gdx.audio.newSound(Gdx.files.internal(Constants.MUSIC2));
-		// GameTitle.winMusic = Gdx.audio.newSound(Gdx.files.internal(Constants.VICTORY));
-		if (GameTitle.ingameMusic != null) {
-			GameTitle.ingameMusic.play();
-			GameTitle.ingameMusic.setVolume(1, 0.5f);
+		if (SoundManager.ingameMusic != null) {
+			SoundManager.ingameMusic.play();
+			SoundManager.ingameMusic.setVolume(1, 0.5f);
 		}
 		return true;
-	}
+	}*/
 
 	/*@Override
 	public void resize(final int width, final int height) {

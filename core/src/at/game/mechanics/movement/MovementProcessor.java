@@ -1,9 +1,9 @@
 package at.game.mechanics.movement;
 
-import at.game.mechanics.AbstractRace;
+import at.game.Constants;
+import at.game.components.PlayerController;
 import at.game.mechanics.Player;
 import at.game.mechanics.enums.HumanStateEnum;
-import at.game.utils.Constants;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -25,12 +25,12 @@ public class MovementProcessor {
 		MovementProcessor.controller = playerController;
 	}
 
-	private static void clampVelocity(final Player player) {
+	/*private static void clampVelocity(final Player player) {
 		final AbstractRace race = player.getRace();
 		if (Math.abs(player.velocity.x) > race.getMaxVelocity()) {
 			player.velocity.x = Math.signum(player.velocity.x) * race.getMaxVelocity();
 		}
-	}
+	}*/
 
 	public static void gravityJumpMovement(final Player player, final boolean up, final boolean down, final boolean right, final boolean left,
 			final float currentSpeed, final float modifier, final boolean jump, final boolean jumpLock, final boolean climbLock) {

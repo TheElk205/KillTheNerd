@@ -1,10 +1,9 @@
 package at.game.visuals.hud;
 
+import at.game.Constants;
 import at.game.managers.Assets;
 import at.game.mechanics.Player;
-import at.game.utils.Constants;
 
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -15,21 +14,17 @@ public class WeaponDisplay extends AbstractHUDElement {
 
 	public WeaponDisplay(final Player player) {
 		this.player = player;
-		this.texture = Assets.getInstance(new AssetManager()).findRegion("book_green_small");
-		this.texture.flip(false, true);
-
+		this.texture = Assets.getInstance().findRegion("book_green_small");
+		// this.texture.flip(false, true);
 	}
 
 	@Override
 	public void update(final float deltaTime) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void render(final SpriteBatch batch) {
 		this.drawMunition(batch);
-
 	}
 
 	private void drawMunition(final SpriteBatch batch) {
@@ -48,5 +43,4 @@ public class WeaponDisplay extends AbstractHUDElement {
 			offset += sizeOfImage;
 		}
 	}
-
 }

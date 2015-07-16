@@ -30,9 +30,8 @@ out/
 com_crashlytics_export_strings.xml
 
 ## Eclipse
-.project
 .classpath
-core\.classpath
+.project
 .metadata
 **/bin/
 tmp/
@@ -63,35 +62,3 @@ build/
 
 ## OS Specific
 .DS_Store
-
-*.classpath
-*.classpath
-core/.classpath
-desktop/.classpath
-core/.classpath
-*.classpath
-core/.classpath
-desktop/images/assets.atlas
-desktop/images/assets.png
-desktop/images/assets.atlas.orig
-desktop/images/assets.png.orig
-html/.classpath
-desktop/Logging.txt
-desktop/Logging.txt.1
-desktop/Logging.txt.lck
-desktop/Logging.txt.1.lck
-desktop/Logging.txt.2
-desktop/Logging.txt.2.lck
-desktop/Logging.txt.3
-desktop/Logging.txt.3.lck
-desktop/Logging.txt.4
-desktop/Logging.txt.4.lck
-desktop/Logging.txt.5
-desktop/Logging.txt.5.lck
-desktop/Logging.txt.6
-desktop/Logging.txt.6.lck
-desktop/Logging.txt.7
-desktop/Logging.txt.7.lck
-desktop/Logging.txt.8
-desktop/Logging.txt.8.lck
-desktop/Logging.txt.9

@@ -1,20 +1,15 @@
 package at.game.mechanics;
 
-import at.game.WorldController;
-import at.game.enums.ItemType;
+import at.game.Constants;
+import at.game.components.PlayerController;
 import at.game.mechanics.actions.FighterType;
 import at.game.mechanics.enums.DirectionEnum;
 import at.game.mechanics.enums.HumanStateEnum;
 import at.game.mechanics.movement.BodyFactory;
-import at.game.mechanics.movement.PlayerController;
 import at.game.objects.AbstractGameObject;
 import at.game.objects.EquippedWeapon;
-import at.game.utils.Constants;
 import at.game.visuals.hud.DelayBar;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -27,27 +22,19 @@ import com.badlogic.gdx.physics.box2d.Body;
 public class Player extends AbstractGameObject {
 	private final FighterType		fighterType				= new FighterType();
 	private boolean					onGround				= false;
-	public final Vector2			velocity				= new Vector2();
 	private final DelayBar			delayBar;												// could be changed to healthbar
-	private Sound					sound;
-	// private Vector<Item> items;
 	private final int				maxItems				= 150;
 	private int						itemCount				= Constants.START_ITEM_COUNT;
 	private boolean					hitAbleAgain			= true;
-	/** 5 meters per second */
-	private final float				baseSpeed				= 4f;
-	private final float				currentSpeed			= this.baseSpeed;
 	private final float				throwingSpeed			= 100;
 	private DirectionEnum			directionMoving;
-	private DirectionEnum			directionLooking;
+
 	private DirectionEnum			newestDirection;
 	private String					name					= "Player";
 	private final PlayerController	playerController;
-	protected int					health					= 100;
-	private double					timeSinceLastShoot		= 0;
-	protected ItemType				itemType				= null;
+	// protected ItemType itemType = null;
 	protected float					factor					= 0.0f;
-	protected float					modifier				= 1f;							// 0: nichts geht mehr, 1: alles Normal, >1: Besser
+	// protected float modifier = 1f; // 0: nichts geht mehr, 1: alles Normal, >1: Besser
 	// protected float dealHandicap = 0.8f;
 	// protected float handicapSetAt = 0.0f;
 	// protected final float handicapDuration = 5f;
@@ -72,7 +59,7 @@ public class Player extends AbstractGameObject {
 	 * @param width
 	 * @param height
 	 */
-	public Player(final Vector2 position, final ItemType itemType, final float width, final float height) {
+	public Player(final Vector2 position, final float width, final float height) { // final ItemType itemType,
 		super(BodyFactory.createPlayerPlatformerBody1(position, width, height, true), position, width, height);
 		final Body weapon = BodyFactory.createTriangleSensorOnBody(position);
 
@@ -85,7 +72,7 @@ public class Player extends AbstractGameObject {
 		this.playerController = new PlayerController(this);
 		this.delayBar = new DelayBar(this);
 		this.init(position, true, true);
-		this.itemType = itemType;
+		// this.itemType = itemType;
 		// this.factor = this.factor;
 		/*String prefix = "";
 		switch (playerType) {
@@ -99,6 +86,8 @@ public class Player extends AbstractGameObject {
 		break;
 		}
 		this.loadPictures(prefix);*/
+		this.entity.add(this.geometrics);
+		this.entity.add(this.playerController);
 	}
 
 	protected void initAnimations() {
@@ -154,14 +143,7 @@ public class Player extends AbstractGameObject {
 
 	protected void init(final Vector2 position, final boolean animation, final boolean initPhysics) {
 		this.geometrics.setPosition(position);
-		final FileHandle handle = Gdx.files.internal(Constants.THROW_SOUND);
-		this.sound = Gdx.audio.newSound(handle);
 		// this.items = new Vector<Item>();
-
-		// this.dimension.set(20f, 1f);
-		// this.dimension = new Vector2(0.75f, 0.75f);
-		// this.directionMoving = DirectionEnum.STAY;
-		this.directionLooking = DirectionEnum.S;
 		if (initPhysics) {
 			this.initPhysics();
 		}
@@ -245,12 +227,14 @@ public class Player extends AbstractGameObject {
 		if (deltaTime == 0) {
 			return; // same time as before, nothing to update
 		}
+		// TODO use this in future
+		/*for (final Component comp : this.entity.getComponents()) {
+			final AbstractComponent aComp = (AbstractComponent) comp;
+		}*/
+
 		this.stateTime += deltaTime; // overflow handling?
-		this.playerController.processInput(this.currentSpeed, this.modifier);
-
-		// this.otherMovement();
-
-		this.throwItem(deltaTime); // TODO: move this method into PlayerController
+		// this.playerController.update(this.currentSpeed); // , this.modifier
+		// this.throwItem(deltaTime);
 		this.geometrics.update();
 		// System.out.println("Player - position" + this.geometrics.getPosition() + " body position: " + this.geometrics.getB2Body().getPosition());
 		// this.rotation = this.geometrics.getB2Body().getAngle() * MathUtils.radiansToDegrees;
@@ -285,86 +269,6 @@ public class Player extends AbstractGameObject {
 				// System.out.println("Got an Item! " + this.itemCount);
 				return true;
 			}
-		}
-		return false;
-	}
-
-	private void throwItem(final float deltaTime) {
-		this.timeSinceLastShoot = this.timeSinceLastShoot + deltaTime; // TODO: check if overflow
-		if (this.timeSinceLastShoot >= (Double.MAX_VALUE - 1)) {
-			throw new RuntimeException();
-		}
-		if ((this.itemCount > 0) && this.playerController.isPressingShoot() && (this.timeSinceLastShoot > 0.2f)) {
-			this.sound.play();
-			this.timeSinceLastShoot = 0;
-			final Vector2 initPos = this.geometrics.getPosition();
-			final Vector2 toApply = new Vector2();
-			switch (this.directionLooking) {
-				case N:
-					toApply.y = this.throwingSpeed;
-					initPos.y += (this.geometrics.getApproxB2Height() / 2f) + 0.1f;// 0.2f; // dont add because image is not in middle?
-					// (this.dimension.y / 2) +
-					// initPos.x -= 0.05f;
-					break;
-				case E:
-					toApply.x = this.throwingSpeed;
-					initPos.x += (this.geometrics.getApproxB2Width() / 2f) + 0.1f;// 0.2f; // dont add because image is not in middle?
-					// (this.dimension.x / 2) +
-					// initPos.y -= 0.1f;
-					break;
-				case S:
-					toApply.y = -this.throwingSpeed;
-					initPos.y -= (this.geometrics.getApproxB2Height() / 2f) + 0.1f;// (this.geometrics.getRenderDimension().y / 2); TODO -itemHeigth
-					// initPos.x -= 0.05f;
-					break;
-				case W:
-					toApply.x = -this.throwingSpeed;
-					initPos.x -= (this.geometrics.getApproxB2Width() / 2f) + 0.1f;// (this.geometrics.getRenderDimension().x / 2); TODO -itemWidth
-					// initPos.y -= 0.1f;
-					break;
-				default:
-					break;
-			}
-			// System.out.println("throw spawn position: " + initPos + " playerPosition: " + this.geometrics.getPosition());
-			if (this.itemType == ItemType.Wake_Item) {
-				final Item bull = new Item(initPos, true, ItemType.Wake_Item, "Wake_Item");
-				bull.getB2Body().setLinearVelocity(toApply);
-				WorldController.addTempGameObject(bull);
-				bull.setItemIsThrownBy(this);
-				bull.setFlying();
-				this.decrItemCount();
-			} else
-				if (this.itemType == ItemType.Sleep_Item) {
-					// System.out.println("Player - throw item");
-					final Item thesis = new Item(initPos, true, ItemType.Sleep_Item, "Sleep_Item");
-					thesis.getB2Body().setLinearVelocity(toApply);
-					WorldController.addTempGameObject(thesis);
-					thesis.setItemIsThrownBy(this);
-					thesis.setFlying();
-					this.decrItemCount();
-				}
-
-			// System.out.println("Item Thrown: " + itemCount);
-		}
-	}
-
-	/**
-	 * @param item
-	 * @return returns true if player "dead"
-	 */
-	public boolean hitByItem(final Item item) {
-		// System.out.println(this + " hit by " + item);
-		/*if ((item instanceof RedBull) && (this instanceof PlayerSleep)) {
-				// this.health = this.health - 50;
-			}
-			TODO: switch cases, because different items have different dmg else if(item instanceof Thesis && this instanceof PlayerWake) {
-				health = health - 20;
-			}*/
-
-		if (this.health <= 0) {
-			return true;
-			// this.getBody().setActive(false);
-			// WorldController.destroyBody(getBody());
 		}
 		return false;
 	}
@@ -416,14 +320,6 @@ public class Player extends AbstractGameObject {
 
 	public void setNewestDirection(final DirectionEnum newestDirection) {
 		this.newestDirection = newestDirection;
-	}
-
-	public DirectionEnum getDirectionLooking() {
-		return this.directionLooking;
-	}
-
-	public void setDirectionLooking(final DirectionEnum directionLooking) {
-		this.directionLooking = directionLooking;
 	}
 
 	public PlayerController getPlayerController() {

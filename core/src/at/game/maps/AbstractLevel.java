@@ -32,18 +32,18 @@ public abstract class AbstractLevel {
 		this.abstractGameObjects.add(object);
 	}
 
-	/**
+	/*
 	 * TODO: eventuell denn rest auch updaten, zb animierte Tiles
 	 *
 	 * @param deltaTime
-	 */
+
 	public void update(final float deltaTime) {
 		// System.out.println("AbstractLevel - update abstractGameObjects:" + this.gameObjects.size());
 		for (final AbstractGameObject abstractGameObject : this.abstractGameObjects) {
 			// System.out.println("AbstractLevel - update: " + gameObject);
 			abstractGameObject.update(deltaTime);
 		}
-	}
+	}*/
 
 	/**
 	 * renders all lists of this class

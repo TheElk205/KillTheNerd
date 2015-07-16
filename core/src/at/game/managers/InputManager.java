@@ -1,7 +1,7 @@
 package at.game.managers;
 
-import at.game.mechanics.movement.PlayerController;
-import at.game.utils.Constants;
+import at.game.Constants;
+import at.game.components.PlayerController;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;

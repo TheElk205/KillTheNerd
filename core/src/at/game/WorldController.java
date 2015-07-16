@@ -11,11 +11,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+import at.game.components.ControlledMovementSystem;
 import at.game.maps.AbstractLevel;
 import at.game.mechanics.Item;
 import at.game.objects.AbstractGameObject;
-import at.game.utils.Constants;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -35,9 +36,11 @@ public class WorldController {
 	private final static List<AbstractGameObject>	objectsToAdd	= new ArrayList<AbstractGameObject>();
 	private final boolean							spawnEnabled	= true;
 	private final AbstractLevel						level;
+	public static final Engine						ashleyEngine	= new Engine();
 
 	public WorldController(final AbstractLevel level) {
 		System.out.println("WorldController - Constructor");
+		WorldController.ashleyEngine.addSystem(new ControlledMovementSystem());
 		this.level = level;
 		if (Constants.DEBUG) {
 			// LOGGER.info("test info");
@@ -93,24 +96,20 @@ public class WorldController {
 	}
 
 	public void update(final float deltaTime) {
+		WorldController.ashleyEngine.update(deltaTime);
+
 		// remove objects before or after step!!
-		final List<AbstractGameObject> removeList = this.contactListener.getObjectsToRemove();
+		/*final List<AbstractGameObject> removeList = this.contactListener.getObjectsToRemove();
 		if (removeList.size() > 0) {
 			for (final AbstractGameObject object : removeList) {
 				if (object.isToDelete()) {
 					this.b2World.destroyBody(object.getB2Body());
 					// object.setToRender(false);
 					AbstractGameObject.getTotalObjects().remove(object);
-					/*if (object.getType == Item2) {
-						Thesis.itemCount--;
-					}
-					if (object.getType == Item1) {
-						RedBull.itemCount--; // Item1 = REDBULL
-					}*/
 				}
 			}
 			this.contactListener.getObjectsToRemove().clear();
-		}
+		}*/
 
 		this.timeElapsed += deltaTime * 1000;
 		this.doPhysicsStep(deltaTime);
@@ -118,9 +117,9 @@ public class WorldController {
 		// final Vector2 vector = calcPlayerDistance();
 		// cameraHelper.update(vector);
 		// cameraHelper.setZoom((float) (distance * 0.2f));
-		this.createDynamicObjects();
+		// this.createDynamicObjects();
 
-		this.level.update(deltaTime);
+		// this.level.update(deltaTime);
 
 		// check max player distance for camera
 		/*this.printTime += deltaTime;

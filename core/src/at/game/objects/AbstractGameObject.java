@@ -3,9 +3,11 @@ package at.game.objects;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.game.managers.Assets;
+import at.game.WorldController;
+import at.game.components.Geometrics;
+import at.game.managers.AnimationContainer;
 
-import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -18,7 +20,7 @@ public abstract class AbstractGameObject {
 	protected boolean							physicsAlreadyInit	= false;
 
 	/* ----- statics ----- */
-	public static Assets						assets;
+	// public static Assets assets;
 	private static List<AbstractGameObject>		totalObjects		= new ArrayList<AbstractGameObject>();
 	protected static int						totalObjectCount	= 0;
 	protected static ArrayList<TextureRegion>	textureList			= new ArrayList<TextureRegion>();		// TODO: 05.07 is not used?
@@ -37,9 +39,12 @@ public abstract class AbstractGameObject {
 	// protected Vector2 scale = new Vector2();
 	// protected float rotation = 0;
 
-	static {
+	/** ashley entity - entity component system */
+	protected Entity							entity;
+
+	/*static {
 		AbstractGameObject.assets = Assets.getInstance(new AssetManager());
-	}
+	}*/
 
 	public AbstractGameObject(final Body b2Body, final Vector2 position, final float approxB2Width, final float approxB2Height) {
 		this(new Geometrics(b2Body, position, new Vector2(approxB2Width, approxB2Height), approxB2Width, approxB2Height));
@@ -49,6 +54,8 @@ public abstract class AbstractGameObject {
 
 		AbstractGameObject.totalObjects.add(this);
 		AbstractGameObject.totalObjectCount++;
+		this.entity = new Entity();
+		WorldController.ashleyEngine.addEntity(this.entity);
 		// System.out.println(AbstractGameObject.totalObjectCount + ": " + this);
 	}
 

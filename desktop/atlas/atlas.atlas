@@ -1,9 +1,16 @@
 
-allAssets.png
+atlas.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+backgroundSwamp
+  rotate: false
+  xy: 1, 623
+  size: 800, 400
+  orig: 800, 400
+  offset: 0, 0
+  index: -1
 betty_back
   rotate: false
   xy: 803, 975
@@ -132,7 +139,7 @@ cup_coffee
   index: -1
 desert_BG
   rotate: false
-  xy: 1, 623
+  xy: 1, 221
   size: 800, 400
   orig: 800, 400
   offset: 0, 0
@@ -233,13 +240,6 @@ sun
   xy: 943, 541
   size: 16, 16
   orig: 16, 16
-  offset: 0, 0
-  index: -1
-swamp
-  rotate: false
-  xy: 1, 221
-  size: 800, 400
-  orig: 800, 400
   offset: 0, 0
   index: -1
 table

@@ -1,8 +1,9 @@
 package at.game.screens;
 
+import at.game.Constants;
+import at.game.managers.Assets;
 import at.game.managers.MenuInputManager;
 import at.game.mechanics.movement.MenuController;
-import at.game.utils.Constants;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -66,8 +67,8 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-
+		Assets.getInstance().dispose();
+		this.batch.dispose();
 	}
 
 }

@@ -3,14 +3,9 @@ package at.game.mechanics;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.game.enums.ItemType;
 import at.game.mechanics.movement.BodyFactory;
 import at.game.objects.AbstractGameObject;
-import at.game.objects.AnimationContainer;
-import at.game.utils.Constants;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
@@ -18,7 +13,6 @@ import com.badlogic.gdx.math.Vector2;
  * @author Herkt Kevin
  */
 public class Item extends AbstractGameObject {
-	private static final Sound	GRAB_SOUND		= Gdx.audio.newSound(Gdx.files.internal(Constants.GRAB_SOUND));
 	private boolean				collected		= false;
 	private boolean				collectable		= true;
 	private Player				grabbedBy;
@@ -29,7 +23,8 @@ public class Item extends AbstractGameObject {
 	private float				flyingTime		= 0;
 	private boolean				isFlying		= false;
 	private String				name			= "no Name";
-	private final ItemType		itemType;
+
+	// private final ItemType itemType;
 
 	/**
 	 * @param position
@@ -37,9 +32,9 @@ public class Item extends AbstractGameObject {
 	 * @param itemType
 	 * @param name
 	 */
-	public Item(final Vector2 position, final boolean initPhysics, final ItemType itemType, final String name) {
+	public Item(final Vector2 position, final boolean initPhysics, final String name) {// , final ItemType itemType,
 		super(BodyFactory.createItemBody(position, new Vector2(0.15f, 0.15f)), position, 0.15f, 0.15f);
-		this.itemType = itemType;
+		/*this.itemType = itemType;
 		switch (itemType) {
 			case Wake_Item:
 				this.animationCon = new AnimationContainer(6, "cup_coffee");
@@ -49,13 +44,12 @@ public class Item extends AbstractGameObject {
 				break;
 			default:
 				break;
-		}
+		}*/
 		this.name = name;
 		// this.geometrics.setPosition(position);
 		Item.allItems.add(this);
 		// this.dimension = new Vector2(0.25f, 0.2f);
 		// this.geometrics.setRenderDimension(new Vector2(0.15f, 0.15f));
-		// this.sound = Gdx.audio.newSound(Gdx.files.internal(Constants.THROW_SOUND));
 		if (initPhysics) {
 			this.init(false, initPhysics); // TODO changed to false
 		}
@@ -151,14 +145,19 @@ public class Item extends AbstractGameObject {
 		}
 	}
 
-	// interactions
+	/**
+	 * interactions. This Method should be in a component of the ECS
+	 *
+	 * @param player
+	 * @return true if grabbed
+	 */
 	public boolean grabbedBy(final Player player) {
 		if (this.collectable && !this.collected && !this.isFlying) { // TODO: !this.collected prevent taking twice bug!?
 			// System.out.println("Item grabbed by: " + player);
 			// player.incrItemCount();
 			this.grabbedBy = player;
 			if (this.grabbedBy.addItem(this)) {
-				Item.GRAB_SOUND.play();
+				// SoundManager.GRAB_SOUND.play();
 				this.collected = true;
 				// this.destroyed = false;
 				this.toDelete = true;
@@ -197,9 +196,9 @@ public class Item extends AbstractGameObject {
 		return this.name;
 	}
 
-	public ItemType getItemType() {
+	/*public ItemType getItemType() {
 		return this.itemType;
-	}
+	}*/
 
 	public Player getItemIsThrownBy() {
 		return this.itemIsThrownBy;

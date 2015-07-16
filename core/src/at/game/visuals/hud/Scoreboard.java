@@ -1,7 +1,7 @@
 package at.game.visuals.hud;
 
-import at.game.objects.AbstractGameObject;
-import at.game.utils.Constants;
+import at.game.Constants;
+import at.game.managers.Assets;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -18,7 +18,6 @@ public class Scoreboard extends AbstractHUDElement {
 	private TextureRegion	red;
 	private TextureRegion	yellow;
 	private final int		maxValue		= 10;
-	private int				posX			= 0, posY = 0;
 	private final int		length;
 
 	public Scoreboard() {
@@ -26,8 +25,6 @@ public class Scoreboard extends AbstractHUDElement {
 		this.dimension = new Vector2(Constants.SCREEN_WIDTH_IN_PIXEL / 2, Constants.HEIGHT_2P);
 		this.loadAssets();
 		// this.npcCount = level.getNpcCount();
-		final int xPos = (int) ((Constants.SCREEN_WIDTH_IN_PIXEL - this.dimension.x) / 2);
-		this.setPosition(xPos, 10);
 		this.length = (int) this.dimension.x;
 		// System.out.println("Scoreboard - length: " + this.length);
 	}
@@ -40,16 +37,17 @@ public class Scoreboard extends AbstractHUDElement {
 		final float pos1 = this.length * sleeping;
 		final float pos2 = this.length - (this.length * awake);
 		final float diff = pos2 - pos1;
-
-		batch.draw(this.red, this.posX, this.posY, pos1, this.dimension.y);
-		batch.draw(this.yellow, this.posX + pos1, this.posY, diff, this.dimension.y);
-		batch.draw(this.green, this.posX + pos1 + diff, this.posY, this.length - pos2, this.dimension.y);
+		final int posX = (int) ((Constants.SCREEN_WIDTH_IN_PIXEL - this.dimension.x) / 2);
+		final int posY = (int) Constants.HEIGHT_2P;
+		batch.draw(this.red, posX, posY, pos1, this.dimension.y);
+		batch.draw(this.yellow, posX + pos1, posY, diff, this.dimension.y);
+		batch.draw(this.green, posX + pos1 + diff, posY, this.length - pos2, this.dimension.y);
 	}
 
 	private void loadAssets() {
-		this.green = AbstractGameObject.assets.findRegion("green_pixels");
-		this.red = AbstractGameObject.assets.findRegion("red_pixels");
-		this.yellow = AbstractGameObject.assets.findRegion("yellow_pixels");
+		this.green = Assets.getInstance().findRegion("green_pixels");
+		this.red = Assets.getInstance().findRegion("red_pixels");
+		this.yellow = Assets.getInstance().findRegion("yellow_pixels");
 	}
 
 	@Override
@@ -64,19 +62,6 @@ public class Scoreboard extends AbstractHUDElement {
 
 	public void setAwakeCount(final int c) {
 		this.awakeCount = c;
-	}
-
-	public void setPosX(final int posX) {
-		this.posX = posX;
-	}
-
-	public void setPosY(final int posY) {
-		this.posY = posY;
-	}
-
-	private void setPosition(final int x, final int y) {
-		this.posX = x;
-		this.posY = y;
 	}
 
 	public int won() {

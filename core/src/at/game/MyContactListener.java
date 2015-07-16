@@ -3,7 +3,6 @@ package at.game;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.game.enums.ItemType;
 import at.game.mechanics.Item;
 import at.game.mechanics.Player;
 import at.game.objects.AbstractGameObject;
@@ -89,46 +88,46 @@ public class MyContactListener implements ContactListener {
 			case 3:
 				// System.out.println("beginContact Player1 with Player2");
 				break;
-			case 4:
-				if (userDataA instanceof Item) {
-					final Item itemA = (Item) userDataA;
-					final Player playerB = (Player) userDataB;
-					if (itemA.getItemType() == ItemType.Wake_Item) {
-						this.wakeWithRedbull(playerB, itemA);
+			/*case 4:
+			if (userDataA instanceof Item) {
+				final Item itemA = (Item) userDataA;
+				final Player playerB = (Player) userDataB;
+				if (itemA.getItemType() == ItemType.Wake_Item) {
+					this.wakeWithRedbull(playerB, itemA);
+				} else {
+					// this.wakeWithThesis(playerB, itemA);
+				}
+			} else
+				if (userDataB instanceof Item) {
+					final Item itemB = (Item) userDataB;
+					final Player playerA = (Player) userDataA;
+					if (itemB.getItemType() == ItemType.Sleep_Item) {
+						// this.wakeWithThesis(playerA, itemB);
 					} else {
-						// this.wakeWithThesis(playerB, itemA);
+						this.wakeWithRedbull(playerA, itemB);
 					}
-				} else
-					if (userDataB instanceof Item) {
-						final Item itemB = (Item) userDataB;
-						final Player playerA = (Player) userDataA;
-						if (itemB.getItemType() == ItemType.Sleep_Item) {
-							// this.wakeWithThesis(playerA, itemB);
-						} else {
-							this.wakeWithRedbull(playerA, itemB);
-						}
-					}
-				break;
+				}
+			break;
 			case 5:
-				if (userDataA instanceof Item) {
-					final Item itemA = (Item) userDataA;
-					final Player playerB = (Player) userDataB;
-					if (itemA.getItemType() == ItemType.Wake_Item) {
-						this.sleepWithRedbull(playerB, itemA);
+			if (userDataA instanceof Item) {
+				final Item itemA = (Item) userDataA;
+				final Player playerB = (Player) userDataB;
+				if (itemA.getItemType() == ItemType.Wake_Item) {
+					this.sleepWithRedbull(playerB, itemA);
+				} else {
+					this.sleepWithThesis(playerB, itemA);
+				}
+			} else
+				if (userDataB instanceof Item) {
+					final Item itemB = (Item) userDataB;
+					final Player playerA = (Player) userDataA;
+					if (itemB.getItemType() == ItemType.Sleep_Item) {
+						this.sleepWithThesis(playerA, itemB);
 					} else {
-						this.sleepWithThesis(playerB, itemA);
+						this.sleepWithRedbull(playerA, itemB);
 					}
-				} else
-					if (userDataB instanceof Item) {
-						final Item itemB = (Item) userDataB;
-						final Player playerA = (Player) userDataA;
-						if (itemB.getItemType() == ItemType.Sleep_Item) {
-							this.sleepWithThesis(playerA, itemB);
-						} else {
-							this.sleepWithRedbull(playerA, itemB);
-						}
-					}
-				break;
+				}
+			break;*/
 			case 6:
 				MyContactListener.itemWithItem(userDataA, userDataB);
 				break;
@@ -246,13 +245,13 @@ public class MyContactListener implements ContactListener {
 		}
 	}
 
-	private void wakeWithThesis(final Player player, final Item itemB) {
+	private void PlayerWithItem(final Player player, final Item itemB) {
 		if (itemB.isFlying()) { // (itemB.getItemIsThrownBy().getPlayerType() == PlayerType.Sleep) &&
-			if (player.hitByItem(itemB)) { // does nothing cause players cannot die
+			/*if (player.hitByItem(itemB)) { // does nothing cause players cannot die
 				// player.setToRender(false);
 				this.objectsToRemove.add(player);
 				itemB.setToDelete(true);
-			}
+			}*/
 			if (player.isHitAbleAgain()) {
 				// player.setHandicap(itemB.getDmg());
 				player.setHitAbleAgain(false);
@@ -260,23 +259,6 @@ public class MyContactListener implements ContactListener {
 			// itemB.setToRender(false);
 			this.objectsToRemove.add(itemB);
 			itemB.setToDelete(true);
-		}
-	}
-
-	private void sleepWithRedbull(final Player playerA, final Item itemA) {
-		if (itemA.isFlying()) { // (itemA.getItemIsThrownBy().getPlayerType() == PlayerType.Wake) &&
-			if (playerA.hitByItem(itemA)) { // does nothing cause players cannot die
-				// playerA.setToRender(false);
-				this.objectsToRemove.add(playerA);
-				itemA.setToDelete(true);
-			}
-			if (playerA.isHitAbleAgain()) {
-				// playerA.setHandicap(itemA.getDmg());
-				playerA.setHitAbleAgain(false);
-			}
-			// itemA.setToRender(false);
-			this.objectsToRemove.add(itemA);
-			itemA.setToDelete(true);
 		}
 	}
 
