@@ -85,14 +85,14 @@ public class WorldController {
 		FileHandler fileTxt = null;
 		try {
 			fileTxt = new FileHandler("Logging.txt");
+			// create a TXT formatter
+			final SimpleFormatter formatterTxt = new SimpleFormatter();
+			fileTxt.setFormatter(formatterTxt);
+			WorldController.LOGGER.addHandler(fileTxt);
+			WorldController.LOGGER.info("test info 2");
 		} catch (SecurityException | IOException e) {
 			e.printStackTrace();
 		}
-		// create a TXT formatter
-		final SimpleFormatter formatterTxt = new SimpleFormatter();
-		fileTxt.setFormatter(formatterTxt);
-		WorldController.LOGGER.addHandler(fileTxt);
-		WorldController.LOGGER.info("test info 2");
 	}
 
 	public void update(final float deltaTime) {

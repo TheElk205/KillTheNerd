@@ -29,7 +29,7 @@ public class Constants {
 	public static final String	VICTORY						= "../core/assets/Scumocide-Calamity Trigger_Game.mp3";										// "Desktop/KillTheNerd/core/assets/Scumocide-Calamity Trigger_Game.mp3";
 	public static final String	GENERATEDMAP_MAP			= "../core/assets/map1.png";																	// "Desktop/KillTheNerd/core/assets/map1.png";
 	public static final String	GENERATEDMAP_CONFIG			= "../core/assets/map1.txt";																	// "Desktop/KillTheNerd/core/assets/map1.txt";
-	public static final String	ASSETS_RAW					= "assets_raw";
+	public static final String	ASSETS_RAW					= "../core/assets_raw";
 	public static final int		START_ITEM_COUNT			= 150;
 	// public static final int REF_HEIGHT_IN_PIXEL = 768;
 	public static final int		REF_WIDTH_IN_PIXEL			= 1366;
@@ -38,7 +38,7 @@ public class Constants {
 	public static final float	RATIO						= Constants.SCREEN_WIDTH_IN_PIXEL / Constants.SCREEN_HEIGHT_IN_PIXEL;
 	public static final float	VIEWPORT_HEIGHT_IN_METER	= 10;
 	public static final float	VIEWPORT_WIDTH_IN_METER		= 10 / ((float) Constants.SCREEN_HEIGHT_IN_PIXEL / (float) Constants.SCREEN_WIDTH_IN_PIXEL);
-	public static final String	ATLAS_FOLDER				= "atlas/";
+	public static final String	ATLAS_FOLDER				= "../core/assets/";
 	public static final String	ATLAS_NAME					= "atlas";
 	public static final int		MAX_FAMES					= 60;
 	public static final boolean	IS_DOWN_GRAVITY				= true;

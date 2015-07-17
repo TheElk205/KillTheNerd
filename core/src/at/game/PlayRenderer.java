@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import at.game.gui.AbstractHUDElement;
+import at.game.gui.Scoreboard;
+import at.game.gui.WeaponDisplay;
 import at.game.managers.AssetStore;
 import at.game.managers.Assets;
 import at.game.maps.AbstractLevel;
 import at.game.mechanics.Item;
 import at.game.objects.AbstractGameObject;
-import at.game.visuals.hud.AbstractHUDElement;
-import at.game.visuals.hud.Scoreboard;
-import at.game.visuals.hud.WeaponDisplay;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;

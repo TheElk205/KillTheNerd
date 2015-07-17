@@ -2,13 +2,13 @@ package at.game.mechanics;
 
 import at.game.Constants;
 import at.game.components.PlayerController;
-import at.game.mechanics.actions.FighterType;
+import at.game.gui.DelayBar;
 import at.game.mechanics.enums.DirectionEnum;
 import at.game.mechanics.enums.HumanStateEnum;
+import at.game.mechanics.enums.RaceTypeEnum;
 import at.game.mechanics.movement.BodyFactory;
 import at.game.objects.AbstractGameObject;
 import at.game.objects.EquippedWeapon;
-import at.game.visuals.hud.DelayBar;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -20,7 +20,6 @@ import com.badlogic.gdx.physics.box2d.Body;
  * @author Herkt Kevin
  */
 public class Player extends AbstractGameObject {
-	private final FighterType		fighterType				= new FighterType();
 	private boolean					onGround				= false;
 	private final DelayBar			delayBar;												// could be changed to healthbar
 	private final int				maxItems				= 150;
@@ -44,7 +43,7 @@ public class Player extends AbstractGameObject {
 	protected TextureRegion			tRMoveUp[], tRMoveDown[], tRMoveLeft[], tRMoveRight[];
 	protected TextureRegion			tRStandUp, tRStandDown, tRStandLeft, tRStandRight;
 	protected TextureRegion			tUp, tDown, tLeft, tRight;
-	private final AbstractRace		race					= new HumanRace();
+	private final Race				race					= new Race(RaceTypeEnum.HUMAN);
 
 	/* ----- Sensor counts ----- */
 	private int						outerFootRightCount		= 0;
@@ -334,7 +333,7 @@ public class Player extends AbstractGameObject {
 		this.race.setState(playerState);
 	}
 
-	public AbstractRace getRace() {
+	public Race getRace() {
 		return this.race;
 	}
 

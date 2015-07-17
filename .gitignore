@@ -40,7 +40,8 @@ tmp/
 *.swp
 *~.nib
 local.properties
-.settings/
+#.settings/ used for Formatter and so on
+.settings/gradle
 .loadpath
 .externalToolBuilders/
 *.launch
@@ -62,3 +63,10 @@ build/
 
 ## OS Specific
 .DS_Store
+
+
+
+# new Stuff
+/.output/
+/gradle/
+/.settings

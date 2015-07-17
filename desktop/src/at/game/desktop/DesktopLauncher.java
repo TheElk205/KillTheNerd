@@ -40,6 +40,7 @@ public class DesktopLauncher {
 		config.foregroundFPS = Constants.MAX_FAMES;
 		System.out.println("Starting game: " + config.width + " x " + config.height + " with ViewPort: " + Constants.VIEWPORT_WIDTH_IN_METER + "x"
 				+ Constants.VIEWPORT_HEIGHT_IN_METER + " in meter");
+		@SuppressWarnings("unused")
 		final LwjglApplication lwjglApplication = new LwjglApplication(new GameTitle(), config);
 	}
 }

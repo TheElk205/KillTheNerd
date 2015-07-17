@@ -1,4 +1,4 @@
-package at.game.visuals.hud;
+package at.game.gui;
 
 import at.game.managers.Assets;
 import at.game.mechanics.Player;
